@@ -1,0 +1,12 @@
+#!/bin/sh
+
+HGSPICE_ROOT=/home/hhbsng/code/HGSPICE
+
+cd $HGSPICE_ROOT
+
+find -iname '*cmake*' -not -name CMakeLists.txt -exec rm -rf {} \+
+find -iname 'Makefile' -exec rm -rf {} \+
+
+cd $HGSPICE_ROOT/src/parser/
+
+rm -f *.hh SpParser.output
