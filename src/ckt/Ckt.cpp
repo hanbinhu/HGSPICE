@@ -1,14 +1,31 @@
+#include <iostream>
+#include <iomanip>
+#include <exception>
+using std::cout;
+using std::cerr;
+using std::endl;
+
+#include <algorithm>
+
 #include "Ckt.h"
 
-Ckt::Ckt()
+#include "SpParser.hpp"
+extern FILE* yyin;
+
+
+Ckt::Ckt(const string& filename) :
+	processState(INIT)
 {
-	nRes = 0;
-	nCap = 0;
-	nInd = 0;
-	nVCVS = 0;
-	nCCCS = 0;
-	nVCCS = 0;
-	nCCVS = 0;
+	if (!(yyin = fopen(filename.c_str(), "r"))) {
+		throw std::ios_base::failure(filename + " doesn't exist.");
+	}
+	processState = PARSING;
+	yy::SpParser spiceParser(this);
+	spiceParser.parse();
+	processState = LINKCKT;
+}
+
+Ckt::Ckt() {
 	nDiode = 0;
 	nMOS = 0;
 
@@ -21,57 +38,47 @@ Ckt::Ckt()
 	nIsrc = 0;
 }
 
-Ckt::~Ckt()
-{
+Ckt::~Ckt() {
 }
 
-void Ckt::ParseRes(char *str, char *nodep, char *noden, double value)
-{
-    cout << "[Resistor Parsed...]" << endl;
-    cout << "   name=" << str << ", node+=" << nodep << ", node-=" << noden << ", R=" << value << endl;
-	nRes++;
+const std::shared_ptr< Node > Ckt::newNode(const string& strNode) {
+	const std::unordered_map< string, NodePtr >::const_iterator reVal = nodeHashMap.find(strNode);
+	if(reVal == nodeHashMap.end()) {
+		string str(strNode);
+		
+		//Check the gnd and 0;
+		if(str.size() == 3) {
+			string strTmp(str);
+			std::transform(strTmp.begin(), strTmp.end(), strTmp.begin(), tolower);
+			if(strTmp == "gnd") {
+				const std::unordered_map< string, NodePtr >::const_iterator reValgnd = nodeHashMap.find("0");
+				if(reValgnd != nodeHashMap.end())
+					return reValgnd->second;
+				str = "0";
+			}
+		}
+		
+		const NodePtr mNodePtr(new Node(str));
+		if("0" != str) nodeList.push_back(mNodePtr);
+		else nodeList.insert(nodeList.begin(), mNodePtr);
+		nodeHashMap.insert({str, mNodePtr});
+		return mNodePtr;
+	} else return reVal->second;
 }
 
-void Ckt::ParseCap(char *str, char *nodep, char *noden, double value, double init)
-{
-    cout << "[Capacitor Parsed...]" << endl;
-    cout << "   name=" << str << ", node+=" << nodep << ", node-=" << noden << ", C=" << value << ", init=" << init << endl;
-	nCap++;
+void Ckt::addInst(const std::shared_ptr< InstBase >& mInstPtr) {
+	const std::unordered_map< string, InstPtr >::const_iterator reVal = instHashMap.find(mInstPtr->getInstName());
+	if(reVal == instHashMap.end()) {
+		instList.push_back(mInstPtr);
+		instHashMap.insert({mInstPtr->getInstName(), mInstPtr});
+	} else {
+		throw std::runtime_error(string("Find Duplicate Instance Name ") + mInstPtr->getInstName() + ".");
+	}
 }
 
-void Ckt::ParseInd(char *str, char *nodep, char *noden, double value, double init)
-{
-    cout << "[Inductor Parsed...]" << endl;
-    cout << "   name=" << str << ", node+=" << nodep << ", node-=" << noden << ", L=" << value << ", init=" << init << endl;
-	nInd++;
-}
-
-void Ckt::ParseVCVS(char *str, char *nodeop, char *nodeon, char *nodeip, char *nodein, double value)
-{
-    cout << "[VCVS Parsed...]" << endl;
-    cout << "   name=" << str << ", nodeo+=" << nodeop << ", nodeo-=" << nodeon << ", nodei+=" << nodeip << ",nodei-=" << nodein << ", E=" << value << endl;
-	nVCVS++;
-}
-
-void Ckt::ParseCCCS(char *str, char *nodeop, char *nodeon, char *vsens, double value)
-{
-    cout << "[CCCS Parsed...]" << endl;
-    cout << "   name=" << str << ", nodeo+=" << nodeop << ", nodeo-=" << nodeon << ", vname=" << vsens << ", F=" << value << endl;
-	nCCCS++;
-}
-
-void Ckt::ParseVCCS(char *str, char *nodeop, char *nodeon, char *nodeip, char *nodein, double value)
-{
-    cout << "[VCCS Parsed...]" << endl;
-    cout << "   name=" << str << ", nodeo+=" << nodeop << ", nodeo-=" << nodeon << ", nodei+=" << nodeip << ",nodei-=" << nodein << ", G=" << value << endl;
-	nVCCS++;
-}
-
-void Ckt::ParseCCVS(char *str, char *nodeop, char *nodeon, char *vsens, double value)
-{
-    cout << "[CCVS Parsed...]" << endl;
-    cout << "   name=" << str << ", nodeo+=" << nodeop << ", nodeo-=" << nodeon << ", vname=" << vsens << ", H=" << value << endl;
-	nCCVS++;
+std::shared_ptr< InstBase > Ckt::getLastInst() {
+	if(processState != PARSING) throw std::runtime_error("Attempt to getLastInst when not parsing.");
+	return instList.back();
 }
 
 void Ckt::ParseDiode(char *str, char *nodep, char *noden, char *model)
@@ -129,12 +136,35 @@ void Ckt::ParseIsrc(char *str, char *nodep, char *noden, double value)
 	nIsrc++;
 }
 
+void Ckt::printAllNodes() const {
+	cout << "****************************************" << endl;
+	cout << "Node Information in Node List (" << nodeList.size() << ")" << endl;
+	cout.flags(std::ios::left);
+	int wordCnt = 1;
+	std::for_each(nodeList.begin(),nodeList.end(),
+		[&wordCnt] (NodePtr elem) {
+			cout << std::setw(8) << elem->getName();
+			wordCnt %= 10; 
+			if(!wordCnt)  cout << endl;
+			wordCnt++;
+			
+		}
+	); if(wordCnt != 1) cout << endl;
+}
+
+void Ckt::printAllInsts() const
+{
+	cout << "All Instances (" << instList.size() << ") are listed here." << endl;
+	std::for_each(instList.begin(), instList.end(),
+		[] (InstPtr elem) {
+			elem->printInf();
+		}
+	);
+}
+
 void Ckt::Summarize()
 {
     cout << "[Parsing Finished!]" << endl;
-    cout << "   res=" << nRes
-         << ", cap=" << nCap
-         << ", ind=" << nInd
-         << ", vsrc=" << nVsrc
+    cout << "vsrc=" << nVsrc
          << ", isrc=" << nIsrc << endl;
 }

@@ -7,3 +7,12 @@ lib/*
 
 # Executables
 bin/*
+
+# Tag File
+.ycm*
+tags
+*cscope*
+
+# Project File
+.kdev4/*
+*.kdev4

@@ -40,39 +40,39 @@ typedef yy::SpParser::token token;
 %}
 
 /* Defining output file name */
-%option outfile="SpScanner.cpp"	
+%option outfile="SpScanner.cpp"
 
 /* Defining Regular Expressions of the patterns */
-COMMENT			[\*][^\n]+
-ALPHA			[A-Za-z_]
-DIGIT			[0-9]
+COMMENT		[\*][^\n]+
+ALPHA				[A-Za-z_]
+DIGIT				[0-9]
 ALPHANUM		[A-Za-z_0-9]
-EQN 			"="
-STRING			{ALPHANUM}+
+EQN 					"="
+STRING				{ALPHANUM}+
 INTEGER			{DIGIT}+
-FLOAT			[\-]?{DIGIT}+"."{DIGIT}+([Ee][\+\-]?{DIGIT}+)?
-UNIT			[Ff]|[Pp]|[Nn]|[Uu]|[Mm]|[Kk]|[Mm][Ee][Gg]|[Gg]|[Tt]
-VALUE			({FLOAT}|[-]?{INTEGER}){UNIT}
-EOL				[\n]
+FLOAT				[\-]?{DIGIT}+"."{DIGIT}+([Ee][\+\-]?{DIGIT}+)?
+UNIT					[Ff]|[Pp]|[Nn]|[Uu]|[Mm]|[Kk]|[Mm][Ee][Gg]|[Gg]|[Tt]
+VALUE				({FLOAT}|[-]?{INTEGER}){UNIT}
+EOL					[\n]
 DELIMITER		[ \t]+
-END				[\.][Ee][Nn][Dd]
+END					^[\.][Ee][Nn][Dd]
 
-RESISTOR		[Rr]{ALPHANUM}+
-CAPACITOR		[Cc]{ALPHANUM}+
-INDUCTOR		[Ll]{ALPHANUM}+
-CURRENTSRC		[Ii]{ALPHANUM}+
-VOLTAGESRC		[Vv]{ALPHANUM}+
-VCVS			[Ee]{ALPHANUM}+
-CCCS			[Ff]{ALPHANUM}+
-VCCS			[Gg]{ALPHANUM}+
-CCVS			[Hh]{ALPHANUM}+
-DIODE			[Dd]{ALPHANUM}+
-MOSFET			[Mm]{ALPHANUM}+
+RESISTOR			^[Rr]{ALPHANUM}+
+CAPACITOR		^[Cc]{ALPHANUM}+
+INDUCTOR		^[Ll]{ALPHANUM}+
+CURRENTSRC	^[Ii]{ALPHANUM}+
+VOLTAGESRC	^[Vv]{ALPHANUM}+
+VCVS				^[Ee]{ALPHANUM}+
+CCCS				^[Ff]{ALPHANUM}+
+VCCS				^[Gg]{ALPHANUM}+
+CCVS				^[Hh]{ALPHANUM}+
+DIODE				^[Dd]{ALPHANUM}+
+MOSFET			^[Mm]{ALPHANUM}+
 
-OPANALYSIS		[\.][Oo][Pp]
-DCANALYSIS		[\.][Dd][Cc]
-ACANALYSIS		[\.][Aa][Cc]
-TRANANALYSIS	[\.][Tt][Rr][Aa][Nn]
+OPANALYSIS		^[\.][Oo][Pp]
+DCANALYSIS		^[\.][Dd][Cc]
+ACANALYSIS		^[\.][Aa][Cc]
+TRANANALYSIS	^[\.][Tt][Rr][Aa][Nn]
 
 %%
 
@@ -137,9 +137,9 @@ TRANANALYSIS	[\.][Tt][Rr][Aa][Nn]
                  return token::MOSFET;
 				}
 
-{OPANALYSIS}	{return token::OPANALYSIS;}
-{DCANALYSIS}	{return token::DCANALYSIS;}
-{ACANALYSIS}	{return token::ACANALYSIS;}
+{OPANALYSIS}		{return token::OPANALYSIS;}
+{DCANALYSIS}		{return token::DCANALYSIS;}
+{ACANALYSIS}		{return token::ACANALYSIS;}
 {TRANANALYSIS}	{return token::TRANANALYSIS;}
 
 {INTEGER}		{yylval->n = atoi(yytext); return token::INTEGER;}
@@ -173,18 +173,25 @@ TRANANALYSIS	[\.][Tt][Rr][Aa][Nn]
 					yylval->f = value;
 				 return token::VALUE;
 				}
-{STRING}		{yylval->s = (char*)malloc((strlen(yytext) + 1) * sizeof(char)); 
+{STRING}	{yylval->s = (char*)malloc((strlen(yytext) + 1) * sizeof(char)); 
 				 strcpy(yylval->s, yytext);
 				 yylval->s[strlen(yytext)] = '\0';
                  if(!strcasecmp(yylval->s, "L")) {return token::L;}
                  if(!strcasecmp(yylval->s, "W")) {return token::W;}
+                 if(!strcasecmp(yylval->s, "DC")) {return token::DC;}
+                 if(!strcasecmp(yylval->s, "AC")) {return token::AC;}
+                 if(!strcasecmp(yylval->s, "SIN")) {return token::SIN;}
+                 if(!strcasecmp(yylval->s, "EXP")) {return token::EXP;}
+                 if(!strcasecmp(yylval->s, "PULSE")) {return token::PULSE;}
+                 if(!strcasecmp(yylval->s, "SFFM")) {return token::SFFM;}
                  return token::STRING;
 			    }
-{EOL}		    {return token::EOL;}
-{EQN}		    {return token::EQN;}
-<<EOF>>			{yyterminate();}
-{DELIMITER}		{yylloc->step();}
-{COMMENT}		{yylloc->step();}
-{END}			{return token::END;}
+
+{EOL}				{return token::EOL;}
+{EQN}				{return token::EQN;}
+<<EOF>>		{yyterminate();}
+{DELIMITER}	{yylloc->step();}
+{COMMENT}	{yylloc->step();}
+{END}				{return token::END;}
 
 %%
