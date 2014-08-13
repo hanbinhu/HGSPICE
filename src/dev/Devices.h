@@ -21,5 +21,10 @@
 
 #include "isrc/ISrcInst.h"
 #include "isrc/ISrcModel.h"
+#include "vsrc/VSrcInst.h"
+#include "vsrc/VSrcModel.h"
+
+#include "xsub/XSubInst.h"
+#include "xsub/XSubModel.h"
 
 #endif  /*DEVICES_H*/

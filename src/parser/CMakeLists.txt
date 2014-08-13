@@ -7,5 +7,6 @@ ADD_FLEX_BISON_DEPENDENCY(SpScanner SpParser)
 
 include_directories(${CKT_DIR})
 include_directories(${DEV_DIR})
+include_directories(${ANA_DIR})
 
 add_library(parser STATIC ${BISON_SpParser_OUTPUTS} ${FLEX_SpScanner_OUTPUTS})

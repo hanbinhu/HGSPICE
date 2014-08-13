@@ -12,47 +12,43 @@ using std::vector;
 #include "Generic.h"
 #include "Devices.h"
 
-class Ckt
+class SubCkt;
+class Analyzer;
+
+class Ckt : public std::enable_shared_from_this< Ckt >
 {
 public:
 	Ckt();
-	Ckt(const string& filename);
 	~Ckt();
 
-	const std::shared_ptr<Node> newNode(const string& strNode);
-	void addInst(const std::shared_ptr< InstBase >& mInstPtr);
+	enum ParseSub {INSUB, OUTSUB};
+
+	void ParseAll(std::shared_ptr< Analyzer > mAnalyzer);
+
+	virtual const std::shared_ptr<Node> newNode(const string& strNode);
+	virtual void addInst(const std::shared_ptr< InstBase >& mInstPtr);
+	virtual std::shared_ptr< InstBase > getLastInst();
 	
-	std::shared_ptr< InstBase > getLastInst();
+	std::shared_ptr< Ckt > CurrentCkt();
+	
+	void addSubCkt(const std::shared_ptr< SubCkt >& mSubCktPtr);
+	void SetSubEnd(); 
+	std::shared_ptr< SubCkt > getLastSubCkt();
 	
 	void ParseDiode(char *str, char *nodep, char *noden, char *model);
 	void ParseMOS(char *str, char *noded, char *nodeg, char *nodes, char *nodeb, char *model, double l, double w);
 
-	void ParseAnaOP();
-	void ParseAnaDC(char *source, double start, double end, double step);
-	void ParseAnaAC(char *sweepType, double n, double fstart, double fend);
-	void ParseAnaTRAN(double tstep, double tend, double tstart = 0);
-
-	void ParseVsrc(char *str, char *nodep, char *noden, double value);
-	void ParseIsrc(char *str, char *nodep, char *noden, double value);
-
-	void Summarize();
 	void printAllNodes() const;
 	void printAllInsts() const;
+	void printAllSubDef() const;
 
 private:
 	enum State {INIT, PARSING, LINKCKT, COMPLETECKT};
 	State processState;
+	ParseSub subParseState;
 	
 	int nDiode;
 	int nMOS;
-
-	int nAnaOP;
-	int nAnaDC;
-	int nAnaAC;
-	int nAnaTRAN;
-
-	int nVsrc;
-	int nIsrc;
 	
 	typedef std::shared_ptr< Node> NodePtr;
 	vector< NodePtr > nodeList;
@@ -67,8 +63,11 @@ private:
 	std::unordered_map< string, InstPtr > instHashMap;
 	
 	typedef std::shared_ptr< ModelBase > ModelPtr;
-	vector< ModelPtr > ModelList;
 	std::unordered_map< string, ModelPtr > modelHashMap;
+	
+	typedef std::shared_ptr< SubCkt > SubCktPtr;
+	vector< SubCktPtr > subCktList;
+	std::unordered_map< string, SubCktPtr > subCktHashMap;
 };
 
 #endif

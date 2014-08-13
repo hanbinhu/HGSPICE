@@ -3,8 +3,8 @@
 vdd vdd 0 1.8
 
 R1 vdd 1 5k
-C1 1 0 500f 3.3
-Cc 4 l 3p 0.1
+C1 1 oct 500f 3.3
+Cc 4 dec 3p 0.1
 L1 1 gnd 2n 3m
 Lcc 2 gNd 3n
 E1 3 2 1 2 1Meg
@@ -23,9 +23,20 @@ I3 c 0 1 SFFM 0 1 10k 5 1k
 I4 c 0 3
 v1 vdd 0 dc 1 ac 1 sin 1 1 20k 1n 0
 
+.subckt INV in out vdd gnd L=5n W=5u s=10
+R1 vdd 1 5k
+V4 in out 0
+.ends
+
+.subckt INV1 in out vdd gnd L=5n W=5u s=10
+R1 vdd 1 5k
+V4 in out 0
+.ends
+
 .op
 .dc vdd 0 1.8 0.1
-.ac DEC 10 10k 1G
+.ac LIN 10 10k 1G
+.ac DEC 100 10 1Meg
 .Tran 1n 1u
 
 .end

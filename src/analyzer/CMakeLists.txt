@@ -1,0 +1,5 @@
+FILE(GLOB SRC_ANA "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
+include_directories(${PARSER_DIR})
+include_directories(${DEV_DIR})
+include_directories(${CKT_DIR})
+ADD_LIBRARY(analyzer STATIC ${SRC_ANA}) 

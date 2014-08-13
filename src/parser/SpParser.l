@@ -49,10 +49,10 @@ DIGIT				[0-9]
 ALPHANUM		[A-Za-z_0-9]
 EQN 					"="
 STRING				{ALPHANUM}+
-INTEGER			{DIGIT}+
-FLOAT				[\-]?{DIGIT}+"."{DIGIT}+([Ee][\+\-]?{DIGIT}+)?
+INTEGER			-?{DIGIT}+
+FLOAT				-?{DIGIT}+\.{DIGIT}+([Ee][\+-]?{DIGIT}+)?
 UNIT					[Ff]|[Pp]|[Nn]|[Uu]|[Mm]|[Kk]|[Mm][Ee][Gg]|[Gg]|[Tt]
-VALUE				({FLOAT}|[-]?{INTEGER}){UNIT}
+VALUE				({FLOAT}|-?{INTEGER}){UNIT}
 EOL					[\n]
 DELIMITER		[ \t]+
 END					^[\.][Ee][Nn][Dd]
@@ -68,6 +68,9 @@ VCCS				^[Gg]{ALPHANUM}+
 CCVS				^[Hh]{ALPHANUM}+
 DIODE				^[Dd]{ALPHANUM}+
 MOSFET			^[Mm]{ALPHANUM}+
+
+SUBDEF			^[\.][Ss][Uu][Bb][Cc][Kk][Tt]
+SUBEND			^[\.][Ee][Nn][Dd][Ss]
 
 OPANALYSIS		^[\.][Oo][Pp]
 DCANALYSIS		^[\.][Dd][Cc]
@@ -137,6 +140,9 @@ TRANANALYSIS	^[\.][Tt][Rr][Aa][Nn]
                  return token::MOSFET;
 				}
 
+{SUBDEF} {return token::SUBDEF;}
+{SUBEND} {return token::SUBEND;}
+
 {OPANALYSIS}		{return token::OPANALYSIS;}
 {DCANALYSIS}		{return token::DCANALYSIS;}
 {ACANALYSIS}		{return token::ACANALYSIS;}
@@ -184,6 +190,9 @@ TRANANALYSIS	^[\.][Tt][Rr][Aa][Nn]
                  if(!strcasecmp(yylval->s, "EXP")) {return token::EXP;}
                  if(!strcasecmp(yylval->s, "PULSE")) {return token::PULSE;}
                  if(!strcasecmp(yylval->s, "SFFM")) {return token::SFFM;}
+                 if(!strcasecmp(yylval->s, "DEC")) {return token::DEC;}
+                 if(!strcasecmp(yylval->s, "OCT")) {return token::OCT;}
+                 if(!strcasecmp(yylval->s, "LIN")) {return token::LIN;}
                  return token::STRING;
 			    }
 
