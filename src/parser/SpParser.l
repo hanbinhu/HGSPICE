@@ -68,6 +68,7 @@ VCCS				^[Gg]{ALPHANUM}+
 CCVS				^[Hh]{ALPHANUM}+
 DIODE				^[Dd]{ALPHANUM}+
 MOSFET			^[Mm]{ALPHANUM}+
+XSUB				^[Xx]{ALPHANUM}+
 
 SUBDEF			^[\.][Ss][Uu][Bb][Cc][Kk][Tt]
 SUBEND			^[\.][Ee][Nn][Dd][Ss]
@@ -138,6 +139,11 @@ TRANANALYSIS	^[\.][Tt][Rr][Aa][Nn]
 				 strcpy(yylval->s, yytext);
 				 yylval->s[strlen(yytext)] = '\0';
                  return token::MOSFET;
+				}
+{XSUB}			{yylval->s = (char*)malloc((strlen(yytext) + 1) * sizeof(char)); 
+				 strcpy(yylval->s, yytext);
+				 yylval->s[strlen(yytext)] = '\0';
+                 return token::XSUB;
 				}
 
 {SUBDEF} {return token::SUBDEF;}

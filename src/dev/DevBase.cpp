@@ -18,11 +18,8 @@ InstBase::InstBase(const string& str, const string& modelStr):
 void InstBase::printNode() const {
 	cout << getInstName() << " has " << nodeTable.size() << " nodes. The nodes are listed below:" << endl;
 	cout.flags(std::ios::left);
-	std::for_each(nodeTable.begin(),nodeTable.end(),
-		[] (NodePtr mNode) {
+	for(NodePtr mNode: nodeTable)
 			cout << std::setw(8) << mNode.lock()->getName();
-		}
-	);
 	cout << endl;
 }
 

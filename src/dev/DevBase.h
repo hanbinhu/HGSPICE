@@ -49,6 +49,9 @@ public:
 	virtual void specifyDC(double dc) {}
 	virtual void specifyAC(double ac, double phase) {}
 	virtual void specifyFunc(SrcFunc::TranFuncType mFuncType, const vector<double>& paramTab) {}
+	virtual void specifyParam(const string& param, double value) {}
+	virtual void specifySubCkt() {}
+	virtual void specifyNode(const string& node) {}
 	
 	inline string getInstName() const {return name;}
 	inline string getModelName() const {return modelName;}

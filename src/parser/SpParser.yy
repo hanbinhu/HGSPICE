@@ -57,7 +57,7 @@ extern FILE* yyin;
 %token<n> INTEGER
 %token<f> FLOAT VALUE
 %token<s> STRING
-%token<s> RESISTOR CAPACITOR INDUCTOR VCVS CCCS VCCS CCVS DIODE MOSFET
+%token<s> RESISTOR CAPACITOR INDUCTOR VCVS CCCS VCCS CCVS DIODE MOSFET XSUB
 %token<s> CURRENTSRC VOLTAGESRC
 %token<s> DC AC SIN PULSE EXP PWL SFFM
 %token<s> L W
@@ -69,7 +69,7 @@ extern FILE* yyin;
 
 %token EQN END EOL
 
-%type<s> resistor capacitor inductor vcvs cccs vccs ccvs diode mosfet
+%type<s> resistor capacitor inductor vcvs cccs vccs ccvs diode mosfet xsub
 %type<s> currentsrcname voltagesrcname
 %type<s> node model variable
 %type<f> value lpara wpara
@@ -153,7 +153,8 @@ component: resistor
 		| vccs
 		| ccvs
 		| diode
-		| mosfet;
+		| mosfet
+		| xsub;
 
 analysis: opanalysis
 			| dcanalysis
@@ -174,14 +175,32 @@ subdefname: SUBDEF variable
 				{
 				std::shared_ptr< SubCkt > subCktPtr(new SubCkt($2));
 				pObj->addSubCkt(subCktPtr);
-				}
+				};
 
 subnodelist: subnodelist node {pObj->getLastSubCkt()->newNode($2);}
-					| node {pObj->getLastSubCkt()->newNode($1);}
+					| node {pObj->getLastSubCkt()->newNode($1);};
 
 subparamlist: subparamlist variable EQN value {pObj->getLastSubCkt()->SetNewParam($2, $4);}
 					| variable EQN value {pObj->getLastSubCkt()->SetNewParam($1, $3);}
-					| {}
+					| {};
+
+xsub: xsubname xnodelist xparamlist
+				{
+				pObj->CurrentCkt()->getLastInst()->specifySubCkt();
+				};
+
+xnodelist: xnodelist node {pObj->CurrentCkt()->getLastInst()->specifyNode($2);}
+				| node {pObj->CurrentCkt()->getLastInst()->specifyNode($1);};
+
+xparamlist: xparamlist variable EQN value {pObj->CurrentCkt()->getLastInst()->specifyParam($2, $4);}
+				| variable EQN value {pObj->CurrentCkt()->getLastInst()->specifyParam($1, $3);}
+				| {};
+
+xsubname: XSUB
+					{
+					std::shared_ptr< XSubInst > instPtr(new XSubInst($1));
+					pObj->CurrentCkt()->addInst(instPtr);
+					};
 
 resistor: RESISTOR node node value
 			{
