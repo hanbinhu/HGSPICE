@@ -18,6 +18,7 @@ int main(int argc, char *argv[]) {
 			pObj->printAllInsts();
 			pObj->printAllNodes();
 			pObj->printAllSubDef();
+			pObj->printAllModels();
 			mAnalyzer->PrintAllAnalysis();
 		} catch (const std::ios::failure& error) {
 			cerr << "I/O exception: " << error.what() << endl;

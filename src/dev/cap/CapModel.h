@@ -3,7 +3,11 @@
 
 #include "../DevBase.h"
 
-class CAPModel : public ModelBase {
+class CapModel : public ModelBase {
+public:
+	CapModel(const string& str);
+	virtual ~CapModel() {}
+	virtual void printInf() const;
 };
 
 #endif  /*CAPMODEL_H*/

@@ -25,31 +25,30 @@ public:
 
 	void ParseAll(std::shared_ptr< Analyzer > mAnalyzer);
 
+	std::shared_ptr< Ckt > CurrentCkt();
+
 	virtual const std::shared_ptr<Node> newNode(const string& strNode);
+
 	virtual void addInst(const std::shared_ptr< InstBase >& mInstPtr);
 	virtual std::shared_ptr< InstBase > getLastInst();
-	
-	std::shared_ptr< Ckt > CurrentCkt();
-	
+
+	void addModel(const std::shared_ptr< ModelBase >& mModelPtr);
+	std::shared_ptr< ModelBase > getLastModel();
+
 	void addSubCkt(const std::shared_ptr< SubCkt >& mSubCktPtr);
 	void SetSubEnd(); 
 	std::shared_ptr< SubCkt > getLastSubCkt();
-	
-	void ParseDiode(char *str, char *nodep, char *noden, char *model);
-	void ParseMOS(char *str, char *noded, char *nodeg, char *nodes, char *nodeb, char *model, double l, double w);
 
 	void printAllNodes() const;
 	void printAllInsts() const;
+	void printAllModels() const;
 	void printAllSubDef() const;
 
 private:
 	enum State {INIT, PARSING, LINKCKT, COMPLETECKT};
 	State processState;
 	ParseSub subParseState;
-	
-	int nDiode;
-	int nMOS;
-	
+		
 	typedef std::shared_ptr< Node> NodePtr;
 	vector< NodePtr > nodeList;
 	std::unordered_map< string, NodePtr > nodeHashMap;
@@ -63,6 +62,7 @@ private:
 	std::unordered_map< string, InstPtr > instHashMap;
 	
 	typedef std::shared_ptr< ModelBase > ModelPtr;
+	vector< ModelPtr > modelList;
 	std::unordered_map< string, ModelPtr > modelHashMap;
 	
 	typedef std::shared_ptr< SubCkt > SubCktPtr;

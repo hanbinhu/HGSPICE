@@ -59,11 +59,12 @@ extern FILE* yyin;
 %token<s> STRING
 %token<s> RESISTOR CAPACITOR INDUCTOR VCVS CCCS VCCS CCVS DIODE MOSFET XSUB
 %token<s> CURRENTSRC VOLTAGESRC
+%token<s> PMOS NMOS D
 %token<s> DC AC SIN PULSE EXP PWL SFFM
 %token<s> L W
 %token<s> DEC LIN OCT
 
-%token SUBDEF SUBEND
+%token MODEL SUBDEF SUBEND
 
 %token OPANALYSIS DCANALYSIS ACANALYSIS TRANANALYSIS
 
@@ -71,7 +72,7 @@ extern FILE* yyin;
 
 %type<s> resistor capacitor inductor vcvs cccs vccs ccvs diode mosfet xsub
 %type<s> currentsrcname voltagesrcname
-%type<s> node model variable
+%type<s> node variable
 %type<f> value lpara wpara
 
 %{
@@ -131,6 +132,7 @@ netlisttot: netlisttot line
 
 line: netlist
 		| substruct
+		| model
 		| analysis EOL
 		| error EOL
 		| EOL;
@@ -283,24 +285,61 @@ ccvs: CCVS node node variable value
 		pObj->CurrentCkt()->addInst(instPtr);
 		};
 
-diode: DIODE node node model
-	   {
-		   pObj->ParseDiode($1, $2, $3, $4);
-	   }
-;
-
-mosfet: MOSFET node node node node model lpara wpara
+diode: DIODE node node variable
 		{
-			pObj -> ParseMOS($1, $2, $3, $4, $5, $6, $7, $8);
-	    }
-	  | MOSFET node node node node model wpara lpara
-	    {
-			pObj -> ParseMOS($1, $2, $3, $4, $5, $6, $8, $7);
+		std::shared_ptr< DiodeInst > instPtr(new DiodeInst($1, $4));
+		instPtr->addNode(pObj->CurrentCkt()->newNode($2));
+		instPtr->addNode(pObj->CurrentCkt()->newNode($3));
+		pObj->CurrentCkt()->addInst(instPtr);
+		};
+
+mosfet: MOSFET node node node node variable lpara wpara
+		{
+		std::shared_ptr< MosInst > instPtr(new MosInst($1, $6));
+		instPtr->addNode(pObj->CurrentCkt()->newNode($2));
+		instPtr->addNode(pObj->CurrentCkt()->newNode($3));
+		instPtr->addNode(pObj->CurrentCkt()->newNode($4));
+		instPtr->addNode(pObj->CurrentCkt()->newNode($5));
+		instPtr->specifyL($7);
+		instPtr->specifyW($8);
+		pObj->CurrentCkt()->addInst(instPtr);
 		}
-;
+		| MOSFET node node node node variable wpara lpara
+		{
+		std::shared_ptr< MosInst > instPtr(new MosInst($1, $6));
+		instPtr->addNode(pObj->CurrentCkt()->newNode($2));
+		instPtr->addNode(pObj->CurrentCkt()->newNode($3));
+		instPtr->addNode(pObj->CurrentCkt()->newNode($4));
+		instPtr->addNode(pObj->CurrentCkt()->newNode($5));
+		instPtr->specifyL($8);
+		instPtr->specifyW($7);
+		pObj->CurrentCkt()->addInst(instPtr);
+		};
 
 lpara: L EQN value {$$ = $3;};
 wpara: W EQN value {$$ = $3;};
+
+model: modeltype modelparamlist;
+
+modelparamlist: modelparamlist variable EQN value {pObj->getLastModel()->addParam($2, $4);}
+						| variable EQN value {pObj->getLastModel()->addParam($1, $3);}
+						| {};
+
+modeltype: MODEL variable D
+				{
+				std::shared_ptr< DiodeModel > modelPtr(new DiodeModel($2));
+				pObj->addModel(modelPtr);
+				}
+				| MODEL variable NMOS
+				{
+				std::shared_ptr< MosModel > modelPtr(new MosModel($2, MosModel::NMOS));
+				pObj->addModel(modelPtr);
+				}
+				| MODEL variable PMOS
+				{
+				std::shared_ptr< MosModel > modelPtr(new MosModel($2, MosModel::PMOS));
+				pObj->addModel(modelPtr);
+				};
 
 voltagesrc: voltagesrcname srcconfig;
 
@@ -367,8 +406,6 @@ tranconfig:	SIN value value value value value
 					}
 					| {};
 
-model: variable;
-
 node: variable
 		{
 		$$ = new char[strlen($1) + 1];
@@ -397,6 +434,9 @@ variable: STRING			{$$ = new char[strlen($1) + 1]; strcpy($$, $1); $$[strlen($1)
 	    | DEC					{$$ = new char[strlen($1) + 1]; strcpy($$, $1); $$[strlen($1)] = '\0';}
 	    | LIN						{$$ = new char[strlen($1) + 1]; strcpy($$, $1); $$[strlen($1)] = '\0';}
 	    | OCT					{$$ = new char[strlen($1) + 1]; strcpy($$, $1); $$[strlen($1)] = '\0';}
+	    | PMOS					{$$ = new char[strlen($1) + 1]; strcpy($$, $1); $$[strlen($1)] = '\0';}
+	    | NMOS					{$$ = new char[strlen($1) + 1]; strcpy($$, $1); $$[strlen($1)] = '\0';}
+	    | D						{$$ = new char[strlen($1) + 1]; strcpy($$, $1); $$[strlen($1)] = '\0';}
 ;
 
 value: VALUE							{$$ = $1;}

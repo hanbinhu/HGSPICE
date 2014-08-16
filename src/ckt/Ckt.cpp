@@ -16,7 +16,18 @@ extern FILE* yyin;
 Ckt::Ckt():
 	processState(INIT),
 	subParseState(OUTSUB)
-{}
+{
+	addModel(ModelPtr(new ResModel("__RES%")));
+	addModel(ModelPtr(new CapModel("__CAP%")));
+	addModel(ModelPtr(new IndModel("__IND%")));
+	addModel(ModelPtr(new VCVSModel("__VCVS%")));
+	addModel(ModelPtr(new VCCSModel("__VCCS%")));
+	addModel(ModelPtr(new CCVSModel("__CCVS%")));
+	addModel(ModelPtr(new CCCSModel("__CCCS%")));
+	addModel(ModelPtr(new ISrcModel("__ISRC%")));
+	addModel(ModelPtr(new VSrcModel("__VSRC%")));
+	addModel(ModelPtr(new XSubModel("__X%")));
+}
 
 void Ckt::ParseAll(std::shared_ptr< Analyzer > mAnalyzer) {
 	if(processState != INIT) throw std::runtime_error("Already Initialized");
@@ -66,6 +77,14 @@ void Ckt::addInst(const std::shared_ptr< InstBase >& mInstPtr) {
 	} else throw std::runtime_error(string("Find Duplicate Instance Name ") + mInstPtr->getInstName() + ".");
 }
 
+void Ckt::addModel(const std::shared_ptr< ModelBase >& mModelPtr) {
+	const std::unordered_map< string, ModelPtr >::const_iterator reVal = modelHashMap.find(mModelPtr->getName());
+	if(reVal == modelHashMap.end()) {
+		modelList.push_back(mModelPtr);
+		modelHashMap.insert({mModelPtr->getName(), mModelPtr});
+	} else throw std::runtime_error(string("Find Duplicate Model Name ") + mModelPtr->getName() + ".");
+}
+
 void Ckt::addSubCkt(const std::shared_ptr< SubCkt >& mSubCktPtr) {
 	const std::unordered_map< string, SubCktPtr >::const_iterator reVal = subCktHashMap.find(mSubCktPtr->getName());
 	if(reVal == subCktHashMap.end()) {
@@ -90,24 +109,14 @@ std::shared_ptr< SubCkt > Ckt::getLastSubCkt() {
 	return subCktList.back();
 }
 
+std::shared_ptr< ModelBase > Ckt::getLastModel(){
+	if(processState != PARSING) throw std::runtime_error("Attempt to getLastModel when not parsing.");
+	return modelList.back();
+}
+
 std::shared_ptr< Ckt > Ckt::CurrentCkt() {
 	if(subParseState == OUTSUB) return shared_from_this();
 	else return subCktList.back();
-}
-
-
-void Ckt::ParseDiode(char *str, char *nodep, char *noden, char *model)
-{
-    cout << "[Diode Parsed...]" << endl;
-    cout << "   name=" << str << ", node+=" << nodep << ", node-=" << noden << ", model=" << model << endl;
-	nDiode++;
-}
-
-void Ckt::ParseMOS(char *str, char *noded, char *nodeg, char *nodes, char *nodeb, char *model, double l, double w)
-{
-    cout << "[MOSFET Parsed...]" << endl;
-    cout << "   name=" << str << ", nodeDrain=" << noded << ", nodeGate=" << nodeg << ", nodeSource=" << nodes << ",nodeBulk=" << nodeb << ", model=" << model << ", L=" << l << ", W=" << w << endl;
-	nMOS++;
 }
 
 void Ckt::printAllNodes() const {
@@ -128,6 +137,11 @@ void Ckt::printAllInsts() const
 {
 	cout << "All Instances (" << instList.size() << ") are listed here." << endl;
 	for(InstPtr elem : instList) elem->printInf();
+}
+
+void Ckt::printAllModels() const{
+	cout << "All Models (" << modelList.size() << ") are listed here." << endl;
+	for(ModelPtr elem : modelList) elem->printInf();
 }
 
 void Ckt::printAllSubDef() const {

@@ -14,14 +14,17 @@ class Node;
 class Branch;
 
 class ModelBase {
-private:
+protected:
 	string name;
-	vector< double > modelParamTable;
+	vector <double> modelParamTable;
+	void printGenInf() const;
 
 public:
-	ModelBase();
+	ModelBase(const string& str, size_t size = 0);
 	virtual ~ModelBase() {}
 	inline string getName() const {return name;}
+	virtual void addParam(const string& param, double val) {}
+	virtual void printInf() const = 0;
 };
 
 class InstBase {

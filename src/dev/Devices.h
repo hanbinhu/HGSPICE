@@ -24,6 +24,11 @@
 #include "vsrc/VSrcInst.h"
 #include "vsrc/VSrcModel.h"
 
+#include "diode/DiodeInst.h"
+#include "diode/DiodeModel.h"
+#include "mos/MosInst.h"
+#include "mos/MosModel.h"
+
 #include "xsub/XSubInst.h"
 #include "xsub/XSubModel.h"
 

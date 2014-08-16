@@ -4,6 +4,10 @@
 #include "../DevBase.h"
 
 class ISrcModel : public ModelBase {
+public:
+	ISrcModel(const string& str);
+	virtual ~ISrcModel() {}
+	virtual void printInf() const;
 };
 
 #endif  /*ISRCMODEL_H*/

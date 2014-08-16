@@ -70,6 +70,8 @@ DIODE				^[Dd]{ALPHANUM}+
 MOSFET			^[Mm]{ALPHANUM}+
 XSUB				^[Xx]{ALPHANUM}+
 
+MODEL				^[\.][Mm][Oo][Dd][Ee][Ll]
+
 SUBDEF			^[\.][Ss][Uu][Bb][Cc][Kk][Tt]
 SUBEND			^[\.][Ee][Nn][Dd][Ss]
 
@@ -146,6 +148,8 @@ TRANANALYSIS	^[\.][Tt][Rr][Aa][Nn]
                  return token::XSUB;
 				}
 
+{MODEL} {return token::MODEL;}
+
 {SUBDEF} {return token::SUBDEF;}
 {SUBEND} {return token::SUBEND;}
 
@@ -199,6 +203,9 @@ TRANANALYSIS	^[\.][Tt][Rr][Aa][Nn]
                  if(!strcasecmp(yylval->s, "DEC")) {return token::DEC;}
                  if(!strcasecmp(yylval->s, "OCT")) {return token::OCT;}
                  if(!strcasecmp(yylval->s, "LIN")) {return token::LIN;}
+                 if(!strcasecmp(yylval->s, "NMOS")) {return token::NMOS;}
+                 if(!strcasecmp(yylval->s, "PMOS")) {return token::PMOS;}
+                 if(!strcasecmp(yylval->s, "D")) {return token::D;}
                  return token::STRING;
 			    }
 

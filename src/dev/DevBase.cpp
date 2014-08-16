@@ -30,5 +30,13 @@ void InstBase::printGenInf() const {
 	printNode();
 }
 
-ModelBase::ModelBase() {
+ModelBase::ModelBase(const string& str, size_t size):
+	name(str),
+	modelParamTable(size)
+{}
+
+void ModelBase::printGenInf() const {
+	cout << "****************************************" << endl;
+	cout << "Model Name: " << getName() << endl;
+	cout << "Parameter number: " << modelParamTable.size() << endl;
 }

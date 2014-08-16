@@ -25,6 +25,8 @@ v1 vdd 0 dc 1 ac 1 sin 1 1 20k 1n 0
 
 Xs fie ji INV
 
+.model hehe PMOS
+
 .subckt INV in out vdd gnd L=5n W=5u s=10
 R1 vdd 1 5k
 V4 in out 0
