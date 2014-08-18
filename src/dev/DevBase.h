@@ -7,11 +7,10 @@ using std::vector;
 using std::string;
 
 #include <memory>
+#include <unordered_map>
 
 #include "SrcFunc.h"
-
-class Node;
-class Branch;
+#include "Generic.h"
 
 class ModelBase {
 protected:
@@ -55,6 +54,9 @@ public:
 	virtual void specifyParam(const string& param, double value) {}
 	virtual void specifySubCkt() {}
 	virtual void specifyNode(const string& node) {}
+	
+	inline void setModel(const ModelPtr& mModel) {myModel = mModel;}
+	virtual void setBranch(const BranchPtr& mBranch) {};
 	
 	inline string getInstName() const {return name;}
 	inline string getModelName() const {return modelName;}

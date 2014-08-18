@@ -33,6 +33,7 @@ using std::vector;
 using std::string;
 #include "Ckt.h"
 #include "SubCkt.h"
+#include "Devices.h"
 #include "Analyzer.h"
 
 extern FILE* yyin;
@@ -345,7 +346,7 @@ voltagesrc: voltagesrcname srcconfig;
 
 voltagesrcname: VOLTAGESRC node node
 				{
-				std::shared_ptr< ISrcInst > instPtr(new ISrcInst($1, "__VSRC%"));
+				std::shared_ptr< VSrcInst > instPtr(new VSrcInst($1, "__VSRC%"));
 				instPtr->addNode(pObj->CurrentCkt()->newNode($2));
 				instPtr->addNode(pObj->CurrentCkt()->newNode($3));
 				pObj->CurrentCkt()->addInst(instPtr);

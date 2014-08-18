@@ -28,6 +28,7 @@ public:
 	inline virtual void specifyDC(double dc) {dcVoltage = dc;}
 	inline virtual void  specifyAC(double ac, double phase) {acVoltage = ac; acVoltagePhase = phase;}
 	virtual void specifyFunc(SrcFunc::TranFuncType mFuncType, const vector<double>& paramTab);
+	inline virtual void setBranch(const BranchPtr& mBranch) {brPtr = mBranch;}
 	
 	virtual void printInf() const;
 };

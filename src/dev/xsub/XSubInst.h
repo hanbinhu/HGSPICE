@@ -24,6 +24,8 @@ public:
 	XSubInst(const string& str);
 	virtual ~XSubInst() {}
 	
+	inline string getSubCktName() const {return subCktName;}
+	
 	inline virtual void specifyNode(const string& node) {exNodeName.push_back(node);}
 	virtual void specifySubCkt();
 	virtual void specifyParam(const string& param, double value);

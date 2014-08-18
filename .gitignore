@@ -16,3 +16,4 @@ tags
 # Project File
 .kdev4/*
 *.kdev4
+*.udb

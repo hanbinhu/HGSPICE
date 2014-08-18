@@ -10,7 +10,7 @@ using std::vector;
 #include <unordered_map>
 
 #include "Generic.h"
-#include "Devices.h"
+#include "DevBase.h"
 
 class SubCkt;
 class Analyzer;
@@ -40,6 +40,7 @@ public:
 	std::shared_ptr< SubCkt > getLastSubCkt();
 
 	void printAllNodes() const;
+	void printAllBranches() const;
 	void printAllInsts() const;
 	void printAllModels() const;
 	void printAllSubDef() const;
@@ -53,7 +54,7 @@ private:
 	vector< NodePtr > nodeList;
 	std::unordered_map< string, NodePtr > nodeHashMap;
 	
-	typedef std::shared_ptr< Node> BranchPtr;
+	typedef std::shared_ptr< Branch> BranchPtr;
 	vector< BranchPtr > branchList;
 	std::unordered_map< string, BranchPtr > branchHashMap;
 	
@@ -68,8 +69,11 @@ private:
 	typedef std::shared_ptr< SubCkt > SubCktPtr;
 	vector< SubCktPtr > subCktList;
 	std::unordered_map< string, SubCktPtr > subCktHashMap;
+	
+	void linkAll();
+	void linkBranch(InstPtr& mInst);
+	void linkCC(InstPtr& mInst);
+	const std::shared_ptr< Branch > newBranch(const string& strBranch);
 };
 
 #endif
-
-

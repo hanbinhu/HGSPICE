@@ -16,6 +16,7 @@ public:
 	
 	inline void specifyCap(double cap) {capcitance = cap;}
 	inline virtual void specifyIC(double IC) {voltageIC = IC;}
+	inline virtual void setBranch(const BranchPtr& mBranch) {brPtr = mBranch;}
 	
 	virtual void printInf() const;
 };

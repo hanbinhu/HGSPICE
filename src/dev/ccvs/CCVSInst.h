@@ -3,9 +3,13 @@
 
 #include "../DevBase.h"
 
+#include <memory>
+
+class VSrcInst;
+
 class CCVSInst : public InstBase {
 private:
-	BranchPtr brCCPtr;
+	std::weak_ptr< VSrcInst > mVPtr;
 	BranchPtr brVSPtr;
 	
 	string CCName;
@@ -17,6 +21,9 @@ public:
 	
 	inline void specifyH(double ccvs) {h = ccvs;}
 	inline void specifyCCName(const string& str)  {CCName = str;}
+	inline string getVName() {return CCName;}
+	inline virtual void setBranch(const BranchPtr& mBranch) {brVSPtr = mBranch;}
+	inline void setVPtr(const std::weak_ptr< VSrcInst >& VPtr) {mVPtr = VPtr;}
 	
 	virtual void printInf() const;
 };

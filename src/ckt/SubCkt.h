@@ -10,8 +10,6 @@ using std::vector;
 #include <unordered_set>
 #include <unordered_map>
 
-#include "Generic.h"
-#include "Devices.h"
 #include "Ckt.h"
 
 class SubCkt : public Ckt {

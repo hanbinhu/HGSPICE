@@ -14,6 +14,7 @@ public:
 	virtual ~VCVSInst() {}
 	
 	inline void specifyE(double vcvs) {e = vcvs;}
+	inline virtual void setBranch(const BranchPtr& mBranch) {brVSPtr = mBranch;}
 	
 	virtual void printInf() const;
 };

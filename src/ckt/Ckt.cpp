@@ -39,6 +39,7 @@ void Ckt::ParseAll(std::shared_ptr< Analyzer > mAnalyzer) {
 	yy::SpParser spiceParser(shared_from_this(), mAnalyzer);
 	spiceParser.parse();
 	processState = LINKCKT;
+	linkAll();
 }
 
 Ckt::~Ckt() {
@@ -119,12 +120,110 @@ std::shared_ptr< Ckt > Ckt::CurrentCkt() {
 	else return subCktList.back();
 }
 
+/**
+ * @Todo SubCkt Def Inst Link
+ * @Todo SubCkt Expand (Create New Node and Inst)
+ * @Todo Model Link
+ * @Todo Branch Create
+ * @Todo CC Link
+ */
+void Ckt::linkAll() {
+	for(int i = 0; i < instList.size(); i++) {
+		//Set Model
+		const std::unordered_map< string, ModelPtr >::const_iterator reVal = modelHashMap.find(instList[i]->getModelName());
+		if (reVal == modelHashMap.end()) throw std::runtime_error(string("Doesn't find ") + instList[i]->getModelName());
+		else instList[i]->setModel(reVal->second);
+		
+		if(instList[i]->getInstName()[0] == 'X' || instList[i]->getInstName()[0] == 'x') {
+			std::shared_ptr< XSubInst > elem = std::dynamic_pointer_cast< XSubInst > (instList[i]);
+		} else {
+			//Branch Link
+			linkBranch(instList[i]);
+			//Set CC
+			linkCC(instList[i]);
+		}
+	}
+}
+void Ckt::linkCC(InstPtr& mInst) {
+	char instType = mInst->getInstName()[0];
+	if(instType >= 'a') instType -= ('a' - 'A');
+	switch(instType) {
+		case 'F': {
+			std::shared_ptr< CCCSInst > mCCCS = std::dynamic_pointer_cast< CCCSInst > (mInst);
+			const string VName = mCCCS->getVName();
+			if(VName[0] == 'V' || VName[0] == 'v') {
+				const std::unordered_map< string, InstPtr >::const_iterator reVal = instHashMap.find(VName);
+				if(reVal != instHashMap.end()) {
+					std::shared_ptr< VSrcInst > tmp = std::dynamic_pointer_cast< VSrcInst > (reVal->second);
+					if(tmp == nullptr) throw std::runtime_error("Dynamic cast wrong for VSrcInst");
+					mCCCS->setVPtr(tmp);
+				}else throw std::runtime_error(VName + " doesn't exist in Instance list");
+			} else throw std::runtime_error(VName + " is not a voltage source for " + mCCCS->getInstName());
+		} break;
+		case 'H': {
+			std::shared_ptr< CCVSInst > mCCVS = std::dynamic_pointer_cast< CCVSInst > (mInst);
+			const string VName = mCCVS->getVName();
+			if(VName[0] == 'V' || VName[0] == 'v') {
+				const std::unordered_map< string, InstPtr >::const_iterator reVal = instHashMap.find(VName);
+				if(reVal != instHashMap.end()) {
+					std::shared_ptr< VSrcInst > tmp = std::dynamic_pointer_cast< VSrcInst > (reVal->second);
+					if(tmp == nullptr) throw std::runtime_error("Dynamic cast wrong for VSrcInst");
+					mCCVS->setVPtr(tmp);
+				} else throw std::runtime_error(VName + " doesn't exist in Instance list");
+			} else throw std::runtime_error(VName + " is not a voltage source for " + mCCVS->getInstName());
+		} break;
+	}
+}
+
+void Ckt::linkBranch(InstPtr& mInst) {
+	char instType = mInst->getInstName()[0];
+	if(instType >= 'a') instType -= ('a' - 'A');
+	switch(instType) {
+		case 'V':
+		case 'E':
+		case 'H':
+		case 'C':
+		case 'L': {
+			const string brName(mInst->getInstName() + ":br");
+			mInst->setBranch(newBranch(brName));
+		} break;
+		case 'M': {
+		} break;
+		default: {
+		} break;
+	}
+}
+
+const std::shared_ptr< Branch > Ckt::newBranch(const string& strBranch) {
+	const std::unordered_map< string, BranchPtr >::const_iterator reVal = branchHashMap.find(strBranch);
+	if(reVal == branchHashMap.end()) {
+		const BranchPtr mBranchPtr(new Branch(strBranch));
+		branchList.push_back(mBranchPtr);
+		branchHashMap.insert({strBranch, mBranchPtr});
+		return mBranchPtr;
+	} else throw std::runtime_error(string("Already has one branch named as ") + strBranch);
+}
+
 void Ckt::printAllNodes() const {
 	cout << "****************************************" << endl;
 	cout << "Node Information in Node List (" << nodeList.size() << ")" << endl;
 	cout.flags(std::ios::left);
 	int wordCnt = 1;
 	for(NodePtr elem : nodeList) {
+		cout << std::setw(8) << elem->getName();
+		wordCnt %= 10; 
+		if(!wordCnt)  cout << endl;
+		wordCnt++;
+	}
+	if(wordCnt != 1) cout << endl;
+}
+
+void Ckt::printAllBranches() const {
+	cout << "****************************************" << endl;
+	cout << "Branch Information in Branch List (" << branchList.size() << ")" << endl;
+	cout.flags(std::ios::left);
+	int wordCnt = 1;
+	for(BranchPtr elem : branchList) {
 		cout << std::setw(8) << elem->getName();
 		wordCnt %= 10; 
 		if(!wordCnt)  cout << endl;

@@ -16,6 +16,7 @@ public:
 	
 	inline void specifyInd(double ind) {inductance = ind;}
 	inline virtual void specifyIC(double IC) {currentIC = IC;}
+	inline virtual void setBranch(const BranchPtr& mBranch) {brPtr = mBranch;}
 	
 	virtual void printInf() const;
 };

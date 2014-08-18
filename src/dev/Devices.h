@@ -1,8 +1,6 @@
 #ifndef  DEVICES_H
 #define  DEVICES_H
 
-#include "DevBase.h"
-
 #include "res/ResInst.h"
 #include "res/ResModel.h"
 #include "cap/CapInst.h"

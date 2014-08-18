@@ -26,7 +26,7 @@ void InstBase::printNode() const {
 void InstBase::printGenInf() const {
 	cout << "****************************************" << endl;
 	cout << "Inst Name: " << getInstName() << endl;
-	cout << "Model Name: " << getModelName() << endl;
+	cout << "Model Name: " << myModel.lock()->getName() << endl;
 	printNode();
 }
 

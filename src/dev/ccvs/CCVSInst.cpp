@@ -3,6 +3,7 @@ using std::cout;
 using std::endl;
 
 #include "CCVSInst.h"
+#include "../vsrc/VSrcInst.h"
 
 CCVSInst::CCVSInst(const string& str, const string& modelStr): 
 	InstBase(str, modelStr),
