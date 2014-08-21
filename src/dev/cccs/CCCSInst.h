@@ -15,12 +15,15 @@ private:
 	
 public:
 	CCCSInst(const string& str, const string& modelStr);
+	CCCSInst(const CCCSInst& rhs);
 	virtual ~CCCSInst() {}
 	
 	inline void specifyF(double cccs) {f = cccs;}
 	inline void specifyCCName(const string& str)  {CCName = str;}
 	inline string getVName() {return CCName;}
 	inline void setVPtr(const std::weak_ptr< VSrcInst >& VPtr) {mVPtr = VPtr;}
+	
+	virtual std::shared_ptr< InstBase > Clone();
 	
 	virtual void printInf() const;
 };

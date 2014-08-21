@@ -12,11 +12,14 @@ private:
 	
 public:
 	IndInst(const string& str, const string& modelStr);
+	IndInst(const IndInst& rhs);
 	virtual ~IndInst() {}
 	
 	inline void specifyInd(double ind) {inductance = ind;}
 	inline virtual void specifyIC(double IC) {currentIC = IC;}
 	inline virtual void setBranch(const BranchPtr& mBranch) {brPtr = mBranch;}
+	
+	virtual std::shared_ptr< InstBase > Clone();
 	
 	virtual void printInf() const;
 };

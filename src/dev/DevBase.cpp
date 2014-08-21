@@ -15,6 +15,13 @@ InstBase::InstBase(const string& str, const string& modelStr):
 	nodeTable()
 {}
 
+InstBase::InstBase(const InstBase& rhs): 
+	name(rhs.name),
+	modelName(rhs.modelName),
+	myModel(),
+	nodeTable()
+{}
+
 void InstBase::printNode() const {
 	cout << getInstName() << " has " << nodeTable.size() << " nodes. The nodes are listed below:" << endl;
 	cout.flags(std::ios::left);

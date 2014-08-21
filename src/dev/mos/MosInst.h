@@ -10,10 +10,13 @@ private:
 	
 public:
 	MosInst(const string& str, const string& modelStr);
+	MosInst(const MosInst& rhs);
 	virtual ~MosInst() {}
 	
 	inline void specifyL(double mL) {L = mL;}
 	inline void specifyW(double mW) {W = mW;}
+	
+	virtual std::shared_ptr< InstBase > Clone();
 	
 	virtual void printInf() const;
 };

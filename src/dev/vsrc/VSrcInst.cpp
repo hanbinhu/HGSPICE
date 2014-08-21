@@ -15,6 +15,16 @@ VSrcInst::VSrcInst(const string& str, const string& modelStr):
 	paramTable()
 {}
 
+VSrcInst::VSrcInst(const VSrcInst& rhs): 
+	InstBase(rhs),
+	dcVoltage(rhs.dcVoltage),
+	acVoltage(rhs.acVoltage),
+	acVoltagePhase(rhs.acVoltagePhase),
+	printFunc(rhs.printFunc),
+	calFunc(rhs.calFunc),
+	paramTable(rhs.paramTable)
+{}
+
 void VSrcInst::printInf() const {
 	printGenInf();
 	cout << "DC Current: " << dcVoltage << "V" << endl;
@@ -49,4 +59,8 @@ void VSrcInst::specifyFunc(SrcFunc::TranFuncType mFuncType, const vector< double
 		default:
 			throw std::runtime_error(string("Unexpected function type found in ") + getInstName());
 	}
+}
+
+std::shared_ptr< InstBase > VSrcInst::Clone() {
+	return std::static_pointer_cast< InstBase >( std::shared_ptr< VSrcInst >(new VSrcInst( *this ) ) );
 }

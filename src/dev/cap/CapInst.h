@@ -12,11 +12,14 @@ private:
 	
 public:
 	CapInst(const string& str, const string& modelStr);
+	CapInst(const CapInst& rhs);
 	virtual ~CapInst() {}
 	
 	inline void specifyCap(double cap) {capcitance = cap;}
 	inline virtual void specifyIC(double IC) {voltageIC = IC;}
 	inline virtual void setBranch(const BranchPtr& mBranch) {brPtr = mBranch;}
+	
+	virtual std::shared_ptr< InstBase > Clone();
 	
 	virtual void printInf() const;
 };

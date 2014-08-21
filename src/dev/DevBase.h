@@ -27,6 +27,8 @@ public:
 };
 
 class InstBase {
+friend class XSubInst;
+	
 protected:
 	typedef std::weak_ptr< Node > NodePtr;
 	typedef std::weak_ptr< Branch > BranchPtr;
@@ -42,6 +44,7 @@ protected:
 	
 public:
 	InstBase(const string& str, const string& modelStr);
+	InstBase(const InstBase& rhs);
 	virtual ~InstBase() {}
 	
 	void addNode(const NodePtr& mNodePtr) {nodeTable.push_back(mNodePtr);}
@@ -61,6 +64,8 @@ public:
 	inline string getInstName() const {return name;}
 	inline string getModelName() const {return modelName;}
 
+	virtual std::shared_ptr< InstBase > Clone() = 0;
+	
 	virtual void printInf() const = 0;
 	
 };

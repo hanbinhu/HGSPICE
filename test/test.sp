@@ -23,7 +23,7 @@ I3 c 0 1 SFFM 0 1 10k 5 1k
 I4 c 0 3
 vsen vdd 0 dc 1 ac 1 sin 1 1 20k 1n 0
 
-Xs fie ji INV
+Xs fie ji vdd 0 INV
 
 .model PCH PMOS
 .model NCH NMOS
@@ -32,7 +32,7 @@ Xs fie ji INV
 .subckt INV in out vdd gnd L=5n W=5u s=10
 R1 vdd 1 5k
 V4 in out 0
-XXs fie foef INV1 L=4 p=3
+XXs fie foef in vdd INV1 L=4 p=3
 .ends
 
 .subckt INV1 in out vdd gnd L=5n W=5u s=10

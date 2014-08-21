@@ -6,7 +6,10 @@
 class DiodeInst : public InstBase {
 public:
 	DiodeInst(const string& str, const string& modelStr);
+	DiodeInst(const DiodeInst& rhs);
 	virtual ~DiodeInst() {}
+
+	virtual std::shared_ptr< InstBase > Clone();
 
 	virtual void printInf() const;
 };

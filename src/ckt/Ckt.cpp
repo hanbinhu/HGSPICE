@@ -128,22 +128,25 @@ std::shared_ptr< Ckt > Ckt::CurrentCkt() {
  * @Todo CC Link
  */
 void Ckt::linkAll() {
-	for(int i = 0; i < instList.size(); i++) {
-		//Set Model
-		const std::unordered_map< string, ModelPtr >::const_iterator reVal = modelHashMap.find(instList[i]->getModelName());
-		if (reVal == modelHashMap.end()) throw std::runtime_error(string("Doesn't find ") + instList[i]->getModelName());
-		else instList[i]->setModel(reVal->second);
-		
-		if(instList[i]->getInstName()[0] == 'X' || instList[i]->getInstName()[0] == 'x') {
-			std::shared_ptr< XSubInst > elem = std::dynamic_pointer_cast< XSubInst > (instList[i]);
+	for(InstPtr elem : instList) {
+		linkModel(elem);
+		if(elem->getInstName()[0] == 'X' || elem->getInstName()[0] == 'x') {
+			std::shared_ptr< XSubInst > xInst = std::dynamic_pointer_cast< XSubInst > (elem);
+			xInst->fillNode( shared_from_this() );
+			xInst->link("", shared_from_this());
 		} else {
-			//Branch Link
-			linkBranch(instList[i]);
-			//Set CC
-			linkCC(instList[i]);
+			linkBranch("", elem);
+			linkCC(elem);
 		}
 	}
 }
+
+void Ckt::linkModel(InstPtr& mInst) {
+	const std::unordered_map< string, ModelPtr >::const_iterator reVal = modelHashMap.find(mInst->getModelName());
+	if (reVal == modelHashMap.end()) throw std::runtime_error(string("Doesn't find ") + mInst->getModelName());
+	else mInst->setModel(reVal->second);
+}
+
 void Ckt::linkCC(InstPtr& mInst) {
 	char instType = mInst->getInstName()[0];
 	if(instType >= 'a') instType -= ('a' - 'A');
@@ -175,7 +178,7 @@ void Ckt::linkCC(InstPtr& mInst) {
 	}
 }
 
-void Ckt::linkBranch(InstPtr& mInst) {
+void Ckt::linkBranch(const string& title, InstPtr& mInst) {
 	char instType = mInst->getInstName()[0];
 	if(instType >= 'a') instType -= ('a' - 'A');
 	switch(instType) {
@@ -184,7 +187,7 @@ void Ckt::linkBranch(InstPtr& mInst) {
 		case 'H':
 		case 'C':
 		case 'L': {
-			const string brName(mInst->getInstName() + ":br");
+			const string brName(title + mInst->getInstName() + ":br");
 			mInst->setBranch(newBranch(brName));
 		} break;
 		case 'M': {

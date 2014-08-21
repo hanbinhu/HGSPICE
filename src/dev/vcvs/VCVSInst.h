@@ -11,10 +11,13 @@ private:
 	
 public:
 	VCVSInst(const string& str, const string& modelStr);
+	VCVSInst(const VCVSInst& rhs);
 	virtual ~VCVSInst() {}
 	
 	inline void specifyE(double vcvs) {e = vcvs;}
 	inline virtual void setBranch(const BranchPtr& mBranch) {brVSPtr = mBranch;}
+	
+	virtual std::shared_ptr< InstBase > Clone();
 	
 	virtual void printInf() const;
 };

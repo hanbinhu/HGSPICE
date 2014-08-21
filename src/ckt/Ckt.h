@@ -10,13 +10,18 @@ using std::vector;
 #include <unordered_map>
 
 #include "Generic.h"
-#include "DevBase.h"
+
+class InstBase;
+class ModelBase;
 
 class SubCkt;
 class Analyzer;
 
 class Ckt : public std::enable_shared_from_this< Ckt >
 {
+
+friend class XSubInst;
+
 public:
 	Ckt();
 	~Ckt();
@@ -71,8 +76,9 @@ private:
 	std::unordered_map< string, SubCktPtr > subCktHashMap;
 	
 	void linkAll();
-	void linkBranch(InstPtr& mInst);
+	void linkBranch(const string& title, InstPtr& mInst);
 	void linkCC(InstPtr& mInst);
+	void linkModel(InstPtr& mInst);
 	const std::shared_ptr< Branch > newBranch(const string& strBranch);
 };
 

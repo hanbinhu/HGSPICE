@@ -15,6 +15,16 @@ ISrcInst::ISrcInst(const string& str, const string& modelStr):
 	paramTable()
 {}
 
+ISrcInst::ISrcInst(const ISrcInst& rhs): 
+	InstBase(rhs),
+	dcCurrent(rhs.dcCurrent),
+	acCurrent(rhs.acCurrent),
+	acCurrentPhase(rhs.acCurrentPhase),
+	printFunc(rhs.printFunc),
+	calFunc(rhs.calFunc),
+	paramTable(rhs.paramTable)
+{}
+
 void ISrcInst::printInf() const {
 	printGenInf();
 	cout << "DC Current: " << dcCurrent << "A" << endl;
@@ -49,4 +59,8 @@ void ISrcInst::specifyFunc(SrcFunc::TranFuncType mFuncType, const vector< double
 		default:
 			throw std::runtime_error(string("Unexpected function type found in ") + getInstName());
 	}
+}
+
+std::shared_ptr< InstBase > ISrcInst::Clone() {
+	return std::static_pointer_cast< InstBase >( std::shared_ptr< ISrcInst >(new ISrcInst( *this ) ) );
 }

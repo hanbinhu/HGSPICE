@@ -21,11 +21,14 @@ private:
 	
 public:
 	ISrcInst(const string& str, const string& modelStr);
+	ISrcInst(const ISrcInst& rhs);
 	virtual ~ISrcInst() {}
 	
 	inline virtual void specifyDC(double dc) {dcCurrent = dc;}
 	inline virtual void  specifyAC(double ac, double phase) {acCurrent = ac; acCurrentPhase = phase;}
 	virtual void specifyFunc(SrcFunc::TranFuncType mFuncType, const vector<double>& paramTab);
+	
+	virtual std::shared_ptr< InstBase > Clone();
 	
 	virtual void printInf() const;
 };

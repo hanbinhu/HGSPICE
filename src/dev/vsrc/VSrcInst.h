@@ -23,12 +23,15 @@ private:
 	
 public:
 	VSrcInst(const string& str, const string& modelStr);
+	VSrcInst(const VSrcInst& rhs);
 	virtual ~VSrcInst() {}
 	
 	inline virtual void specifyDC(double dc) {dcVoltage = dc;}
 	inline virtual void  specifyAC(double ac, double phase) {acVoltage = ac; acVoltagePhase = phase;}
 	virtual void specifyFunc(SrcFunc::TranFuncType mFuncType, const vector<double>& paramTab);
 	inline virtual void setBranch(const BranchPtr& mBranch) {brPtr = mBranch;}
+	
+	virtual std::shared_ptr< InstBase > Clone();
 	
 	virtual void printInf() const;
 };

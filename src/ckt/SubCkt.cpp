@@ -5,6 +5,7 @@
 using std::cout;
 using std::endl;
 
+#include "DevBase.h"
 #include "SubCkt.h"
 
 SubCkt::SubCkt(const string& str):

@@ -13,6 +13,9 @@ using std::vector;
 #include "Ckt.h"
 
 class SubCkt : public Ckt {
+
+friend class XSubInst;
+
 private:
 	string name;
 

@@ -17,6 +17,7 @@ private:
 	
 public:
 	CCVSInst(const string& str, const string& modelStr);
+	CCVSInst(const CCVSInst& rhs);	
 	virtual ~CCVSInst() {}
 	
 	inline void specifyH(double ccvs) {h = ccvs;}
@@ -24,6 +25,8 @@ public:
 	inline string getVName() {return CCName;}
 	inline virtual void setBranch(const BranchPtr& mBranch) {brVSPtr = mBranch;}
 	inline void setVPtr(const std::weak_ptr< VSrcInst >& VPtr) {mVPtr = VPtr;}
+	
+	virtual std::shared_ptr< InstBase > Clone();
 	
 	virtual void printInf() const;
 };

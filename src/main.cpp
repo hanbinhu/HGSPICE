@@ -15,8 +15,6 @@ int main(int argc, char *argv[]) {
 			std::shared_ptr< Analyzer > mAnalyzer(new Analyzer(argv[1]));
 			std::shared_ptr< Ckt > pObj(new Ckt);
 			pObj->ParseAll(mAnalyzer);
-			pObj->printAllInsts();
-			pObj->printAllBranches();
 		} catch (const std::ios::failure& error) {
 			cerr << "I/O exception: " << error.what() << endl;
 			return 1;

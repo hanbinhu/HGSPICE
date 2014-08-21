@@ -9,9 +9,12 @@ private:
 	
 public:
 	ResInst(const string& str, const string& modelStr);
+	ResInst(const ResInst& rhs);
 	virtual ~ResInst() {}
 	
 	inline void specifyRes(double res) {resistance = res;}
+	
+	virtual std::shared_ptr< InstBase > Clone();
 	
 	virtual void printInf() const;
 };
