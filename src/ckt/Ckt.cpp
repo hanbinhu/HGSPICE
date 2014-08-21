@@ -40,6 +40,7 @@ void Ckt::ParseAll(std::shared_ptr< Analyzer > mAnalyzer) {
 	spiceParser.parse();
 	processState = LINKCKT;
 	linkAll();
+	numberNodeBranch();
 }
 
 Ckt::~Ckt() {
@@ -205,6 +206,13 @@ const std::shared_ptr< Branch > Ckt::newBranch(const string& strBranch) {
 		branchHashMap.insert({strBranch, mBranchPtr});
 		return mBranchPtr;
 	} else throw std::runtime_error(string("Already has one branch named as ") + strBranch);
+}
+
+void Ckt::numberNodeBranch() {
+	int i = 0;
+	if(nodeList[0]->getName() != "0") throw std::runtime_error("No gnd in this Circuit.");
+	for(NodePtr elem : nodeList) elem->setId(i++);
+	for(BranchPtr elem : branchList) elem->setId(i++);
 }
 
 void Ckt::printAllNodes() const {

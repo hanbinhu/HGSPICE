@@ -24,6 +24,7 @@ I4 c 0 3
 vsen vdd 0 dc 1 ac 1 sin 1 1 20k 1n 0
 
 Xs fie ji vdd 0 INV
+XXs 1 2 vdd gnd INV1
 
 .model PCH PMOS
 .model NCH NMOS

@@ -80,6 +80,8 @@ private:
 	void linkCC(InstPtr& mInst);
 	void linkModel(InstPtr& mInst);
 	const std::shared_ptr< Branch > newBranch(const string& strBranch);
+	
+	void numberNodeBranch();
 };
 
 #endif

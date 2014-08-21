@@ -14,6 +14,8 @@ private:
 public:
 	Node(const string& str);
 	inline string getName() const {return name;}
+	void setId(int id);
+	int getId() const;
 
 };
 
@@ -27,6 +29,8 @@ private:
 public:	
 	Branch(const string& str);
 	inline string getName() const {return name;}
+	void setId(int id);
+	int getId() const;
 
 };
 

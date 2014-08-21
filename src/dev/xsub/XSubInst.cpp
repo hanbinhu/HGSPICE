@@ -158,6 +158,11 @@ void XSubInst::printInf() const {
 	cout << std::setw(15) << "Parameters" << std::setw(10) << "Values" << endl;
 	for(int i = 0; i < paramTab.size(); ++i)
 		cout << std::setw(15) << paramTab[i] << std::setw(20) << paramValueTab[i] << endl;
+	if(!instList.empty()) {
+		cout << "Internal Inst (" << instList.size() << ") for " << getInstName() << " is below:" << endl;
+		for(InstPtr elem: instList) elem->printInf();
+		cout << "Internal Inst (" << instList.size() << ") for " << getInstName() << " is Completed" << endl;
+	}
 }
 
 std::shared_ptr< InstBase > XSubInst::Clone() {
