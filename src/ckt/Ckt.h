@@ -22,13 +22,20 @@ class Ckt : public std::enable_shared_from_this< Ckt >
 
 friend class XSubInst;
 
+private:
+	typedef std::shared_ptr< Node> NodePtr;
+	typedef std::shared_ptr< Branch> BranchPtr;
+	typedef std::shared_ptr< InstBase > InstPtr;
+	typedef std::shared_ptr< ModelBase > ModelPtr;
+	typedef std::shared_ptr< SubCkt > SubCktPtr;
+
 public:
 	Ckt();
 	~Ckt();
 
 	enum ParseSub {INSUB, OUTSUB};
 
-	void ParseAll(std::shared_ptr< Analyzer > mAnalyzer);
+	void Initialize(std::shared_ptr< Analyzer > mAnalyzer);
 
 	std::shared_ptr< Ckt > CurrentCkt();
 
@@ -43,6 +50,8 @@ public:
 	void addSubCkt(const std::shared_ptr< SubCkt >& mSubCktPtr);
 	void SetSubEnd(); 
 	std::shared_ptr< SubCkt > getLastSubCkt();
+	
+	InstPtr findInst(const string& instName);
 
 	void printAllNodes() const;
 	void printAllBranches() const;
@@ -54,24 +63,19 @@ private:
 	enum State {INIT, PARSING, LINKCKT, COMPLETECKT};
 	State processState;
 	ParseSub subParseState;
-		
-	typedef std::shared_ptr< Node> NodePtr;
+
 	vector< NodePtr > nodeList;
-	std::unordered_map< string, NodePtr > nodeHashMap;
+	std::unordered_map< string, NodePtr > nodeHashMap;	
 	
-	typedef std::shared_ptr< Branch> BranchPtr;
 	vector< BranchPtr > branchList;
 	std::unordered_map< string, BranchPtr > branchHashMap;
 	
-	typedef std::shared_ptr< InstBase > InstPtr;
 	vector< InstPtr > instList;
 	std::unordered_map< string, InstPtr > instHashMap;
 	
-	typedef std::shared_ptr< ModelBase > ModelPtr;
 	vector< ModelPtr > modelList;
 	std::unordered_map< string, ModelPtr > modelHashMap;
 	
-	typedef std::shared_ptr< SubCkt > SubCktPtr;
 	vector< SubCktPtr > subCktList;
 	std::unordered_map< string, SubCktPtr > subCktHashMap;
 	

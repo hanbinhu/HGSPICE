@@ -42,7 +42,7 @@ V4 in out 0
 .ends
 
 .op
-.dc vdd 0 1.8 0.1
+.dc Ila 0 1.8 0.1
 .ac LIN 10 10k 1G
 .ac DEC 100 10 1Meg
 .Tran 1n 1u

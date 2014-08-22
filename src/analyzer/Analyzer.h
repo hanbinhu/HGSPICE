@@ -11,6 +11,8 @@ using std::vector;
 #include "Analysis.h"
 #include "ACAnalysis.h"
 
+class Ckt;
+
 class Analyzer {
 public:
 	Analyzer(const string& str);
@@ -24,6 +26,8 @@ public:
 	void ParseACAnalysis(ACAnalysis::SweepType mType, int n, double fs, double fe);
 	
 	void PrintAllAnalysis() const;
+	
+	void linkSrc(std::shared_ptr< Ckt > mCkt);
 	
 private:
 	enum State {INIT, LINKCKT, COMPLETEANA};

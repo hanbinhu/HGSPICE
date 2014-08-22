@@ -7,6 +7,7 @@ using std::endl;
 
 #include <algorithm>
 
+#include "Analyzer.h"
 #include "Ckt.h"
 #include "SubCkt.h"
 
@@ -29,7 +30,7 @@ Ckt::Ckt():
 	addModel(ModelPtr(new XSubModel("__X%")));
 }
 
-void Ckt::ParseAll(std::shared_ptr< Analyzer > mAnalyzer) {
+void Ckt::Initialize(std::shared_ptr< Analyzer > mAnalyzer) {
 	if(processState != INIT) throw std::runtime_error("Already Initialized");
 	string filename = mAnalyzer->getInputFile();
 	if (!(yyin = fopen(filename.c_str(), "r"))) {
@@ -41,6 +42,8 @@ void Ckt::ParseAll(std::shared_ptr< Analyzer > mAnalyzer) {
 	processState = LINKCKT;
 	linkAll();
 	numberNodeBranch();
+	mAnalyzer->linkSrc(shared_from_this());
+	processState = COMPLETECKT;
 }
 
 Ckt::~Ckt() {
@@ -213,6 +216,12 @@ void Ckt::numberNodeBranch() {
 	if(nodeList[0]->getName() != "0") throw std::runtime_error("No gnd in this Circuit.");
 	for(NodePtr elem : nodeList) elem->setId(i++);
 	for(BranchPtr elem : branchList) elem->setId(i++);
+}
+
+std::shared_ptr< InstBase > Ckt::findInst(const string& instName) {
+	const std::unordered_map< string, InstPtr >::const_iterator reVal = instHashMap.find(instName);
+	if(reVal == instHashMap.end()) return nullptr;
+	else return reVal->second;
 }
 
 void Ckt::printAllNodes() const {

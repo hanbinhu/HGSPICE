@@ -5,6 +5,8 @@ using std::endl;
 
 #include "Analyzer.h"
 
+#include "Ckt.h"
+
 #include "OPAnalysis.h"
 #include "DCAnalysis.h"
 #include "ACAnalysis.h"
@@ -15,6 +17,17 @@ Analyzer::Analyzer(const string& str):
 	taskList(),
 	processState(INIT)
 {}
+
+void Analyzer::linkSrc(std::shared_ptr< Ckt > mCkt) {
+	for (AnalysisPtr taskPtr : taskList) {
+		std::shared_ptr< DCAnalysis > tmpTask = std::dynamic_pointer_cast< DCAnalysis >(taskPtr);
+		if(tmpTask == nullptr) continue;
+		const string srcN = tmpTask->SrcName();
+		std::shared_ptr< InstBase > tmpInst = mCkt->findInst(srcN);
+		if(tmpInst == nullptr) throw std::runtime_error(srcN + " cannot be found in Circuit.");
+		tmpTask->linkSrcInst(tmpInst);
+	}
+}
 
 void Analyzer::ParseOPAnalysis() {
 	if(processState != INIT)
