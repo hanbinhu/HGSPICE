@@ -7,12 +7,12 @@ Node::Node(const string& str):
 {
 }
 
-void Node::setId(int id) {
+void Node::setId(unsigned int id) {
 	if(index == -1) index = id;
 	else throw std::runtime_error(string("Wrong set Id for node ") + getName());
 }
 
-int Node::getId() const {
+unsigned int Node::getId() const {
 	if(index != -1) return index;
 	else throw std::runtime_error(string("Wrong get Id  for node ") + getName());
 }
@@ -23,12 +23,12 @@ Branch::Branch(const string& str):
 {
 }
 
-int Branch::getId() const {
+unsigned int Branch::getId() const {
 	if(index != -1) return index;
 	else throw std::runtime_error(string("Wrong get Id for node ") + getName());
 }
 
-void Branch::setId(int id) {
+void Branch::setId(unsigned int id) {
 	if(index == -1) index = id;
 	else throw std::runtime_error(string("Wrong set Id  for node ") + getName());
 }

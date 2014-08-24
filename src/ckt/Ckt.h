@@ -17,6 +17,8 @@ class ModelBase;
 class SubCkt;
 class Analyzer;
 
+template<typename T> class Matrix;
+
 class Ckt : public std::enable_shared_from_this< Ckt >
 {
 
@@ -86,6 +88,7 @@ private:
 	const std::shared_ptr< Branch > newBranch(const string& strBranch);
 	
 	void numberNodeBranch();
+	void stampInst(const std::shared_ptr< Matrix<double> >& mMat);
 };
 
 #endif

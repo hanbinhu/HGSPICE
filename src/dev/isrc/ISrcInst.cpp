@@ -5,6 +5,8 @@ using std::endl;
 
 #include "ISrcInst.h"
 
+#include "Matrix.h"
+
 ISrcInst::ISrcInst(const string& str, const string& modelStr): 
 	InstBase(str, modelStr),
 	dcCurrent(0),
@@ -63,4 +65,11 @@ void ISrcInst::specifyFunc(SrcFunc::TranFuncType mFuncType, const vector< double
 
 std::shared_ptr< InstBase > ISrcInst::Clone() {
 	return std::static_pointer_cast< InstBase >( std::shared_ptr< ISrcInst >(new ISrcInst( *this ) ) );
+}
+
+void ISrcInst::stamp(const std::shared_ptr< Matrix< double > >& mMat) {
+	unsigned int nodeP = nodeTable[0].lock()->getId();
+	unsigned int nodeN = nodeTable[1].lock()->getId();
+	pRhsp = mMat->getRhsPtr(nodeP);
+	pRhsn = mMat->getRhsPtr(nodeN);
 }

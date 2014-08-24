@@ -16,7 +16,15 @@ public:
 	
 	virtual std::shared_ptr< InstBase > Clone();
 	
+	virtual void stamp(const std::shared_ptr< Matrix<double> >& mMat);
+	
 	virtual void printInf() const;
+	
+private:
+	double* pMatpcp;
+	double* pMatpcn;
+	double* pMatncp;
+	double* pMatncn;
 };
 
 #endif  /*VCCSINST_H*/

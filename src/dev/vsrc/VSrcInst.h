@@ -33,7 +33,17 @@ public:
 	
 	virtual std::shared_ptr< InstBase > Clone();
 	
+	inline unsigned int getBrId() const {return brPtr.lock()->getId();}
+	virtual void stamp(const std::shared_ptr< Matrix<double> >& mMat);
+	
 	virtual void printInf() const;
+	
+private:
+	double* pMatpb;
+	double* pMatnb;
+	double* pMatbp;
+	double* pMatbn;
+	double* pRhsb;
 };
 
 #endif  /*VSRCINST_H*/

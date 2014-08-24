@@ -12,6 +12,7 @@ using std::vector;
 #include "ACAnalysis.h"
 
 class Ckt;
+template<typename T> class Matrix;
 
 class Analyzer {
 public:
@@ -28,12 +29,16 @@ public:
 	void PrintAllAnalysis() const;
 	
 	void linkSrc(std::shared_ptr< Ckt > mCkt);
+	void initialMat(unsigned int dim);
+	inline const std::shared_ptr< Matrix<double> >& getMatPtr() {return cktMatrix;}
 	
 private:
 	enum State {INIT, LINKCKT, COMPLETEANA};
 	State processState;
 	
 	string inputFile;
+	
+	std::shared_ptr< Matrix<double> > cktMatrix;
 	
 	typedef std::shared_ptr< Analysis > AnalysisPtr;
 	vector< AnalysisPtr > taskList;

@@ -7,6 +7,8 @@ using std::endl;
 
 #include "Ckt.h"
 
+#include "EigenMatrix.h"
+
 #include "OPAnalysis.h"
 #include "DCAnalysis.h"
 #include "ACAnalysis.h"
@@ -27,6 +29,10 @@ void Analyzer::linkSrc(std::shared_ptr< Ckt > mCkt) {
 		if(tmpInst == nullptr) throw std::runtime_error(srcN + " cannot be found in Circuit.");
 		tmpTask->linkSrcInst(tmpInst);
 	}
+}
+
+void Analyzer::initialMat(unsigned int dim) {
+	cktMatrix = std::make_shared<EigenMatrix>(dim);
 }
 
 void Analyzer::ParseOPAnalysis() {

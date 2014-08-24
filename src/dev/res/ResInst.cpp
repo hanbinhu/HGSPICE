@@ -4,6 +4,8 @@ using std::endl;
 
 #include "ResInst.h"
 
+#include "Matrix.h"
+
 ResInst::ResInst(const string& str, const string& modelStr): 
 	InstBase(str, modelStr),
 	resistance(1)
@@ -21,4 +23,13 @@ void ResInst::printInf() const {
 
 std::shared_ptr< InstBase > ResInst::Clone() {
 	return std::static_pointer_cast< InstBase >( std::shared_ptr< ResInst >(new ResInst( *this ) ) );
+}
+
+void ResInst::stamp(const std::shared_ptr< Matrix< double > >& mMat) {
+	unsigned int nodeP = nodeTable[0].lock()->getId();
+	unsigned int nodeN = nodeTable[1].lock()->getId();
+	pMatpp = mMat->getMatPtr(nodeP, nodeP);
+	pMatpn = mMat->getMatPtr(nodeP, nodeN);
+	pMatnp = mMat->getMatPtr(nodeN, nodeP);
+	pMatnn = mMat->getMatPtr(nodeN, nodeN);
 }

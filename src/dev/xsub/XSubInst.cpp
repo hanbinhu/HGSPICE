@@ -31,9 +31,6 @@ void XSubInst::specifySubCkt() {
 	exNodeName.pop_back();
 }
 
-/**
- * @ToDo XSubInst::nodeTable ?
- */
 void XSubInst::linkSubCktDef(const string& title, CktPtr& mCkt) {
 	const std::unordered_map< string, std::shared_ptr< SubCkt > >::const_iterator reVal = mCkt->subCktHashMap.find(subCktName);
 	if (reVal == mCkt->subCktHashMap.end()) throw std::runtime_error(string("Doesn't find ") + subCktName);
@@ -167,4 +164,8 @@ void XSubInst::printInf() const {
 
 std::shared_ptr< InstBase > XSubInst::Clone() {
 	return std::static_pointer_cast< InstBase >( std::shared_ptr< XSubInst >(new XSubInst( *this ) ) );
+}
+
+void XSubInst::stamp(const std::shared_ptr< Matrix< double > >& mMat) {
+	for(InstPtr elem: instList) elem->stamp(mMat);
 }

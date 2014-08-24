@@ -26,6 +26,8 @@ public:
 	virtual void printInf() const = 0;
 };
 
+template<typename T> class Matrix;
+
 class InstBase {
 friend class XSubInst;
 	
@@ -63,6 +65,8 @@ public:
 	
 	inline string getInstName() const {return name;}
 	inline string getModelName() const {return modelName;}
+	
+	virtual void stamp(const std::shared_ptr< Matrix<double> >& mMat) = 0;
 
 	virtual std::shared_ptr< InstBase > Clone() = 0;
 	

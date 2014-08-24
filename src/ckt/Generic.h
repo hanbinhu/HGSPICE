@@ -14,8 +14,8 @@ private:
 public:
 	Node(const string& str);
 	inline string getName() const {return name;}
-	void setId(int id);
-	int getId() const;
+	void setId(unsigned int id);
+	unsigned int getId() const;
 
 };
 
@@ -23,14 +23,14 @@ class Branch {
 
 private:
 	string name;
-	int index;
+	unsigned int index;
 	double current;
 
 public:	
 	Branch(const string& str);
 	inline string getName() const {return name;}
-	void setId(int id);
-	int getId() const;
+	void setId(unsigned int id);
+	unsigned int getId() const;
 
 };
 

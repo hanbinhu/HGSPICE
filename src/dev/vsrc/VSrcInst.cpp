@@ -5,6 +5,8 @@ using std::endl;
 
 #include "VSrcInst.h"
 
+#include "Matrix.h"
+
 VSrcInst::VSrcInst(const string& str, const string& modelStr): 
 	InstBase(str, modelStr),
 	dcVoltage(0),
@@ -63,4 +65,15 @@ void VSrcInst::specifyFunc(SrcFunc::TranFuncType mFuncType, const vector< double
 
 std::shared_ptr< InstBase > VSrcInst::Clone() {
 	return std::static_pointer_cast< InstBase >( std::shared_ptr< VSrcInst >(new VSrcInst( *this ) ) );
+}
+
+void VSrcInst::stamp(const std::shared_ptr< Matrix< double > >& mMat){
+	unsigned int nodeP = nodeTable[0].lock()->getId();
+	unsigned int nodeN = nodeTable[1].lock()->getId();
+	unsigned int branch = brPtr.lock()->getId();
+	pMatpb = mMat->getMatPtr(nodeP, branch);
+	pMatnb = mMat->getMatPtr(nodeN, branch);
+	pMatbp = mMat->getMatPtr(branch, nodeP);
+	pMatbn = mMat->getMatPtr(branch, nodeN);
+	pRhsb = mMat->getRhsPtr(branch);
 }

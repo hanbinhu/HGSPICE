@@ -4,6 +4,8 @@ using std::endl;
 
 #include "MosInst.h"
 
+#include "Matrix.h"
+
 MosInst::MosInst(const string& str, const string& modelStr): 
 	InstBase(str, modelStr)
 {}
@@ -22,4 +24,8 @@ void MosInst::printInf() const {
 
 std::shared_ptr< InstBase > MosInst::Clone() {
 	return std::static_pointer_cast< InstBase >( std::shared_ptr< MosInst >(new MosInst( *this ) ) );
+}
+
+void MosInst::stamp(const std::shared_ptr< Matrix< double > >& mMat) {
+
 }
