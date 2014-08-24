@@ -40,3 +40,7 @@ void IndInst::stamp(const std::shared_ptr< Matrix< double > >& mMat) {
 	pMatbb = mMat->getMatPtr(branch, branch);
 	pRhsb = mMat->getRhsPtr(branch);
 }
+
+void IndInst::loadDC() {
+
+}

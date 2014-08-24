@@ -219,6 +219,10 @@ void Ckt::stampInst(const std::shared_ptr< Matrix< double > >& mMat) {
 	for(InstPtr elem : instList) elem->stamp(mMat);
 }
 
+void Ckt::LoadDC() const {
+	for(InstPtr elem : instList) elem->loadDC();
+}
+
 std::shared_ptr< InstBase > Ckt::findInst(const string& instName) {
 	const std::unordered_map< string, InstPtr >::const_iterator reVal = instHashMap.find(instName);
 	if(reVal == instHashMap.end()) return nullptr;

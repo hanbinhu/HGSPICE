@@ -54,6 +54,8 @@ public:
 	std::shared_ptr< SubCkt > getLastSubCkt();
 	
 	InstPtr findInst(const string& instName);
+	
+	void LoadDC() const;
 
 	void printAllNodes() const;
 	void printAllBranches() const;

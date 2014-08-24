@@ -25,3 +25,7 @@ std::shared_ptr< InstBase > DiodeInst::Clone() {
 void DiodeInst::stamp(const std::shared_ptr< Matrix< double > >& mMat) {
 
 }
+
+void DiodeInst::loadDC() {
+
+}

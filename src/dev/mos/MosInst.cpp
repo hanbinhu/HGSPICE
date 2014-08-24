@@ -29,3 +29,7 @@ std::shared_ptr< InstBase > MosInst::Clone() {
 void MosInst::stamp(const std::shared_ptr< Matrix< double > >& mMat) {
 
 }
+
+void MosInst::loadDC() {
+
+}

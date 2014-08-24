@@ -35,6 +35,7 @@ public:
 	
 	inline unsigned int getBrId() const {return brPtr.lock()->getId();}
 	virtual void stamp(const std::shared_ptr< Matrix<double> >& mMat);
+	virtual void loadDC();
 	
 	virtual void printInf() const;
 	

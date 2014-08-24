@@ -35,6 +35,10 @@ void Analyzer::initialMat(unsigned int dim) {
 	cktMatrix = std::make_shared<EigenMatrix>(dim);
 }
 
+void Analyzer::runAnalysis(const std::shared_ptr< Ckt >& mCkt) {
+	for(AnalysisPtr elem : taskList) elem->analyze(inputFile, mCkt, cktMatrix);
+}
+
 void Analyzer::ParseOPAnalysis() {
 	if(processState != INIT)
 		throw std::runtime_error("Can't parse more analysis task now.");

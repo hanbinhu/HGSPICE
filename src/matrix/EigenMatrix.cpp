@@ -10,6 +10,7 @@ using std::endl;
 EigenMatrix::EigenMatrix(unsigned int dim):
 	A(dim - 1, dim - 1),
 	b(dim - 1),
+	//solver(A),
 	dimension(dim),
 	stampMat(new double*[dim]),
 	stampRhs(new double[dim])
@@ -27,7 +28,6 @@ EigenMatrix::~EigenMatrix() {
 }
 
 double* EigenMatrix::getMatPtr(unsigned int i, unsigned int j) const {
-	//double& tmp = A.coeffRef(i, j);
 	return &stampMat[i][j];
 }
 
@@ -35,7 +35,7 @@ double* EigenMatrix::getRhsPtr(unsigned int i) const {
 	return &stampRhs[i];
 }
 
-void EigenMatrix::SetA() {
+void EigenMatrix::SetAb() {
 	A.setZero();
 	for(unsigned int i = 1; i < dimension; i++)
 		for(unsigned int j = 1; j < dimension; j++)
@@ -53,7 +53,7 @@ void EigenMatrix::reset() {
 }
 
 bool EigenMatrix::solveVI() {
-	SetA();
+	SetAb();
 	solver.compute(A);
 	if(solver.info() != Eigen::Success) return false;
 	x = solver.solve(b);

@@ -38,3 +38,12 @@ void VCVSInst::stamp(const std::shared_ptr< Matrix< double > >& mMat) {
 	pMatbcp = mMat->getMatPtr(branch, nodeCP);
 	pMatbcn = mMat->getMatPtr(branch, nodeCN);
 }
+
+void VCVSInst::loadDC() {
+	*pMatpb += 1;
+	*pMatnb -= 1;
+	*pMatbp += 1;
+	*pMatbn -= 1;
+	*pMatbcp -= e;
+	*pMatbcn += e;
+}

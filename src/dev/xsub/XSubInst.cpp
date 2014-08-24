@@ -125,17 +125,17 @@ void XSubInst::linkCC(InstPtr& mInst) {
 }
 
 void XSubInst::link(const string& mStackTitle, CktPtr mCkt) {
-	string::size_type p = mStackTitle.find(subCktName);
+	string::size_type p = mStackTitle.find(subCktName + ";");
 	if(p != mStackTitle.npos) throw std::runtime_error(string("Recursively add SubCkt ") + subCktName + " in " + mStackTitle);
 	linkSubCktDef(mStackTitle, mCkt);
-	linkSubCktInst(mStackTitle + subCktName + ";", mCkt);
+	linkSubCktInst(mStackTitle + getInstName() + "+" + subCktName + ";", mCkt);
 	for(InstPtr elem : instList) {
 		mCkt->linkModel(elem);
 		if(elem->getInstName()[0] == 'X' || elem->getInstName()[0] == 'x') {
 			std::shared_ptr< XSubInst > xInst = std::dynamic_pointer_cast< XSubInst > (elem);
-			xInst->link(mStackTitle + subCktName + ";", mCkt);
+			xInst->link(mStackTitle + getInstName() + "+" + subCktName  + ";", mCkt);
 		} else {
-			mCkt->linkBranch(mStackTitle + subCktName + ";", elem);
+			mCkt->linkBranch(mStackTitle + getInstName() + "+" + subCktName  + ";", elem);
 			linkCC(elem);
 		}
 	}
@@ -168,4 +168,8 @@ std::shared_ptr< InstBase > XSubInst::Clone() {
 
 void XSubInst::stamp(const std::shared_ptr< Matrix< double > >& mMat) {
 	for(InstPtr elem: instList) elem->stamp(mMat);
+}
+
+void XSubInst::loadDC() {
+	for(InstPtr elem: instList) elem->loadDC();
 }

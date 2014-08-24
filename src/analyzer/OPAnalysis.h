@@ -9,6 +9,8 @@ public:
 	virtual ~OPAnalysis() {}
 	virtual void PrintInf();
 	
+	virtual void analyze(const string& filename, const std::shared_ptr< Ckt >& mCkt, std::shared_ptr< Matrix< double > >& mMat);
+	
 };
 
 #endif  /*OPANALYSIS_H*/

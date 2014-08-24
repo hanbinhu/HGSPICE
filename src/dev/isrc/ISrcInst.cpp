@@ -73,3 +73,8 @@ void ISrcInst::stamp(const std::shared_ptr< Matrix< double > >& mMat) {
 	pRhsp = mMat->getRhsPtr(nodeP);
 	pRhsn = mMat->getRhsPtr(nodeN);
 }
+
+void ISrcInst::loadDC() {
+	*pRhsp -= dcCurrent;
+	*pRhsn += dcCurrent;
+}

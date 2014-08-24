@@ -13,8 +13,8 @@ private:
 	Eigen::SparseMatrix<double> A;
 	Eigen::VectorXd b;
 	Eigen::VectorXd x;
-	Eigen::BiCGSTAB<Eigen::SparseMatrix<double>> solver;
-	void SetA();
+	Eigen::SparseLU<Eigen::SparseMatrix<double>> solver;
+	void SetAb();
 	
 	bool Success;
 	

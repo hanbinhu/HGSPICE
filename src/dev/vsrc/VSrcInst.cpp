@@ -77,3 +77,11 @@ void VSrcInst::stamp(const std::shared_ptr< Matrix< double > >& mMat){
 	pMatbn = mMat->getMatPtr(branch, nodeN);
 	pRhsb = mMat->getRhsPtr(branch);
 }
+
+void VSrcInst::loadDC() {
+	*pMatpb += 1;
+	*pMatnb -= 1;
+	*pMatbp += 1;
+	*pMatbn -= 1;
+	*pRhsb += dcVoltage;
+}

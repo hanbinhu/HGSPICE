@@ -32,6 +32,8 @@ public:
 	void initialMat(unsigned int dim);
 	inline const std::shared_ptr< Matrix<double> >& getMatPtr() {return cktMatrix;}
 	
+	void runAnalysis(const std::shared_ptr< Ckt >& mCkt);
+	
 private:
 	enum State {INIT, LINKCKT, COMPLETEANA};
 	State processState;

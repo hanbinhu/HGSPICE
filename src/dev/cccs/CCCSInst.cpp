@@ -35,3 +35,8 @@ void CCCSInst::stamp(const std::shared_ptr< Matrix< double > >& mMat) {
 	pMatpcb = mMat->getMatPtr(nodeP, branchC);
 	pMatncb = mMat->getMatPtr(nodeN, branchC);
 }
+
+void CCCSInst::loadDC() {
+	*pMatpcb += f;
+	*pMatncb -= f;
+}
