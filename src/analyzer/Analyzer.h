@@ -39,6 +39,9 @@ private:
 	State processState;
 	
 	string inputFile;
+	string prefixname;
+	
+	int nOP, nDC, nAC, nTRAN;
 	
 	std::shared_ptr< Matrix<double> > cktMatrix;
 	

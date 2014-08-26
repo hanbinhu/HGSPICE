@@ -21,6 +21,9 @@ private:
 	std::function< void(const vector<double>&, SrcFunc::SignalType) > printFunc;
 	vector< double > paramTable;
 	
+	double loadV;
+	bool compDCLoad;
+	
 public:
 	VSrcInst(const string& str, const string& modelStr);
 	VSrcInst(const VSrcInst& rhs);
@@ -35,7 +38,10 @@ public:
 	
 	inline unsigned int getBrId() const {return brPtr.lock()->getId();}
 	virtual void stamp(const std::shared_ptr< Matrix<double> >& mMat);
+	virtual void loadOP();
 	virtual void loadDC();
+	
+	inline void setLoad(double V) {loadV = V; compDCLoad = true;}
 	
 	virtual void printInf() const;
 	
@@ -45,6 +51,8 @@ private:
 	double* pMatbp;
 	double* pMatbn;
 	double* pRhsb;
+	
+	void load();
 };
 
 #endif  /*VSRCINST_H*/

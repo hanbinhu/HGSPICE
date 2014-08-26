@@ -55,6 +55,7 @@ public:
 	
 	InstPtr findInst(const string& instName);
 	
+	void LoadOP() const;
 	void LoadDC() const;
 
 	void printAllNodes() const;

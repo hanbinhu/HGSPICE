@@ -20,6 +20,7 @@ public:
 	virtual std::shared_ptr< InstBase > Clone();
 	
 	virtual void stamp(const std::shared_ptr< Matrix<double> >& mMat);
+	virtual void loadOP();
 	virtual void loadDC();
 	
 	virtual void printInf() const;
@@ -31,6 +32,8 @@ private:
 	double* pMatbn;
 	double* pMatbcp;
 	double* pMatbcn;
+	
+	void load();
 };
 
 #endif  /*VCVSINST_H*/

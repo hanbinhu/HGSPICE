@@ -36,9 +36,17 @@ void VCCSInst::stamp(const std::shared_ptr< Matrix< double > >& mMat) {
 	pMatncn = mMat->getMatPtr(nodeN, nodeCN);
 }
 
-void VCCSInst::loadDC() {
+void VCCSInst::load() {
 	*pMatpcp += g;
 	*pMatpcn -= g;
 	*pMatncp -= g;
 	*pMatncn += g;
+}
+
+void VCCSInst::loadOP() {
+	load();
+}
+
+void VCCSInst::loadDC() {
+	load();
 }

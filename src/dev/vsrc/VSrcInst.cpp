@@ -12,6 +12,8 @@ VSrcInst::VSrcInst(const string& str, const string& modelStr):
 	dcVoltage(0),
 	acVoltage(0),
 	acVoltagePhase(0),
+	loadV(0),
+	compDCLoad(false),
 	printFunc(nullptr),
 	calFunc(nullptr),
 	paramTable()
@@ -22,6 +24,8 @@ VSrcInst::VSrcInst(const VSrcInst& rhs):
 	dcVoltage(rhs.dcVoltage),
 	acVoltage(rhs.acVoltage),
 	acVoltagePhase(rhs.acVoltagePhase),
+	loadV(0),
+	compDCLoad(false),
 	printFunc(rhs.printFunc),
 	calFunc(rhs.calFunc),
 	paramTable(rhs.paramTable)
@@ -78,10 +82,21 @@ void VSrcInst::stamp(const std::shared_ptr< Matrix< double > >& mMat){
 	pRhsb = mMat->getRhsPtr(branch);
 }
 
-void VSrcInst::loadDC() {
+void VSrcInst::load() {
 	*pMatpb += 1;
 	*pMatnb -= 1;
 	*pMatbp += 1;
 	*pMatbn -= 1;
-	*pRhsb += dcVoltage;
+	*pRhsb += loadV;
+}
+
+void VSrcInst::loadOP() {
+	loadV = dcVoltage;
+	load();
+}
+
+void VSrcInst::loadDC() {
+	if(compDCLoad) compDCLoad = false;
+	else loadV = dcVoltage;
+	load();
 }

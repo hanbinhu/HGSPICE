@@ -8,6 +8,8 @@ private:
 	BranchPtr brPtr;
 	
 	double inductance;
+	
+	bool initial;
 	double currentIC;
 	
 public:
@@ -16,12 +18,13 @@ public:
 	virtual ~IndInst() {}
 	
 	inline void specifyInd(double ind) {inductance = ind;}
-	inline virtual void specifyIC(double IC) {currentIC = IC;}
+	inline virtual void specifyIC(double IC) {currentIC = IC; initial = true;}
 	inline virtual void setBranch(const BranchPtr& mBranch) {brPtr = mBranch;}
 	
 	virtual std::shared_ptr< InstBase > Clone();
 	
 	virtual void stamp(const std::shared_ptr< Matrix<double> >& mMat);
+	virtual void loadOP();
 	virtual void loadDC();
 	
 	virtual void printInf() const;

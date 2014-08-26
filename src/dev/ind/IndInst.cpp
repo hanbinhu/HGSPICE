@@ -10,13 +10,15 @@ IndInst::IndInst(const string& str, const string& modelStr):
 	InstBase(str, modelStr),
 	inductance(1),
 	currentIC(0),
-	brPtr()
+	brPtr(),
+	initial(false)
 {}
 
 IndInst::IndInst(const IndInst& rhs): 
 	InstBase(rhs),
 	inductance(rhs.inductance),
-	currentIC(rhs.currentIC)
+	currentIC(rhs.currentIC),
+	initial(rhs.initial)
 {}
 
 void IndInst::printInf() const {
@@ -31,7 +33,7 @@ std::shared_ptr< InstBase > IndInst::Clone() {
 
 void IndInst::stamp(const std::shared_ptr< Matrix< double > >& mMat) {
 	unsigned int nodeP = nodeTable[0].lock()->getId();
-	unsigned int nodeN = nodeTable[0].lock()->getId();
+	unsigned int nodeN = nodeTable[1].lock()->getId();
 	unsigned int branch = brPtr.lock()->getId();
 	pMatpb = mMat->getMatPtr(nodeP, branch);
 	pMatnb = mMat->getMatPtr(nodeN, branch);
@@ -41,6 +43,16 @@ void IndInst::stamp(const std::shared_ptr< Matrix< double > >& mMat) {
 	pRhsb = mMat->getRhsPtr(branch);
 }
 
-void IndInst::loadDC() {
+void IndInst::loadOP() {
+	*pMatpb += 1;
+	*pMatnb -= 1;
+	*pMatbp += 1;
+	*pMatbn -= 1;
+}
 
+void IndInst::loadDC() {
+	*pMatpb += 1;
+	*pMatnb -= 1;
+	*pMatbp += 1;
+	*pMatbn -= 1;
 }

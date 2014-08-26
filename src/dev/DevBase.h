@@ -67,6 +67,7 @@ public:
 	inline string getModelName() const {return modelName;}
 	
 	virtual void stamp(const std::shared_ptr< Matrix<double> >& mMat) = 0;
+	virtual void loadOP() = 0;
 	virtual void loadDC() = 0;
 
 	virtual std::shared_ptr< InstBase > Clone() = 0;

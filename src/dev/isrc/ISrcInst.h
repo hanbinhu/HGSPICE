@@ -19,6 +19,9 @@ private:
 	std::function< void(const vector<double>&, SrcFunc::SignalType) > printFunc;
 	vector< double > paramTable;
 	
+	double loadI;
+	bool compDCLoad;
+	
 public:
 	ISrcInst(const string& str, const string& modelStr);
 	ISrcInst(const ISrcInst& rhs);
@@ -31,13 +34,18 @@ public:
 	virtual std::shared_ptr< InstBase > Clone();
 	
 	virtual void stamp(const std::shared_ptr< Matrix<double> >& mMat);
+	virtual void loadOP();
 	virtual void loadDC();
+	
+	inline void setLoad(double I) {loadI = I; compDCLoad = true;}
 	
 	virtual void printInf() const;
 	
 private:
 	double* pRhsp;
 	double* pRhsn;
+	
+	void load();
 };
 
 #endif  /*ISRCINST_H*/

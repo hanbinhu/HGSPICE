@@ -4,7 +4,8 @@ using std::endl;
 
 #include "TranAnalysis.h"
 
-TranAnalysis::TranAnalysis(double ti, double te, double ts):
+TranAnalysis::TranAnalysis(int id, const string& filename, double ti, double te, double ts):
+	Analysis(id, filename),
 	tStep(ti),
 	tStop(te),
 	tStart(ts)

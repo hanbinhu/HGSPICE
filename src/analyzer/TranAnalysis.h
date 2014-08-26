@@ -5,7 +5,7 @@
 
 class TranAnalysis : public Analysis {
 public:
-	TranAnalysis(double ti, double te, double ts);
+	TranAnalysis(int id, const string& filename, double ti, double te, double ts);
 	virtual ~TranAnalysis() {}
 	virtual void PrintInf();
 	

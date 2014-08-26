@@ -26,6 +26,10 @@ void DiodeInst::stamp(const std::shared_ptr< Matrix< double > >& mMat) {
 
 }
 
+void DiodeInst::loadOP() {
+
+}
+
 void DiodeInst::loadDC() {
 
 }

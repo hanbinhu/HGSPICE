@@ -5,7 +5,11 @@ using std::endl;
 #include "DCAnalysis.h"
 #include "Devices.h"
 
-DCAnalysis::DCAnalysis(const string& src, double vs, double ve, double vi):
+#include "Ckt.h"
+#include "Matrix.h"
+
+DCAnalysis::DCAnalysis(int id, const string& filename, const string& src, double vs, double ve, double vi):
+	Analysis(id, filename),
 	mSrcName(src),
 	vStart(vs),
 	vStop(ve),
@@ -40,4 +44,21 @@ void DCAnalysis::PrintInf() {
 	cout << "\tStart Value: " << vStart << endl;
 	cout << "\tStop Value: " << vStop << endl;
 	cout << "\tIncremental Value: " << vInc << endl;
+}
+
+void DCAnalysis::analyze(const std::shared_ptr< Ckt >& mCkt, std::shared_ptr< Matrix< double > > mMat) {
+	cout << outputFile << endl;
+	for(double v = vStart; v <= vStop; v += vInc) {
+		cout << v << endl;
+		if(mType == V) mVSrcInst.lock()->setLoad(v);
+		else mISrcInst.lock()->setLoad(v);
+		mCkt->LoadDC();
+		cout << "Here" << endl;
+		cout << mMat << endl;
+		//mMat->printMat();
+		//mMat->printRhs();
+		mMat->solveVI();
+		mMat->printRes();
+		mMat->reset();
+	}
 }

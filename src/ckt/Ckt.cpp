@@ -219,6 +219,10 @@ void Ckt::stampInst(const std::shared_ptr< Matrix< double > >& mMat) {
 	for(InstPtr elem : instList) elem->stamp(mMat);
 }
 
+void Ckt::LoadOP() const {
+	for(InstPtr elem : instList) elem->loadOP();
+}
+
 void Ckt::LoadDC() const {
 	for(InstPtr elem : instList) elem->loadDC();
 }

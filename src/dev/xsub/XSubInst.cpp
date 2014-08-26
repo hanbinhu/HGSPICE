@@ -170,6 +170,10 @@ void XSubInst::stamp(const std::shared_ptr< Matrix< double > >& mMat) {
 	for(InstPtr elem: instList) elem->stamp(mMat);
 }
 
+void XSubInst::loadOP() {
+	for(InstPtr elem: instList) elem->loadOP();
+}
+
 void XSubInst::loadDC() {
 	for(InstPtr elem: instList) elem->loadDC();
 }

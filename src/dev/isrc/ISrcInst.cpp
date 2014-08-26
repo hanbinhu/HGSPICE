@@ -12,6 +12,8 @@ ISrcInst::ISrcInst(const string& str, const string& modelStr):
 	dcCurrent(0),
 	acCurrent(0),
 	acCurrentPhase(0),
+	loadI(0),
+	compDCLoad(false),
 	printFunc(nullptr),
 	calFunc(nullptr),
 	paramTable()
@@ -22,6 +24,8 @@ ISrcInst::ISrcInst(const ISrcInst& rhs):
 	dcCurrent(rhs.dcCurrent),
 	acCurrent(rhs.acCurrent),
 	acCurrentPhase(rhs.acCurrentPhase),
+	loadI(0),
+	compDCLoad(false),
 	printFunc(rhs.printFunc),
 	calFunc(rhs.calFunc),
 	paramTable(rhs.paramTable)
@@ -74,7 +78,18 @@ void ISrcInst::stamp(const std::shared_ptr< Matrix< double > >& mMat) {
 	pRhsn = mMat->getRhsPtr(nodeN);
 }
 
+void ISrcInst::load() {
+	*pRhsp -= loadI;
+	*pRhsn += loadI;
+}
+
+void ISrcInst::loadOP() {
+	loadI = dcCurrent;
+	load();
+}
+
 void ISrcInst::loadDC() {
-	*pRhsp -= dcCurrent;
-	*pRhsn += dcCurrent;
+	if(compDCLoad) compDCLoad = false;
+	else loadI = dcCurrent;
+	load();
 }

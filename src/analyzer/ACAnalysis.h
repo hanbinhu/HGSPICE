@@ -7,7 +7,7 @@ class ACAnalysis : public Analysis {
 public:
 	enum SweepType {DEC, OCT, LIN};
 	
-	ACAnalysis(SweepType mType, int n, double fs, double fe);
+	ACAnalysis(int id, const string& filename, SweepType mType, int n, double fs, double fe);
 	virtual ~ACAnalysis() {}
 	virtual void PrintInf();
 	

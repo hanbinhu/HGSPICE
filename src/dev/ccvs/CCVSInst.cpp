@@ -40,10 +40,18 @@ void CCVSInst::stamp(const std::shared_ptr< Matrix< double > >& mMat) {
 	pMatbcb = mMat->getMatPtr(branch, branchC);
 }
 
-void CCVSInst::loadDC() {
+void CCVSInst::load() {
 	*pMatpb += 1;
 	*pMatnb -= 1;
 	*pMatbp += 1;
 	*pMatbn -= 1;
 	*pMatbcb -= h;
+}
+
+void CCVSInst::loadOP() {
+	load();
+}
+
+void CCVSInst::loadDC() {
+	load();
 }

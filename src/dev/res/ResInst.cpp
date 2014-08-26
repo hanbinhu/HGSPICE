@@ -34,9 +34,17 @@ void ResInst::stamp(const std::shared_ptr< Matrix< double > >& mMat) {
 	pMatnn = mMat->getMatPtr(nodeN, nodeN);
 }
 
-void ResInst::loadDC() {
+void ResInst::load() {
 	*pMatpp += 1/resistance;
 	*pMatpn -= 1/resistance;
 	*pMatnp -= 1/resistance;
 	*pMatnn += 1/resistance;
+}
+
+void ResInst::loadOP() {
+	load();
+}
+
+void ResInst::loadDC() {
+	load();
 }

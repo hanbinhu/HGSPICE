@@ -8,6 +8,8 @@ private:
 	BranchPtr brPtr;
 	
 	double capcitance;
+	
+	bool initial;
 	double voltageIC;
 	
 public:
@@ -16,12 +18,13 @@ public:
 	virtual ~CapInst() {}
 	
 	inline void specifyCap(double cap) {capcitance = cap;}
-	inline virtual void specifyIC(double IC) {voltageIC = IC;}
+	inline virtual void specifyIC(double IC) {voltageIC = IC; initial = true;}
 	inline virtual void setBranch(const BranchPtr& mBranch) {brPtr = mBranch;}
 	
 	virtual std::shared_ptr< InstBase > Clone();
 	
 	virtual void stamp(const std::shared_ptr< Matrix<double> >& mMat);
+	virtual void loadOP();
 	virtual void loadDC();
 	
 	virtual void printInf() const;

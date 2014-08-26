@@ -5,7 +5,8 @@ using std::endl;
 
 #include "ACAnalysis.h"
 
-ACAnalysis::ACAnalysis(ACAnalysis::SweepType mType, int n, double fs, double fe):
+ACAnalysis::ACAnalysis(int id, const string& filename, ACAnalysis::SweepType mType, int n, double fs, double fe):
+	Analysis(id, filename),
 	mSweepType(mType),
 	nPoints(n),
 	fStart(fs),

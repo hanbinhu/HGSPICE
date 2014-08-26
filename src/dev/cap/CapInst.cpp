@@ -10,13 +10,15 @@ CapInst::CapInst(const string& str, const string& modelStr):
 	InstBase(str, modelStr),
 	capcitance(1),
 	voltageIC(0),
-	brPtr()
+	brPtr(),
+	initial(false)
 {}
 
 CapInst::CapInst(const CapInst& rhs): 
 	InstBase(rhs),
 	capcitance(rhs.capcitance),
-	voltageIC(rhs.voltageIC)
+	voltageIC(rhs.voltageIC),
+	initial(rhs.initial)
 {}
 
 void CapInst::printInf() const {
@@ -41,6 +43,10 @@ void CapInst::stamp(const std::shared_ptr< Matrix< double > >& mMat) {
 	pRhsb = mMat->getRhsPtr(branch);
 }
 
+void CapInst::loadOP() {
+	*pMatbb += 1;
+}
+
 void CapInst::loadDC() {
-	
+	*pMatbb += 1;
 }

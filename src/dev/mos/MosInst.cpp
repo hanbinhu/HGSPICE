@@ -30,6 +30,10 @@ void MosInst::stamp(const std::shared_ptr< Matrix< double > >& mMat) {
 
 }
 
+void MosInst::loadOP() {
+
+}
+
 void MosInst::loadDC() {
 
 }
