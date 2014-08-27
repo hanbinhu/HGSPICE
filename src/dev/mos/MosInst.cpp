@@ -37,3 +37,7 @@ void MosInst::loadOP() {
 void MosInst::loadDC() {
 
 }
+
+void MosInst::loadTRAN(double time, double timeStep, bool flagInitial) {
+
+}

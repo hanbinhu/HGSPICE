@@ -55,3 +55,7 @@ void VCVSInst::loadOP(){
 void VCVSInst::loadDC() {
 	load();
 }
+
+void VCVSInst::loadTRAN(double time, double timeStep, bool flagInitial) {
+	load();
+}

@@ -50,3 +50,7 @@ void VCCSInst::loadOP() {
 void VCCSInst::loadDC() {
 	load();
 }
+
+void VCCSInst::loadTRAN(double time, double timeStep, bool flagInitial) {
+	load();
+}

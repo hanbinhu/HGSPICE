@@ -57,6 +57,10 @@ public:
 	
 	void LoadOP() const;
 	void LoadDC() const;
+	void LoadTRAN(double time, double timeStep, bool flagInitial) const;
+	
+	void SetTForNAB(const vector<double>& vTable);
+	void SetDForNAB(const vector<double>& vTable);
 
 	void printAllNodes() const;
 	void printAllBranches() const;

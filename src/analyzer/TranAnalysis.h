@@ -9,6 +9,8 @@ public:
 	virtual ~TranAnalysis() {}
 	virtual void PrintInf();
 	
+	virtual void analyze(const std::shared_ptr< Ckt >& mCkt, std::shared_ptr< Matrix< double > > mMat);
+	
 private:
 	double tStart;
 	double tStop;

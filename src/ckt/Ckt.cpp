@@ -227,6 +227,22 @@ void Ckt::LoadDC() const {
 	for(InstPtr elem : instList) elem->loadDC();
 }
 
+void Ckt::LoadTRAN(double time, double timeStep, bool flagInitial) const {
+	for(InstPtr elem : instList) elem->loadTRAN(time, timeStep, flagInitial);
+}
+
+void Ckt::SetDForNAB(const vector< double >& vTable) {
+	unsigned int i = 0;
+	for(NodePtr elem : nodeList) elem->setDC(vTable[i++]);
+	for(BranchPtr elem : branchList) elem->setDC(vTable[i++]);
+}
+
+void Ckt::SetTForNAB(const vector< double >& vTable) {
+	unsigned int i = 0;
+	for(NodePtr elem : nodeList) elem->setTRAN(vTable[i++]);
+	for(BranchPtr elem : branchList) elem->setTRAN(vTable[i++]);
+}
+
 std::shared_ptr< InstBase > Ckt::findInst(const string& instName) {
 	const std::unordered_map< string, InstPtr >::const_iterator reVal = instHashMap.find(instName);
 	if(reVal == instHashMap.end()) return nullptr;

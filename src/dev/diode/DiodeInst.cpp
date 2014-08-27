@@ -33,3 +33,7 @@ void DiodeInst::loadOP() {
 void DiodeInst::loadDC() {
 
 }
+
+void DiodeInst::loadTRAN(double time, double timeStep, bool flagInitial) {
+
+}

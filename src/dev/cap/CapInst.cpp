@@ -41,6 +41,9 @@ void CapInst::stamp(const std::shared_ptr< Matrix< double > >& mMat) {
 	pMatbn = mMat->getMatPtr(branch, nodeN);
 	pMatbb = mMat->getMatPtr(branch, branch);
 	pRhsb = mMat->getRhsPtr(branch);
+	
+	VTp = nodeTable[0].lock()->getTPtr();
+	VTn = nodeTable[1].lock()->getTPtr();
 }
 
 void CapInst::loadOP() {
@@ -49,4 +52,24 @@ void CapInst::loadOP() {
 
 void CapInst::loadDC() {
 	*pMatbb += 1;
+}
+
+void CapInst::loadTRAN(double time, double timeStep, bool flagInitial) {
+	if(flagInitial) {
+		if(initial) {
+			*pMatpb += 1;
+			*pMatnb -= 1;
+			*pMatbp += 1;
+			*pMatbn -= 1;
+			*pRhsb += voltageIC;
+		} else *pMatbb += 1;
+	} else {
+		double tmpV = capcitance / timeStep;
+		*pMatpb += 1;
+		*pMatnb -= 1;
+		*pMatbp += tmpV;
+		*pMatbn -= tmpV;
+		*pMatbb -= 1;
+		*pRhsb += tmpV * (*VTp - *VTn);
+	}
 }

@@ -3,6 +3,8 @@
 using std::cout;
 using std::endl;
 
+#include <cmath>
+
 #include "SrcFunc.h"
 
 string SrcFunc::SelUnit(SignalType type) {
@@ -20,6 +22,9 @@ double SrcFunc::SineFunc(const vector<double>& paramTable, double t) {
 	const double FREQ = paramTable[2];
 	const double TD = paramTable[3];
 	const double THETA = paramTable[4];
+	
+	if (t < TD) return V0;
+	return (V0 + VA * exp(-(t - TD) * THETA) * sin(2 * M_PI * FREQ * (t - TD)));
 }
 
 void SrcFunc::SinePrint(const vector<double>& paramTable, SignalType type) {
@@ -50,6 +55,10 @@ double SrcFunc::ExpFunc(const vector<double>& paramTable, double t) {
 	const double TAU1 = paramTable[3];
 	const double TD2 = paramTable[4];
 	const double TAU2 = paramTable[5];
+	
+	if(t < TD1) return V1;
+	if(t < TD2) return V1 + (V2 - V1) * (1 - exp(-(t - TD1) / TAU1));
+	return V1 + (V2 - V1) * (1 - exp(-(TD2 - TD1) / TAU1)) + (V1 - V2) *  (1 - exp(-(t - TD2) / TAU2));
 }
 
 void SrcFunc::ExpPrint(const vector<double>& paramTable, SignalType type) {
@@ -83,6 +92,15 @@ double SrcFunc::PulseFunc(const vector<double>& paramTable, double t) {
 	const double TF = paramTable[4];
 	const double PW = paramTable[5];
 	const double PER = paramTable[6];
+	
+	if(t < TD) return V1;
+	double reVal = V1;
+	double tRel = t - TD;
+	while(tRel >= PER) tRel -= PER;
+	if(tRel < TR) reVal += (V2 - V1) / TR * tRel;
+	if(TR <= tRel && tRel <= TR + PW) reVal = V2;
+	if(TR + PW < tRel && tRel < TR + PW + TF) reVal += (V2 - V1) / TF * (TR + PW + TF - t);
+	return reVal;
 }
 
 void SrcFunc::PulsePrint(const vector<double>& paramTable, SignalType type) {
@@ -116,6 +134,8 @@ double SrcFunc::SFFMFunc(const vector<double>& paramTable, double t) {
 	const double FC = paramTable[2];
 	const double MDI = paramTable[3];
 	const double FS = paramTable[4];
+	
+	return (V0 + VA * sin(2 * M_PI * FC * t + MDI * sin(2 * M_PI * FS * t)));
 }
 
 void SrcFunc::SFFMPrint(const vector<double>& paramTable, SignalType type) {

@@ -12,6 +12,7 @@ protected:
 	void PrintResTitle(unsigned int dim) const {std::cout << "MNA Result vector (" << dim << ") looks like:" << std::endl;}
 public:
 	virtual ~Matrix() {}
+	virtual unsigned int getDim() const = 0;
 	virtual T* getMatPtr(unsigned int i, unsigned int j) const = 0;
 	virtual T* getRhsPtr(unsigned int i) const = 0;
 	virtual bool solveVI() = 0;

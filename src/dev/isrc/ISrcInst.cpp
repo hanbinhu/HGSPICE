@@ -93,3 +93,9 @@ void ISrcInst::loadDC() {
 	else loadI = dcCurrent;
 	load();
 }
+
+void ISrcInst::loadTRAN(double time, double timeStep, bool flagInitial) {
+	if(calFunc == nullptr) loadI = dcCurrent;
+	else loadI = calFunc(paramTable, time);
+	load();
+}

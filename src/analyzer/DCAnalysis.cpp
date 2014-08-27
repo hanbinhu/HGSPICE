@@ -47,16 +47,10 @@ void DCAnalysis::PrintInf() {
 }
 
 void DCAnalysis::analyze(const std::shared_ptr< Ckt >& mCkt, std::shared_ptr< Matrix< double > > mMat) {
-	cout << outputFile << endl;
 	for(double v = vStart; v <= vStop; v += vInc) {
-		cout << v << endl;
 		if(mType == V) mVSrcInst.lock()->setLoad(v);
 		else mISrcInst.lock()->setLoad(v);
 		mCkt->LoadDC();
-		cout << "Here" << endl;
-		cout << mMat << endl;
-		//mMat->printMat();
-		//mMat->printRhs();
 		mMat->solveVI();
 		mMat->printRes();
 		mMat->reset();

@@ -48,3 +48,7 @@ void CCCSInst::loadOP() {
 void CCCSInst::loadDC() {
 	load();
 }
+
+void CCCSInst::loadTRAN(double time, double timeStep, bool flagInitial) {
+	load();
+}

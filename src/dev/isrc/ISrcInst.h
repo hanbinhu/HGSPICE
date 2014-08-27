@@ -36,6 +36,7 @@ public:
 	virtual void stamp(const std::shared_ptr< Matrix<double> >& mMat);
 	virtual void loadOP();
 	virtual void loadDC();
+	virtual void loadTRAN(double time, double timeStep, bool flagInitial);
 	
 	inline void setLoad(double I) {loadI = I; compDCLoad = true;}
 	

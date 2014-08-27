@@ -41,6 +41,8 @@ void IndInst::stamp(const std::shared_ptr< Matrix< double > >& mMat) {
 	pMatbn = mMat->getMatPtr(branch, nodeN);
 	pMatbb = mMat->getMatPtr(branch, branch);
 	pRhsb = mMat->getRhsPtr(branch);
+	
+	IT = brPtr.lock()->getTPtr();
 }
 
 void IndInst::loadOP() {
@@ -55,4 +57,24 @@ void IndInst::loadDC() {
 	*pMatnb -= 1;
 	*pMatbp += 1;
 	*pMatbn -= 1;
+}
+
+void IndInst::loadTRAN(double time, double timeStep, bool flagInitial) {
+	*pMatpb += 1;
+	*pMatnb -= 1;
+	if(flagInitial) {
+		if(initial) {
+			*pMatbb += 1;
+			*pRhsb += currentIC;
+		} else {
+			*pMatbp += 1;
+			*pMatbn -= 1;
+		}
+	} else {
+		double tmpV = inductance / timeStep;
+		*pMatbp += 1;
+		*pMatbn -= 1;
+		*pMatbb -= tmpV;
+		*pRhsb -= *IT * tmpV;
+	}
 }

@@ -100,3 +100,9 @@ void VSrcInst::loadDC() {
 	else loadV = dcVoltage;
 	load();
 }
+
+void VSrcInst::loadTRAN(double time, double timeStep, bool flagInitial) {
+	if(calFunc == nullptr) loadV = dcVoltage;
+	else loadV = calFunc(paramTable, time);
+	load();
+}

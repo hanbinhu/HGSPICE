@@ -26,6 +26,7 @@ public:
 	virtual void stamp(const std::shared_ptr< Matrix<double> >& mMat);
 	virtual void loadOP();
 	virtual void loadDC();
+	virtual void loadTRAN(double time, double timeStep, bool flagInitial);
 	
 	virtual void printInf() const;
 	
@@ -36,6 +37,8 @@ private:
 	double* pMatbn;
 	double* pMatbb;
 	double* pRhsb;
+	
+	double* IT;
 };
 
 #endif  /*INDINST_H*/

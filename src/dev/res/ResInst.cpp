@@ -48,3 +48,7 @@ void ResInst::loadOP() {
 void ResInst::loadDC() {
 	load();
 }
+
+void ResInst::loadTRAN(double time, double timeStep, bool flagInitial) {
+	load();
+}

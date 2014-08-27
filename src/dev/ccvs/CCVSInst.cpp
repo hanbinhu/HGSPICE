@@ -55,3 +55,7 @@ void CCVSInst::loadOP() {
 void CCVSInst::loadDC() {
 	load();
 }
+
+void CCVSInst::loadTRAN(double time, double timeStep, bool flagInitial) {
+	load();
+}

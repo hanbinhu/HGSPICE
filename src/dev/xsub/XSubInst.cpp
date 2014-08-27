@@ -177,3 +177,7 @@ void XSubInst::loadOP() {
 void XSubInst::loadDC() {
 	for(InstPtr elem: instList) elem->loadDC();
 }
+
+void XSubInst::loadTRAN(double time, double timeStep, bool flagInitial) {
+	for(InstPtr elem: instList) elem->loadTRAN(time, timeStep, flagInitial);
+}

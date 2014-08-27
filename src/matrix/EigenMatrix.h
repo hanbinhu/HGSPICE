@@ -21,6 +21,7 @@ private:
 public:
 	EigenMatrix(unsigned int dim);
 	virtual ~EigenMatrix();
+	inline virtual unsigned int getDim() const {return dimension;}
 	virtual double* getMatPtr(unsigned int i, unsigned int j) const;
 	virtual double* getRhsPtr(unsigned int i) const;
 	virtual bool solveVI();
