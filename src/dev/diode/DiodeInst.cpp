@@ -14,6 +14,14 @@ DiodeInst::DiodeInst(const DiodeInst& rhs):
 	InstBase(rhs)
 {}
 
+void DiodeInst::printFileTitle(ofstream& outF, const string& title) const {
+
+}
+
+void DiodeInst::printFileValue(ofstream& outF) const {
+
+}
+
 void DiodeInst::printInf() const {
 	printGenInf();
 }

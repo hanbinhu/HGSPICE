@@ -50,7 +50,6 @@ void Analyzer::initialMat(unsigned int dim) {
 
 void Analyzer::runAnalysis(const std::shared_ptr< Ckt >& mCkt) {
 	for(AnalysisPtr elem : taskList) {
-		cout << cktMatrix << endl;
 		elem->analyze(mCkt, cktMatrix);
 	}
 }
@@ -59,25 +58,25 @@ void Analyzer::ParseOPAnalysis() {
 	if(processState != INIT)
 		throw std::runtime_error("Can't parse more analysis task now.");
 	if(!nOP)
-		taskList.push_back(AnalysisPtr(new OPAnalysis(nOP++, inputFile + ".op")));
+		taskList.push_back(AnalysisPtr(new OPAnalysis(nOP++, prefixname + "_op")));
 }
 
 void Analyzer::ParseDCAnalysis(const string& src, double vs, double ve, double vi) {
 	if(processState != INIT)
 		throw std::runtime_error("Can't parse more analysis task now.");
-	taskList.push_back(AnalysisPtr(new DCAnalysis(nDC++, inputFile + ".dc", src, vs, ve,vi)));
+	taskList.push_back(AnalysisPtr(new DCAnalysis(nDC++, prefixname + "_dc", src, vs, ve,vi)));
 }
 
 void Analyzer::ParseTranAnalysis(double vi, double ve, double vs) {
 	if(processState != INIT)
 		throw std::runtime_error("Can't parse more analysis task now.");
-	taskList.push_back(AnalysisPtr(new TranAnalysis(nTRAN++, inputFile + ".tr", vi, ve,vs)));
+	taskList.push_back(AnalysisPtr(new TranAnalysis(nTRAN++, prefixname + "_tr", vi, ve,vs)));
 }
 
 void Analyzer::ParseACAnalysis(ACAnalysis::SweepType mType, int n, double fe, double fs){
 	if(processState != INIT)
 		throw std::runtime_error("Can't parse more analysis task now.");
-	taskList.push_back(AnalysisPtr(new ACAnalysis(nAC++, inputFile + ".ac", mType, n, fs, fe)));
+	taskList.push_back(AnalysisPtr(new ACAnalysis(nAC++, prefixname + "_ac", mType, n, fs, fe)));
 }
 
 void Analyzer::PrintAllAnalysis() const{

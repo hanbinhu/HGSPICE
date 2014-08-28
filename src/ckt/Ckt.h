@@ -1,6 +1,8 @@
 #ifndef CKT_H
 #define CKT_H
 
+#include <fstream>
+
 #include <string>
 #include <vector>
 using std::string;
@@ -62,6 +64,8 @@ public:
 	void SetTForNAB(const vector<double>& vTable);
 	void SetDForNAB(const vector<double>& vTable);
 
+	void printFile(double sweep, bool initial, std::ofstream& outF) const;
+	
 	void printAllNodes() const;
 	void printAllBranches() const;
 	void printAllInsts() const;

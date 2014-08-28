@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 using std::cout;
 using std::endl;
 
@@ -27,14 +28,22 @@ void TranAnalysis::PrintInf() {
 
 void TranAnalysis::analyze(const std::shared_ptr< Ckt >& mCkt, std::shared_ptr< Matrix< double > > mMat) {
 	bool flagINI =  true;
+	std::ofstream outFile(outputFile, std::fstream::out);
+	outFile.setf(std::ios::scientific);
+	
 	for(double t = tStart; t <= tStop; t += tStep) {
 		mCkt->LoadTRAN(t, tStep, flagINI);
 		mMat->solveVI();
-		mMat->printRes();
+		
 		vector<double> vVec;
 		for(unsigned int i = 0; i < mMat->getDim(); i++) vVec.push_back(mMat->getResVal(i));
-		mMat->reset();
 		mCkt->SetTForNAB(vVec);
+		
+		if(flagINI) outFile << "Time(s)";
+		mCkt->printFile(t, flagINI, outFile);
+		
+		mMat->reset();
 		flagINI = false;
 	}
+	outFile.close();
 }

@@ -9,11 +9,12 @@ lib/*
 bin/*
 
 # Tag File
-.ycm*
 tags
-*cscope*
 
 # Project File
 .kdev4/*
 *.kdev4
 *.udb
+
+# Test Result
+*.csv

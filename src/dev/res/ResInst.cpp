@@ -16,6 +16,18 @@ ResInst::ResInst(const ResInst& rhs):
 	resistance(rhs.resistance)
 {}
 
+void ResInst::printFileTitle(ofstream& outF, const string& title) const {
+	printFileTitleGen(getInstName(), outF, title);
+}
+
+void ResInst::printFileValue(ofstream& outF) const {
+	printSeperator(outF);
+	double Vp = *(nodeTable[0].lock()->getTPtr());
+	double Vn = *(nodeTable[1].lock()->getTPtr());
+	double I = (Vp - Vn) / resistance;
+	outF << I;
+}
+
 void ResInst::printInf() const {
 	printGenInf();
 	cout << "Resistance: " << resistance << "Ω" << endl;

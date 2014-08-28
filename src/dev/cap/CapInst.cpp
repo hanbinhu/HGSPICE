@@ -21,6 +21,15 @@ CapInst::CapInst(const CapInst& rhs):
 	initial(rhs.initial)
 {}
 
+void CapInst::printFileTitle(ofstream& outF, const string& title) const {
+	printFileTitleGen(getInstName(), outF, title);
+}
+
+void CapInst::printFileValue(ofstream& outF) const {
+	printSeperator(outF);
+	outF << *(brPtr.lock()->getTPtr());
+}
+
 void CapInst::printInf() const {
 	printGenInf();
 	cout << "Capcitance: " << capcitance << "F" << endl;

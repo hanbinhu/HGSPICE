@@ -31,6 +31,15 @@ ISrcInst::ISrcInst(const ISrcInst& rhs):
 	paramTable(rhs.paramTable)
 {}
 
+void ISrcInst::printFileTitle(ofstream& outF, const string& title) const {
+	printFileTitleGen(getInstName(), outF, title);
+}
+
+void ISrcInst::printFileValue(ofstream& outF) const {
+	printSeperator(outF);
+	outF << loadI;
+}
+
 void ISrcInst::printInf() const {
 	printGenInf();
 	cout << "DC Current: " << dcCurrent << "A" << endl;

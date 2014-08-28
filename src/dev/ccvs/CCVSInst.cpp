@@ -18,6 +18,16 @@ CCVSInst::CCVSInst(const CCVSInst& rhs):
 	CCName(rhs.CCName)
 {}
 
+void CCVSInst::printFileTitle(ofstream& outF, const string& title) const {
+	printFileTitleGen(getInstName() + ":VS", outF, title);
+}
+
+void CCVSInst::printFileValue(ofstream& outF) const {
+	printSeperator(outF);
+	double I = *(brVSPtr.lock()->getTPtr());
+	outF << I;
+}
+
 void CCVSInst::printInf() const {
 	printGenInf();
 	cout << "Transresistance: " << h << endl;

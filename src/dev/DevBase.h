@@ -1,6 +1,9 @@
 #ifndef  DEVBASE_H
 #define  DEVBASE_H
 
+#include <fstream>
+using std::ofstream;
+
 #include <vector>
 #include <string>
 using std::vector;
@@ -41,6 +44,9 @@ protected:
 	ModelPtr myModel;
 	string modelName;
 
+	void printSeperator(ofstream& outF) const;
+	void printFileTitleGen(const string& currentName, ofstream& outF, const string& title) const;
+	
 	void printNode() const;
 	void printGenInf() const;
 	
@@ -59,18 +65,21 @@ public:
 	virtual void specifyParam(const string& param, double value) {}
 	virtual void specifySubCkt() {}
 	virtual void specifyNode(const string& node) {}
-	
+
 	inline void setModel(const ModelPtr& mModel) {myModel = mModel;}
 	virtual void setBranch(const BranchPtr& mBranch) {};
-	
+
 	inline string getInstName() const {return name;}
 	inline string getModelName() const {return modelName;}
-	
+
 	virtual void stamp(const std::shared_ptr< Matrix<double> >& mMat) = 0;
 	virtual void loadOP() = 0;
 	virtual void loadDC() = 0;
 	virtual void loadTRAN(double time, double timeStep, bool flagInitial) = 0;
 
+	virtual void printFileTitle(ofstream& outF, const string& title) const = 0;
+	virtual void printFileValue(ofstream& outF) const = 0;
+	
 	virtual std::shared_ptr< InstBase > Clone() = 0;
 	
 	virtual void printInf() const = 0;

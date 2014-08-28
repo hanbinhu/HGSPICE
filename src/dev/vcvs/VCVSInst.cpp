@@ -21,6 +21,16 @@ void VCVSInst::printInf() const {
 	cout << "Voltage amplify coefficient: " << e << endl;
 }
 
+void VCVSInst::printFileTitle(ofstream& outF, const string& title) const {
+	printFileTitleGen(getInstName() + ":VS", outF, title);
+}
+
+void VCVSInst::printFileValue(ofstream& outF) const {
+	printSeperator(outF);
+	double I = *(brVSPtr.lock()->getTPtr());
+	outF << I;
+}
+
 std::shared_ptr< InstBase > VCVSInst::Clone() {
 	return std::static_pointer_cast< InstBase >( std::shared_ptr< VCVSInst >(new VCVSInst( *this ) ) );
 }

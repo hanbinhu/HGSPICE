@@ -1,6 +1,7 @@
 #include <iostream>
 using std::cout;
 using std::endl;
+#include <fstream>
 
 #include "DCAnalysis.h"
 #include "Devices.h"
@@ -47,12 +48,28 @@ void DCAnalysis::PrintInf() {
 }
 
 void DCAnalysis::analyze(const std::shared_ptr< Ckt >& mCkt, std::shared_ptr< Matrix< double > > mMat) {
+	std::ofstream outFile(outputFile, std::fstream::out);
+	outFile.setf(std::ios::scientific);
+	
 	for(double v = vStart; v <= vStop; v += vInc) {
 		if(mType == V) mVSrcInst.lock()->setLoad(v);
 		else mISrcInst.lock()->setLoad(v);
 		mCkt->LoadDC();
 		mMat->solveVI();
-		mMat->printRes();
+		
+		vector<double> vVec;
+		for(unsigned int i = 0; i < mMat->getDim(); i++) vVec.push_back(mMat->getResVal(i));
+		mCkt->SetTForNAB(vVec);
+		
+		bool initial = (v == vStart);
+		if(initial) {
+			outFile << mSrcName;
+			if(mType == V) outFile << "(V)";
+			else outFile << "(A)";
+		}
+		mCkt->printFile(v, initial, outFile);
+		
 		mMat->reset();
 	}
+	outFile.close();
 }

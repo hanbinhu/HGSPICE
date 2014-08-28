@@ -21,6 +21,9 @@ public:
 	virtual void loadOP();
 	virtual void loadTRAN(double time, double timeStep, bool flagInitial);
 	
+	virtual void printFileTitle(ofstream& outF, const string& title) const;
+	virtual void printFileValue(ofstream& outF) const;
+	
 	virtual void printInf() const;
 	
 private:

@@ -16,6 +16,18 @@ VCCSInst::VCCSInst(const VCCSInst& rhs):
 	g(rhs.g)
 {}
 
+void VCCSInst::printFileTitle(ofstream& outF, const string& title) const {
+	printFileTitleGen(getInstName() + ":CS", outF, title);
+}
+
+void VCCSInst::printFileValue(ofstream& outF) const {
+	printSeperator(outF);
+	double Vp = *(nodeTable[2].lock()->getTPtr());
+	double Vn = *(nodeTable[3].lock()->getTPtr());
+	double I = (Vp - Vn) * g;
+	outF << I;
+}
+
 void VCCSInst::printInf() const {
 	printGenInf();
 	cout << "Transconductance: " << g << endl;

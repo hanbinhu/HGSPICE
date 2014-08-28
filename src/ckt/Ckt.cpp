@@ -249,6 +249,17 @@ std::shared_ptr< InstBase > Ckt::findInst(const string& instName) {
 	else return reVal->second;
 }
 
+void Ckt::printFile(double sweep, bool initial, std::ofstream& outF) const {
+	if(initial) {
+		for(NodePtr elem: nodeList) outF << "," << elem->getName() << "(V)";
+		for(InstPtr elem: instList) elem->printFileTitle(outF, "");
+	}
+	outF << endl << sweep;
+	for(NodePtr elem: nodeList) outF << "," << *(elem->getTPtr());
+	for(InstPtr elem: instList) elem->printFileValue(outF);
+	outF << endl;
+}
+
 void Ckt::printAllNodes() const {
 	cout << "****************************************" << endl;
 	cout << "Node Information in Node List (" << nodeList.size() << ")" << endl;

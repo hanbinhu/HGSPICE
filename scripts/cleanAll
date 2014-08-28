@@ -11,3 +11,6 @@ rm -f *.hh *.output *.cpp *.hpp
 
 cd $HGSPICE_ROOT/src
 rm -rf tags
+
+cd $HGSPICE_ROOT/test
+rm -rf *.csv

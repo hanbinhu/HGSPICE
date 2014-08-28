@@ -141,6 +141,14 @@ void XSubInst::link(const string& mStackTitle, CktPtr mCkt) {
 	}
 }
 
+void XSubInst::printFileTitle(ofstream& outF, const string& title) const {
+	for(InstPtr elem: instList) elem->printFileTitle(outF, title + getInstName() + ";");
+}
+
+void XSubInst::printFileValue(ofstream& outF) const {
+	for(InstPtr elem: instList) elem->printFileValue(outF);
+}
+
 void XSubInst::printInf() const {
 	cout << "****************************************" << endl;
 	cout << "Inst Name: " << getInstName() << endl;

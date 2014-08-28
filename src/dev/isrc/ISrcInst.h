@@ -40,6 +40,9 @@ public:
 	
 	inline void setLoad(double I) {loadI = I; compDCLoad = true;}
 	
+	virtual void printFileTitle(ofstream& outF, const string& title) const;
+	virtual void printFileValue(ofstream& outF) const;
+	
 	virtual void printInf() const;
 	
 private:

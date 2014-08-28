@@ -16,6 +16,14 @@ MosInst::MosInst(const MosInst& rhs):
 	L(rhs.L)
 {}
 
+void MosInst::printFileTitle(ofstream& outF, const string& title) const {
+
+}
+
+void MosInst::printFileValue(ofstream& outF) const {
+
+}
+
 void MosInst::printInf() const {
 	printGenInf();
 	cout << "Length of transistor is " << L << "m." << endl;

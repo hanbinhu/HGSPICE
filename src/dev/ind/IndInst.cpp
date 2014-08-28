@@ -21,6 +21,15 @@ IndInst::IndInst(const IndInst& rhs):
 	initial(rhs.initial)
 {}
 
+void IndInst::printFileTitle(ofstream& outF, const string& title) const {
+	printFileTitleGen(getInstName(), outF, title);
+}
+
+void IndInst::printFileValue(ofstream& outF) const {
+	printSeperator(outF);
+	outF << *IT;
+}
+
 void IndInst::printInf() const {
 	printGenInf();
 	cout << "Inductance: " << inductance << "H" << endl;

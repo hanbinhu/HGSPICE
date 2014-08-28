@@ -22,6 +22,15 @@ InstBase::InstBase(const InstBase& rhs):
 	nodeTable()
 {}
 
+void InstBase::printSeperator(ofstream& outF) const {
+	outF << ",";
+}
+
+void InstBase::printFileTitleGen(const string& currentName, ofstream& outF, const string& title) const {
+	printSeperator(outF);
+	outF << title + currentName + "(A)";
+}
+
 void InstBase::printNode() const {
 	cout << getInstName() << " has " << nodeTable.size() << " nodes. The nodes are listed below:" << endl;
 	cout.flags(std::ios::left);

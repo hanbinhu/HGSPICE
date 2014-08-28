@@ -18,6 +18,16 @@ CCCSInst::CCCSInst(const CCCSInst& rhs):
 	CCName(rhs.CCName)
 {}
 
+void CCCSInst::printFileTitle(ofstream& outF, const string& title) const {
+	printFileTitleGen(getInstName() + ":CS", outF, title);
+}
+
+void CCCSInst::printFileValue(ofstream& outF) const {
+	printSeperator(outF);
+	double I = f * mVPtr.lock()->getBrI();
+	outF << I;
+}
+
 void CCCSInst::printInf() const {
 	printGenInf();
 	cout << "Current amplify coefficient: " << f << endl;
