@@ -1,0 +1,7 @@
+#!/bin/sh
+
+HGSPICE_ROOT=$(cd "$(dirname "$0")"; pwd)/..
+
+cd $HGSPICE_ROOT/test
+find . -name "*.csv" -exec rm -f {} \;
+find . -name "*.eps" -exec rm -f {} \;
