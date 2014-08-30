@@ -197,10 +197,12 @@ my $oriEPS = "$script_path/temp/1.eps";
 chomp(my $time = `date +%F-%H-%M-%S`);
 my ($name, $path) = fileparse($csvFile, '.csv');
 chop($path);
-my $newEPS = "$path/$name-$time.eps";
+my $newEPS = "$path/$time\_$name.eps";
 rename "$oriEPS", "$newEPS";
 
 rmtree("$script_path/temp");
+
+print "EPS file has been written to $newEPS.\n";
 
 sub inputNum {
     my $min = shift @_;

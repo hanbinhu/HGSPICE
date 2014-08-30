@@ -2,6 +2,7 @@
 #define  CCCSINST_H
 
 #include "../DevBase.h"
+#include "CCCSModel.h"
 
 #include <memory>
 
@@ -12,6 +13,8 @@ private:
 	std::weak_ptr< VSrcInst > mVPtr;
 	string CCName;
 	double f;
+	
+	std::weak_ptr<CCCSModel> myModel;
 	
 public:
 	CCCSInst(const string& str, const string& modelStr);
@@ -24,6 +27,7 @@ public:
 	inline void setVPtr(const std::weak_ptr< VSrcInst >& VPtr) {mVPtr = VPtr;}
 	
 	virtual std::shared_ptr< InstBase > Clone();
+	virtual inline void setModel(const ModelPtr& mModel) {myModel = std::dynamic_pointer_cast<CCCSModel>(mModel);}
 	
 	virtual void stamp(const std::shared_ptr< Matrix<double> >& mMat);
 	virtual void loadOP();

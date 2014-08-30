@@ -16,8 +16,8 @@ int main(int argc, char *argv[]) {
 			std::shared_ptr< Ckt > pObj(new Ckt);
 			pObj->Initialize(mAnalyzer);
 			mAnalyzer->runAnalysis(pObj);
-			pObj->printAllNodes();
-			pObj->printAllBranches();
+			//pObj->printAllNodes();
+			//pObj->printAllBranches();
 			//pObj->printAllInsts();
 			//mAnalyzer->PrintAllAnalysis();
 		} catch (const std::ios::failure& error) {

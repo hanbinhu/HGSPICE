@@ -7,6 +7,7 @@ using std::vector;
 #include <functional>
 
 #include "../DevBase.h"
+#include "VSrcModel.h"
 #include "../SrcFunc.h"
 
 class VSrcInst : public InstBase {
@@ -16,6 +17,8 @@ private:
 	double dcVoltage;
 	double acVoltage;
 	double acVoltagePhase;
+	
+	std::weak_ptr<VSrcModel> myModel;
 	
 	std::function< double(const vector<double>&, double) > calFunc;
 	std::function< void(const vector<double>&, SrcFunc::SignalType) > printFunc;
@@ -35,6 +38,7 @@ public:
 	inline virtual void setBranch(const BranchPtr& mBranch) {brPtr = mBranch;}
 	
 	virtual std::shared_ptr< InstBase > Clone();
+	virtual inline void setModel(const ModelPtr& mModel) {myModel = std::dynamic_pointer_cast<VSrcModel>(mModel);}
 	
 	inline unsigned int getBrId() const {return brPtr.lock()->getId();}
 	inline double getBrI() const {return *(brPtr.lock()->getTPtr());}

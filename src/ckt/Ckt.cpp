@@ -6,6 +6,7 @@ using std::cerr;
 using std::endl;
 
 #include <algorithm>
+#include <random>
 
 #include "Analyzer.h"
 #include "Ckt.h"
@@ -208,6 +209,12 @@ const std::shared_ptr< Branch > Ckt::newBranch(const string& strBranch) {
 	} else throw std::runtime_error(string("Already has one branch named as ") + strBranch);
 }
 
+void Ckt::NodeInitial() {
+	std::default_random_engine dre;
+	std::uniform_real_distribution<double> randGen(0, 1);
+	for(NodePtr elem : nodeList) elem->setTRAN(randGen(dre));
+}
+
 void Ckt::numberNodeBranch() {
 	unsigned int i = 0;
 	if(nodeList[0]->getName() != "0") throw std::runtime_error("No gnd in this Circuit.");
@@ -228,13 +235,27 @@ void Ckt::LoadDC() const {
 }
 
 void Ckt::LoadTRAN(double time, double timeStep, bool flagInitial) const {
-	for(InstPtr elem : instList) elem->loadTRAN(time, timeStep, flagInitial);
+	for(InstPtr elem : instList)  elem->loadTRAN(time, timeStep, flagInitial);
 }
 
-void Ckt::SetDForNAB(const vector< double >& vTable) {
+bool Ckt::SetDForNAB(const vector< double >& vTable, double ea, double er) {
+	bool flagConv = true;
 	unsigned int i = 0;
-	for(NodePtr elem : nodeList) elem->setDC(vTable[i++]);
-	for(BranchPtr elem : branchList) elem->setDC(vTable[i++]);
+	for(NodePtr elem : nodeList) {
+		double vP = *elem->getDPtr();
+		double vN = vTable[i];
+		elem->setDC(vN);
+		i++;
+		if(abs(vP - vN) > ea + er * std::min(abs(vP), abs(vN))) flagConv = false;
+	}
+	for(BranchPtr elem : branchList) {
+		double iP = *elem->getDPtr();
+		double iN = vTable[i];
+		elem->setDC(iN);
+		i++;
+		if(abs(iP - iN) > ea + er * std::min(abs(iP), abs(iN))) flagConv = false;
+	}
+	return flagConv;
 }
 
 void Ckt::SetTForNAB(const vector< double >& vTable) {
@@ -253,8 +274,9 @@ void Ckt::printFile(double sweep, bool initial, std::ofstream& outF) const {
 	if(initial) {
 		for(NodePtr elem: nodeList) outF << "," << elem->getName() << "(V)";
 		for(InstPtr elem: instList) elem->printFileTitle(outF, "");
+		outF << endl;
 	}
-	outF << endl << sweep;
+	outF << sweep;
 	for(NodePtr elem: nodeList) outF << "," << *(elem->getTPtr());
 	for(InstPtr elem: instList) elem->printFileValue(outF);
 	outF << endl;

@@ -7,6 +7,7 @@ using std::vector;
 #include <functional>
 
 #include "../DevBase.h"
+#include "ISrcModel.h"
 #include "../SrcFunc.h"
 
 class ISrcInst : public InstBase {
@@ -14,6 +15,8 @@ private:
 	double dcCurrent;
 	double acCurrent;
 	double acCurrentPhase;
+	
+	std::weak_ptr<ISrcModel> myModel;
 	
 	std::function< double(const vector<double>&, double) > calFunc;
 	std::function< void(const vector<double>&, SrcFunc::SignalType) > printFunc;
@@ -32,6 +35,7 @@ public:
 	virtual void specifyFunc(SrcFunc::TranFuncType mFuncType, const vector<double>& paramTab);
 	
 	virtual std::shared_ptr< InstBase > Clone();
+	virtual inline void setModel(const ModelPtr& mModel) {myModel = std::dynamic_pointer_cast<ISrcModel>(mModel);}
 	
 	virtual void stamp(const std::shared_ptr< Matrix<double> >& mMat);
 	virtual void loadOP();

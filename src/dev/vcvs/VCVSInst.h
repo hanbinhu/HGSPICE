@@ -2,12 +2,15 @@
 #define  VCVSINST_H
 
 #include "../DevBase.h"
+#include "VCVSModel.h"
 
 class VCVSInst : public InstBase {
 private:
 	BranchPtr brVSPtr;
 	
 	double e;
+	
+	std::weak_ptr<VCVSModel> myModel;
 	
 public:
 	VCVSInst(const string& str, const string& modelStr);
@@ -18,6 +21,7 @@ public:
 	inline virtual void setBranch(const BranchPtr& mBranch) {brVSPtr = mBranch;}
 	
 	virtual std::shared_ptr< InstBase > Clone();
+	virtual inline void setModel(const ModelPtr& mModel) {myModel = std::dynamic_pointer_cast<VCVSModel>(mModel);}
 	
 	virtual void stamp(const std::shared_ptr< Matrix<double> >& mMat);
 	virtual void loadOP();

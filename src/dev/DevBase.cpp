@@ -11,14 +11,12 @@ using std::endl;
 InstBase::InstBase(const string& str, const string& modelStr):
 	name(str), 
 	modelName(modelStr),
-	myModel(),
 	nodeTable()
 {}
 
 InstBase::InstBase(const InstBase& rhs): 
 	name(rhs.name),
 	modelName(rhs.modelName),
-	myModel(),
 	nodeTable()
 {}
 
@@ -42,7 +40,7 @@ void InstBase::printNode() const {
 void InstBase::printGenInf() const {
 	cout << "****************************************" << endl;
 	cout << "Inst Name: " << getInstName() << endl;
-	cout << "Model Name: " << myModel.lock()->getName() << endl;
+	cout << "Model Name: " << modelName << endl;
 	printNode();
 }
 

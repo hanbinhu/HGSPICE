@@ -2,6 +2,7 @@
 #define  CCVSINST_H
 
 #include "../DevBase.h"
+#include "CCVSModel.h"
 
 #include <memory>
 
@@ -15,6 +16,8 @@ private:
 	string CCName;
 	double h;
 	
+	std::weak_ptr<CCVSModel> myModel;
+	
 public:
 	CCVSInst(const string& str, const string& modelStr);
 	CCVSInst(const CCVSInst& rhs);	
@@ -27,6 +30,7 @@ public:
 	inline void setVPtr(const std::weak_ptr< VSrcInst >& VPtr) {mVPtr = VPtr;}
 	
 	virtual std::shared_ptr< InstBase > Clone();
+	virtual inline void setModel(const ModelPtr& mModel) {myModel = std::dynamic_pointer_cast<CCVSModel>(mModel);}
 	
 	virtual void stamp(const std::shared_ptr< Matrix<double> >& mMat);
 	virtual void loadOP();

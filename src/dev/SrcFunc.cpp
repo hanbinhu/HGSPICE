@@ -99,7 +99,7 @@ double SrcFunc::PulseFunc(const vector<double>& paramTable, double t) {
 	while(tRel >= PER) tRel -= PER;
 	if(tRel < TR) reVal += (V2 - V1) / TR * tRel;
 	if(TR <= tRel && tRel <= TR + PW) reVal = V2;
-	if(TR + PW < tRel && tRel < TR + PW + TF) reVal += (V2 - V1) / TF * (TR + PW + TF - t);
+	if(TR + PW < tRel && tRel < TR + PW + TF) reVal += (V2 - V1) / TF * (TR + PW + TF - tRel);
 	return reVal;
 }
 

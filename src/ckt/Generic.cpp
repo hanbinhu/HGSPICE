@@ -3,7 +3,7 @@
 
 Node::Node(const string& str): 
 	name(str), 
-	index(-1) 
+	index(-1)
 {
 }
 

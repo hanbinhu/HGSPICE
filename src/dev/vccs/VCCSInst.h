@@ -2,10 +2,13 @@
 #define  VCCSINST_H
 
 #include "../DevBase.h"
+#include "VCCSModel.h"
 
 class VCCSInst : public InstBase {
 private:
 	double g;
+	
+	std::weak_ptr<VCCSModel> myModel;
 	
 public:
 	VCCSInst(const string& str, const string& modelStr);
@@ -15,6 +18,7 @@ public:
 	inline void specifyG(double vccs) {g = vccs;}
 	
 	virtual std::shared_ptr< InstBase > Clone();
+	virtual inline void setModel(const ModelPtr& mModel) {myModel = std::dynamic_pointer_cast<VCCSModel>(mModel);}
 	
 	virtual void stamp(const std::shared_ptr< Matrix<double> >& mMat);
 	virtual void loadDC();

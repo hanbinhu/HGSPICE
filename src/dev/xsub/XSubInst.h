@@ -9,6 +9,7 @@ using std::string;
 #include <unordered_set>
 
 #include "../DevBase.h"
+#include "XSubModel.h"
 
 class Ckt;
 class SubCkt;
@@ -26,6 +27,8 @@ private:
 	typedef std::shared_ptr< InstBase > InstPtr;
 	vector< InstPtr > instList;
 	std::unordered_map< string, InstPtr > instHashMap;
+	
+	std::weak_ptr<XSubModel> myModel;
 	
 	typedef std::shared_ptr< Ckt > CktPtr;
 	
@@ -50,6 +53,7 @@ public:
 	void fillNode(CktPtr mCkt);
 	
 	virtual std::shared_ptr< InstBase > Clone();
+	virtual inline void setModel(const ModelPtr& mModel) {myModel = std::dynamic_pointer_cast<XSubModel>(mModel);}
 	
 	virtual void stamp(const std::shared_ptr< Matrix<double> >& mMat);
 	virtual void loadOP();

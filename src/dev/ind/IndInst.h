@@ -2,6 +2,7 @@
 #define  INDINST_H
 
 #include "../DevBase.h"
+#include "IndModel.h"
 
 class IndInst : public InstBase {
 private:
@@ -11,6 +12,8 @@ private:
 	
 	bool initial;
 	double currentIC;
+	
+	std::weak_ptr<IndModel> myModel;
 	
 public:
 	IndInst(const string& str, const string& modelStr);
@@ -22,6 +25,7 @@ public:
 	inline virtual void setBranch(const BranchPtr& mBranch) {brPtr = mBranch;}
 	
 	virtual std::shared_ptr< InstBase > Clone();
+	virtual inline void setModel(const ModelPtr& mModel) {myModel = std::dynamic_pointer_cast<IndModel>(mModel);}
 	
 	virtual void stamp(const std::shared_ptr< Matrix<double> >& mMat);
 	virtual void loadOP();

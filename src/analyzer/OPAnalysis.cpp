@@ -35,5 +35,5 @@ void OPAnalysis::analyze(const std::shared_ptr< Ckt >& mCkt, std::shared_ptr< Ma
 	outFile << "NS";
 	mCkt->printFile(0, true, outFile);
 	
-	mMat.reset();
+	mMat->reset();
 }

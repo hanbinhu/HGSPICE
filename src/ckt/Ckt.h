@@ -62,7 +62,9 @@ public:
 	void LoadTRAN(double time, double timeStep, bool flagInitial) const;
 	
 	void SetTForNAB(const vector<double>& vTable);
-	void SetDForNAB(const vector<double>& vTable);
+	bool SetDForNAB(const vector<double>& vTable, double ea, double er);
+	
+	void NodeInitial();
 
 	void printFile(double sweep, bool initial, std::ofstream& outF) const;
 	

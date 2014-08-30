@@ -3,9 +3,13 @@
 
 #include "../DevBase.h"
 
+#include "ResModel.h"
+
 class ResInst : public InstBase {
 private:
 	double resistance;
+	
+	std::weak_ptr<ResModel> myModel;
 	
 public:
 	ResInst(const string& str, const string& modelStr);
@@ -15,6 +19,7 @@ public:
 	inline void specifyRes(double res) {resistance = res;}
 	
 	virtual std::shared_ptr< InstBase > Clone();
+	virtual inline void setModel(const ModelPtr& mModel) {myModel = std::dynamic_pointer_cast<ResModel>(mModel);}
 	
 	virtual void stamp(const std::shared_ptr< Matrix<double> >& mMat);
 	virtual void loadOP();

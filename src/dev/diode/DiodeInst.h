@@ -2,14 +2,18 @@
 #define  DIODEINST_H
 
 #include "../DevBase.h"
+#include "DiodeModel.h"
 
 class DiodeInst : public InstBase {
+private:
+	std::weak_ptr<DiodeModel> myModel;
 public:
 	DiodeInst(const string& str, const string& modelStr);
 	DiodeInst(const DiodeInst& rhs);
 	virtual ~DiodeInst() {}
 
 	virtual std::shared_ptr< InstBase > Clone();
+	virtual inline void setModel(const ModelPtr& mModel) {myModel = std::dynamic_pointer_cast<DiodeModel>(mModel);}
 
 	virtual void stamp(const std::shared_ptr< Matrix<double> >& mMat);
 	virtual void loadOP();

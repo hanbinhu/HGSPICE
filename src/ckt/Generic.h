@@ -11,7 +11,7 @@ private:
 	int index;
 	double voltageT;
 	double voltageD;
-
+	
 public:
 	Node(const string& str);
 	inline string getName() const {return name;}
@@ -31,7 +31,7 @@ private:
 	unsigned int index;
 	double currentT;
 	double currentD;
-
+	
 public:	
 	Branch(const string& str);
 	inline string getName() const {return name;}

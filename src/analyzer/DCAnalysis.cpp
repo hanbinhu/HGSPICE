@@ -51,14 +51,22 @@ void DCAnalysis::analyze(const std::shared_ptr< Ckt >& mCkt, std::shared_ptr< Ma
 	std::ofstream outFile(outputFile, std::fstream::out);
 	outFile.setf(std::ios::scientific);
 	
+	mCkt->NodeInitial();
+	
 	for(double v = vStart; v <= vStop; v += vInc) {
 		if(mType == V) mVSrcInst.lock()->setLoad(v);
 		else mISrcInst.lock()->setLoad(v);
-		mCkt->LoadDC();
-		mMat->solveVI();
 		
 		vector<double> vVec;
-		for(unsigned int i = 0; i < mMat->getDim(); i++) vVec.push_back(mMat->getResVal(i));
+		bool flagConv = false;
+		do {
+			mCkt->LoadDC();
+			mMat->solveVI();
+			vVec.clear();
+			for(unsigned int i = 0; i < mMat->getDim(); i++) vVec.push_back(mMat->getResVal(i));
+			flagConv = mCkt->SetDForNAB(vVec, epsilonA, epsilonR);
+		} while(!flagConv);
+		
 		mCkt->SetTForNAB(vVec);
 		
 		bool initial = (v == vStart);

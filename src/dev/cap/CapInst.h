@@ -2,6 +2,7 @@
 #define  CAPINST_H
 
 #include "../DevBase.h"
+#include "CapModel.h"
 
 class CapInst : public InstBase {
 private:
@@ -11,6 +12,8 @@ private:
 	
 	bool initial;
 	double voltageIC;
+	
+	std::weak_ptr<CapModel> myModel;
 	
 public:
 	CapInst(const string& str, const string& modelStr);
@@ -22,6 +25,7 @@ public:
 	inline virtual void setBranch(const BranchPtr& mBranch) {brPtr = mBranch;}
 	
 	virtual std::shared_ptr< InstBase > Clone();
+	virtual inline void setModel(const ModelPtr& mModel) {myModel = std::dynamic_pointer_cast<CapModel>(mModel);}
 	
 	virtual void stamp(const std::shared_ptr< Matrix<double> >& mMat);
 	virtual void loadOP();

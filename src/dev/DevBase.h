@@ -37,11 +37,10 @@ friend class XSubInst;
 protected:
 	typedef std::weak_ptr< Node > NodePtr;
 	typedef std::weak_ptr< Branch > BranchPtr;
-	typedef std::weak_ptr< ModelBase > ModelPtr;
+	typedef std::shared_ptr< ModelBase > ModelPtr;
 	
 	string name;
 	vector< NodePtr > nodeTable;
-	ModelPtr myModel;
 	string modelName;
 
 	void printSeperator(ofstream& outF) const;
@@ -66,7 +65,7 @@ public:
 	virtual void specifySubCkt() {}
 	virtual void specifyNode(const string& node) {}
 
-	inline void setModel(const ModelPtr& mModel) {myModel = mModel;}
+	virtual void setModel(const ModelPtr& mModel) = 0;
 	virtual void setBranch(const BranchPtr& mBranch) {};
 
 	inline string getInstName() const {return name;}
