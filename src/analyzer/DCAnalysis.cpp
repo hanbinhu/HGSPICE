@@ -2,6 +2,7 @@
 using std::cout;
 using std::endl;
 #include <fstream>
+#include <cmath>
 
 #include "DCAnalysis.h"
 #include "Devices.h"
@@ -51,17 +52,20 @@ void DCAnalysis::analyze(const std::shared_ptr< Ckt >& mCkt, std::shared_ptr< Ma
 	std::ofstream outFile(outputFile, std::fstream::out);
 	outFile.setf(std::ios::scientific);
 	
-	mCkt->NodeInitial();
+	mCkt->randInitial();
+	
+	vector<double> vVec;
+	vVec.reserve(mMat->getDim());
 	
 	for(double v = vStart; v <= vStop; v += vInc) {
-		if(mType == V) mVSrcInst.lock()->setLoad(v);
-		else mISrcInst.lock()->setLoad(v);
 		
-		vector<double> vVec;
 		bool flagConv = false;
 		do {
+			if(mType == V) mVSrcInst.lock()->setLoad(v);
+			else mISrcInst.lock()->setLoad(v);
 			mCkt->LoadDC();
-			mMat->solveVI();
+			bool SolveSuccess = mMat->solveVI();
+			if(!SolveSuccess) cout << v << " doesn't converge" << endl;
 			vVec.clear();
 			for(unsigned int i = 0; i < mMat->getDim(); i++) vVec.push_back(mMat->getResVal(i));
 			flagConv = mCkt->SetDForNAB(vVec, epsilonA, epsilonR);

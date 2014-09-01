@@ -6,6 +6,6 @@ M1 drain gate 0 0 NCH l = 1u w = 2u
 
 .model NCH NMOS
 
-.dc vd 0 1.8 0.01
+.dc vin 0 1.8 0.01
 
 .end

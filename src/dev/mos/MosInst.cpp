@@ -25,11 +25,15 @@ void MosInst::setModel(const ModelPtr& mModel) {
 }
 
 void MosInst::printFileTitle(ofstream& outF, const string& title) const {
-
+	printFileTitleGen(getInstName(), outF, title);
 }
 
 void MosInst::printFileValue(ofstream& outF) const {
-
+	printSeperator(outF);
+	double Ids;
+	double dummy;
+	std::make_tuple(std::ref(Ids), std::ref(dummy), std::ref(dummy), std::ref(dummy)) = myModel.lock()->modelCalc(L, W, *VDd, *VDg, *VDs, *VDb);
+	outF << Ids;
 }
 
 void MosInst::printInf() const {
@@ -47,6 +51,7 @@ void MosInst::stamp(const std::shared_ptr< Matrix< double > >& mMat) {
 	unsigned int nodeG = nodeTable[1].lock()->getId();
 	unsigned int nodeS = nodeTable[2].lock()->getId();
 	unsigned int nodeB = nodeTable[3].lock()->getId();
+		
 	pMatdd = mMat->getMatPtr(nodeD, nodeD);
 	pMatdg = mMat->getMatPtr(nodeD, nodeG);
 	pMatds = mMat->getMatPtr(nodeD, nodeS);
@@ -73,11 +78,11 @@ void MosInst::load() {
 	
 	*pMatdd += gds;
 	*pMatdg += gm;
-	*pMatds -= (gm + gds + gmb);
+	*pMatds -= gm + gds + gmb;
 	*pMatdb += gmb;
 	*pMatsd -= gds;
 	*pMatsg -= gm;
-	*pMatss += (gm + gds + gmb);
+	*pMatss += gm + gds + gmb;
 	*pMatsb -= gmb;
 	
 	*pRhsd -= I0;

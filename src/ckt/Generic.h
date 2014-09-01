@@ -28,7 +28,7 @@ class Branch {
 
 private:
 	string name;
-	unsigned int index;
+	int index;
 	double currentT;
 	double currentD;
 	

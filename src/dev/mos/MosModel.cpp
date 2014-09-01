@@ -96,7 +96,7 @@ std::tuple< double, double, double, double > MosModel::modelCalc(double L, doubl
     // calc id
     double beta = kvalue * W / Leq;
     double Is = 2 * n * beta * VT * VT;
-    double Ids = Is * IC;
+    double Ids = sign * Is * IC;
 
     // calc gmg
     double gmg;
@@ -155,7 +155,7 @@ std::tuple< double, double, double, double > MosModel::modelCalc(double L, doubl
 
     double gm = gmg;
     double gds = gmd;
-    double gmb = gms - gmg - gmd;
+    double gmb = (gms - gmg - gmd) ;
 	
 	std::tuple<double, double, double, double> reVal(Ids, gm, gds, gmb);
 	

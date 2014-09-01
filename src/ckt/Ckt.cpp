@@ -209,10 +209,13 @@ const std::shared_ptr< Branch > Ckt::newBranch(const string& strBranch) {
 	} else throw std::runtime_error(string("Already has one branch named as ") + strBranch);
 }
 
-void Ckt::NodeInitial() {
+void Ckt::randInitial() {
 	std::default_random_engine dre;
-	std::uniform_real_distribution<double> randGen(0, 1);
-	for(NodePtr elem : nodeList) elem->setTRAN(randGen(dre));
+	std::normal_distribution<double> randGenV(0.9, 0.2);
+	for(NodePtr elem : nodeList) elem->setTRAN(randGenV(dre));
+	nodeList[0]->setTRAN(0);
+	std::lognormal_distribution<double> randGenI(-10, 2);
+	for(NodePtr elem : nodeList) elem->setTRAN(randGenI(dre));
 }
 
 void Ckt::numberNodeBranch() {
@@ -246,14 +249,20 @@ bool Ckt::SetDForNAB(const vector< double >& vTable, double ea, double er) {
 		double vN = vTable[i];
 		elem->setDC(vN);
 		i++;
-		if(abs(vP - vN) > ea + er * std::min(abs(vP), abs(vN))) flagConv = false;
+		double left = fabs(vP - vN);
+		double righttmp = std::min(fabs(vP), fabs(vN));
+		double right = ea + er * righttmp;
+		if(left > right) flagConv = false;
 	}
 	for(BranchPtr elem : branchList) {
 		double iP = *elem->getDPtr();
 		double iN = vTable[i];
 		elem->setDC(iN);
 		i++;
-		if(abs(iP - iN) > ea + er * std::min(abs(iP), abs(iN))) flagConv = false;
+		double left = fabs(iP - iN);
+		double righttmp = std::min(fabs(iP), fabs(iN));
+		double right = ea + er * righttmp;
+		if(left > right) flagConv = false;
 	}
 	return flagConv;
 }

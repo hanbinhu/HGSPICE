@@ -64,7 +64,7 @@ public:
 	void SetTForNAB(const vector<double>& vTable);
 	bool SetDForNAB(const vector<double>& vTable, double ea, double er);
 	
-	void NodeInitial();
+	void randInitial();
 
 	void printFile(double sweep, bool initial, std::ofstream& outF) const;
 	

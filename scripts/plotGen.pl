@@ -124,6 +124,7 @@ open GPLOT, ">", "$tmpScriptFile";
 
 print GPLOT "set xlabel \"$XTitle\"\n";
 print GPLOT "plot \\\n";
+
 my @scriptPlot = ();
 if(@plot_current > 0 && @plot_voltage > 0) {
     my $count = 2;
@@ -203,6 +204,8 @@ rename "$oriEPS", "$newEPS";
 rmtree("$script_path/temp");
 
 print "EPS file has been written to $newEPS.\n";
+
+system("gs $newEPS");
 
 sub inputNum {
     my $min = shift @_;
