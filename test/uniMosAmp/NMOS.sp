@@ -1,7 +1,7 @@
 *Unit Mos Test
 
 vdd vdd 0 1.8
-vin gate 0 0.9
+vin in 0 0.9
 
 Rload vdd out 10k
 M1 out in 0 0 NCH l = 1u w = 2u

@@ -51,14 +51,14 @@ void DCAnalysis::PrintInf() {
 void DCAnalysis::analyze(const std::shared_ptr< Ckt >& mCkt, std::shared_ptr< Matrix< double > > mMat) {
 	std::ofstream outFile(outputFile, std::fstream::out);
 	outFile.setf(std::ios::scientific);
-	
+
 	mCkt->randInitial();
-	
+
 	vector<double> vVec;
 	vVec.reserve(mMat->getDim());
-	
+
 	for(double v = vStart; v <= vStop; v += vInc) {
-		
+
 		bool flagConv = false;
 		do {
 			if(mType == V) mVSrcInst.lock()->setLoad(v);
@@ -69,10 +69,11 @@ void DCAnalysis::analyze(const std::shared_ptr< Ckt >& mCkt, std::shared_ptr< Ma
 			vVec.clear();
 			for(unsigned int i = 0; i < mMat->getDim(); i++) vVec.push_back(mMat->getResVal(i));
 			flagConv = mCkt->SetDForNAB(vVec, epsilonA, epsilonR);
+		    mMat->reset();
 		} while(!flagConv);
-		
+
 		mCkt->SetTForNAB(vVec);
-		
+
 		bool initial = (v == vStart);
 		if(initial) {
 			outFile << mSrcName;
@@ -80,8 +81,7 @@ void DCAnalysis::analyze(const std::shared_ptr< Ckt >& mCkt, std::shared_ptr< Ma
 			else outFile << "(A)";
 		}
 		mCkt->printFile(v, initial, outFile);
-		
-		mMat->reset();
+
 	}
 	outFile.close();
 }
