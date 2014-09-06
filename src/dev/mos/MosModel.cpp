@@ -26,14 +26,25 @@ MosModel::MosModel(const string& str, MosType type):
 	Lmax = 20e-6;
 	Wmin = 2.2e-7;
 	Wmax = 900e-6;
-	Phi = 0.9;
-	Cox = 8.58e-3;
-	gamma = 0.3;
-	Vth0 = 0.4;
-	kvalue = 390e-6;
-	lambda = 0.5;
-	xj = 30e-9;
-	Esat = 5e6;
+	if(type == NMOS) {
+		Phi = 0.9;
+		Cox = 8.58e-3;
+		gamma = 0.3;
+		Vth0 = 0.4;
+		kvalue = 390e-6;
+		lambda = 0.5;
+		xj = 30e-9;
+		Esat = 5e6;
+	} else {
+		Phi = 0.904;
+		Cox = 8.80e-3;
+		gamma = 0.61;
+		Vth0 = 0.4;
+		kvalue = 82e-6;
+		lambda = 0.54;
+		xj = 50e-9;
+		Esat = 5.5e6;
+	}
 }
 
 bool MosModel::checkSize(double L, double W) const {
@@ -71,7 +82,6 @@ std::tuple< double, double, double, double > MosModel::modelCalc(double L, doubl
     double Vgt = Vg - Vth0 + Phi + gamma * sqrt(Phi);
     double Vp = -Phi;
     if(Vgt >= 0) Vp = Vgt - Phi - gamma * (sqrt(Vgt + gamma * gamma / 4) - gamma / 2);
-    else cout << "derivative should be 0" << endl;
     double n = 1 + gamma / 2 / sqrt(Vp + Phi + 4 * VT);
 
     //calc IC
@@ -89,9 +99,11 @@ std::tuple< double, double, double, double > MosModel::modelCalc(double L, doubl
     double Vip = sqrt(Vdss * Vdss + deltaV * deltaV) - sqrt((Vds - Vdss) * (Vds - Vdss)+ deltaV * deltaV);
     double Lc = sqrt(EPSILONSI / Cox * xj);
     double deltaL = lambda * Lc * log(1 + (Vds - Vip) / Lc / Esat);
+	if(isnan(deltaL)) deltaL = 0;
     double Lt = L - deltaL + (Vds + Vip) / Esat;
     double Lmint = L / 10;
     double Leq = (Lt + sqrt(Lt * Lt + Lmint * Lmint)) / 2;
+	if(Leq == 0) Leq = L;
 
     // calc id
     double beta = kvalue * W / Leq;
@@ -99,8 +111,8 @@ std::tuple< double, double, double, double > MosModel::modelCalc(double L, doubl
     double Ids = sign * Is * IC;
 
     // calc gmg
-    double gmg;
-    {
+    double gmg = 0;
+     if(Vgt >= 0) {
         double dVpdVg = 1 - gamma / sqrt(4 * Vgt + gamma * gamma);
         double dicfdVg = qf / VT * dVpdVg;
         double dicrdVg = qr / VT * dVpdVg;
@@ -125,6 +137,7 @@ std::tuple< double, double, double, double > MosModel::modelCalc(double L, doubl
     {
         double dVipdVd = (Vdss - Vds) / 2 / sqrt((Vdss - Vds) * (Vdss - Vds) + deltaV * deltaV);
         double ddeltaLdVd = lambda * Lc / (Lc * Esat + Vds - Vip) * (0.5 - dVipdVd);
+		if(isnan(ddeltaLdVd) || isinf(ddeltaLdVd)) ddeltaLdVd = lambda * Lc / (Lc * Esat) * (0.5 - dVipdVd);
         double dLtdVd = (dVipdVd + 0.5) / Esat - ddeltaLdVd;
         double dLeqdVd = dLtdVd * (1 + Lt / sqrt(Lt * Lt + Lmint * Lmint)) / 2;
         double dbetadVd = -kvalue * W / Leq / Leq * dLeqdVd;
@@ -145,6 +158,7 @@ std::tuple< double, double, double, double > MosModel::modelCalc(double L, doubl
         double ddeltaVdVs = 8 * lambda * VT * VT / deltaV * (dicfdVs / 2 / sqrt(icf) - dVdssdVs / VT);
         double dVipdVs = (Vdss * dVdssdVs + deltaV * ddeltaVdVs) / sqrt(Vdss * Vdss + deltaV * deltaV) - (deltaV * ddeltaVdVs - (dVdssdVs + 0.5) * (Vds - Vdss)) / sqrt(deltaV * deltaV + (Vds - Vdss) * (Vds - Vdss));
         double ddeltaLdVs = lambda * Lc / (Vip - Lc * Esat - Vds) * (0.5 + dVipdVs);
+		if(isnan(ddeltaLdVs) || isinf(ddeltaLdVs)) ddeltaLdVs = lambda * Lc / (Lc * Esat) * (0.5 - dVipdVs);
         double dLtdVs = (dVipdVs - 0.5) / Esat - ddeltaLdVs;
         double dLeqdVs = dLtdVs * (1 + Lt / sqrt(Lt * Lt + Lmint * Lmint)) / 2;
         double dbetadVs = -kvalue * W / Leq / Leq * dLeqdVs;
@@ -173,7 +187,7 @@ double MosModel::invq(double targetV, double q0) const {
         dV = 2 + 1.0 / q;
         delta = V / dV;
         if(fabs(delta) / q < 1e-9) break;
-        if(cnt == 100) {
+        if(cnt == 500) {
             cout << "Warning: invq() hasn't converged." << endl;
             break;
         }

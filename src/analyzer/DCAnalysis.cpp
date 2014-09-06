@@ -58,20 +58,25 @@ void DCAnalysis::analyze(const std::shared_ptr< Ckt >& mCkt, std::shared_ptr< Ma
 	vVec.reserve(mMat->getDim());
 
 	for(double v = vStart; v <= vStop; v += vInc) {
-
+		int iterCnt = 0;
 		bool flagConv = false;
 		do {
 			if(mType == V) mVSrcInst.lock()->setLoad(v);
 			else mISrcInst.lock()->setLoad(v);
 			mCkt->LoadDC();
+			
+			//mMat->printMat();
+			//mMat->printRhs();
+			
 			bool SolveSuccess = mMat->solveVI();
 			if(!SolveSuccess) cout << v << " doesn't converge" << endl;
 			vVec.clear();
 			for(unsigned int i = 0; i < mMat->getDim(); i++) vVec.push_back(mMat->getResVal(i));
 			flagConv = mCkt->SetDForNAB(vVec, epsilonA, epsilonR);
 		    mMat->reset();
+			iterCnt++;
 		} while(!flagConv);
-
+		//cout << v << '\t' << iterCnt << endl;
 		mCkt->SetTForNAB(vVec);
 
 		bool initial = (v == vStart);

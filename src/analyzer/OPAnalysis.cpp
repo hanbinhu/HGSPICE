@@ -25,11 +25,26 @@ void OPAnalysis::analyze(const std::shared_ptr< Ckt >& mCkt, std::shared_ptr< Ma
 	std::ofstream outFile(outputFile, std::fstream::out);
 	outFile.setf(std::ios::scientific);
 	
-	mCkt->LoadOP();
-	mMat->solveVI();
+	mCkt->randInitial();
 	
 	vector<double> vVec;
-	for(unsigned int i = 0; i < mMat->getDim(); i++) vVec.push_back(mMat->getResVal(i));
+	vVec.reserve(mMat->getDim());
+	
+	int iterCnt = 0;
+	bool flagConv = false;
+	do {
+		mCkt->LoadOP();
+		//mMat->printMat();
+		//mMat->printRhs();
+		bool SolveSuccess = mMat->solveVI();
+		if(!SolveSuccess) cout << "OP: doesn't converge" << endl;
+		vVec.clear();
+		for(unsigned int i = 0; i < mMat->getDim(); i++) vVec.push_back(mMat->getResVal(i));
+		flagConv = mCkt->SetDForNAB(vVec, epsilonA, epsilonR);
+		mMat->reset();
+		iterCnt++;
+	} while(!flagConv);
+	
 	mCkt->SetTForNAB(vVec);
 	
 	outFile << "NS";

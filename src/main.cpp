@@ -15,6 +15,8 @@ int main(int argc, char *argv[]) {
 			std::shared_ptr< Analyzer > mAnalyzer(new Analyzer(argv[1]));
 			std::shared_ptr< Ckt > pObj(new Ckt);
 			pObj->Initialize(mAnalyzer);
+			pObj->printAllNodes();
+			pObj->printAllBranches();
 			mAnalyzer->runAnalysis(pObj);
 			//pObj->printAllNodes();
 			//pObj->printAllBranches();
