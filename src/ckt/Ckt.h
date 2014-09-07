@@ -63,6 +63,7 @@ public:
 	
 	void SetTForNAB(const vector<double>& vTable);
 	bool SetDForNAB(const vector<double>& vTable, double ea, double er);
+	void SmallSignalSet();
 	
 	void randInitial();
 

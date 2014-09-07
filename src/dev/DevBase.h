@@ -75,6 +75,8 @@ public:
 	virtual void loadOP() = 0;
 	virtual void loadDC() = 0;
 	virtual void loadTRAN(double time, double timeStep, bool flagInitial) = 0;
+	
+	virtual void setSmallParam() {}
 
 	virtual void printFileTitle(ofstream& outF, const string& title) const = 0;
 	virtual void printFileValue(ofstream& outF) const = 0;

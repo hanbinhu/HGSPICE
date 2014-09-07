@@ -46,6 +46,7 @@ void OPAnalysis::analyze(const std::shared_ptr< Ckt >& mCkt, std::shared_ptr< Ma
 	} while(!flagConv);
 	
 	mCkt->SetTForNAB(vVec);
+	mCkt->SmallSignalSet();
 	
 	outFile << "NS";
 	mCkt->printFile(0, true, outFile);

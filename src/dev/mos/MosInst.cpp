@@ -26,14 +26,35 @@ void MosInst::setModel(const ModelPtr& mModel) {
 
 void MosInst::printFileTitle(ofstream& outF, const string& title) const {
 	printFileTitleGen(getInstName(), outF, title);
+	printFileTitleGen(getInstName() + ":gm", outF, title);
+	printFileTitleGen(getInstName() + ":gds", outF, title);
+	printFileTitleGen(getInstName() + ":gmb", outF, title);
+	printFileTitleGen(getInstName() + ":cgs", outF, title);
+	printFileTitleGen(getInstName() + ":cgd", outF, title);
+	printFileTitleGen(getInstName() + ":cgb", outF, title);
+	printFileTitleGen(getInstName() + ":csb", outF, title);
+	printFileTitleGen(getInstName() + ":cdb", outF, title);
 }
 
 void MosInst::printFileValue(ofstream& outF) const {
 	printSeperator(outF);
-	double Ids;
-	double dummy;
-	std::make_tuple(std::ref(Ids), std::ref(dummy), std::ref(dummy), std::ref(dummy)) = myModel.lock()->modelCalc(L, W, *VDd, *VDg, *VDs, *VDb);
-	outF << Ids;
+	outF << Id;
+	printSeperator(outF);
+	outF << gm;
+	printSeperator(outF);
+	outF << gds;
+	printSeperator(outF);
+	outF << gmb;
+	printSeperator(outF);
+	outF << cgs;
+	printSeperator(outF);
+	outF << cgd;
+	printSeperator(outF);
+	outF << cgb;
+	printSeperator(outF);
+	outF << csb;
+	printSeperator(outF);
+	outF << cdb;
 }
 
 void MosInst::printInf() const {
@@ -70,7 +91,7 @@ void MosInst::stamp(const std::shared_ptr< Matrix< double > >& mMat) {
 }
 
 void MosInst::load() {
-	std::make_tuple(std::ref(Id), std::ref(gm), std::ref(gds), std::ref(gmb)) = myModel.lock()->modelCalc(L, W, *VDd, *VDg, *VDs, *VDb);
+	setSmallParam();
 	double Vgs = *VDg - *VDs;
 	double Vds = *VDd - *VDs;
 	double Vbs = *VDb - *VDs;
@@ -99,4 +120,9 @@ void MosInst::loadDC() {
 
 void MosInst::loadTRAN(double time, double timeStep, bool flagInitial) {
 	load();
+}
+
+void MosInst::setSmallParam() {
+	std::make_tuple(std::ref(Id), std::ref(gm), std::ref(gds), std::ref(gmb), std::ref(cgs), std::ref(cgd), std::ref(cgb), std::ref(csb), std::ref(cdb)) \
+		= myModel.lock()->modelCalc(L, W, *VDd, *VDg, *VDs, *VDb);
 }

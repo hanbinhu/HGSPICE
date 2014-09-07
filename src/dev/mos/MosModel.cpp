@@ -69,7 +69,7 @@ void MosModel::addParam(const string& param, double val) {
 	else throw std::runtime_error(string("No parameter ") + param + " for diodes.");
 }
 
-std::tuple< double, double, double, double > MosModel::modelCalc(double L, double W, double Vdrain, double Vgate, double Vsource, double Vbulk) const {
+std::tuple< double, double, double, double, double, double, double, double, double > MosModel::modelCalc(double L, double W, double Vdrain, double Vgate, double Vsource, double Vbulk) const {
     int sign = (mType == NMOS) ? 1 : -1;
 
     //calc IDS
@@ -171,7 +171,18 @@ std::tuple< double, double, double, double > MosModel::modelCalc(double L, doubl
     double gds = gmd;
     double gmb = (gms - gmg - gmd) ;
 	
-	std::tuple<double, double, double, double> reVal(Ids, gm, gds, gmb);
+	double nq = 1 + gamma / 2 / sqrt(Vp + Phi + 1e-6);
+	double c_ox = Cox * W * L;
+	double xf = sqrt(icf + 0.25);
+	double xr = sqrt(icr + 0.25);
+	
+	double cgs = c_ox * 2 / 3 * (1 - (xr * xr + xr + xf / 2) / (xf + xr) / (xf + xr));
+	double cgd = c_ox * 2 / 3 * (1 - (xf * xf + xf + xr / 2) / (xf + xr) / (xf + xr));
+	double cgb = c_ox * (nq - 1) / nq * (1 - cgs / c_ox - cgd / c_ox);
+	double csb = (nq - 1) * cgs;
+	double cdb = (nq - 1) * cgd;
+	
+	std::tuple<double, double, double, double, double, double, double, double, double> reVal(Ids, gm, gds, gmb, cgs, cgd, cgb, csb, cdb);
 	
 	return reVal;
 }

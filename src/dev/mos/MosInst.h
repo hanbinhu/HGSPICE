@@ -13,6 +13,12 @@ private:
 	double gds;
 	double gmb;
 	
+	double cgs;
+	double cgd;
+	double cgb;
+	double csb;
+	double cdb;
+	
 	double Id;
 	std::weak_ptr<MosModel> myModel;
 	
@@ -31,6 +37,8 @@ public:
 	virtual void loadOP();
 	virtual void loadDC();
 	virtual void loadTRAN(double time, double timeStep, bool flagInitial);
+	
+	virtual void setSmallParam();
 	
 	virtual void printFileTitle(ofstream& outF, const string& title) const;
 	virtual void printFileValue(ofstream& outF) const;

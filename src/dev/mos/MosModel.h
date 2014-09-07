@@ -14,7 +14,7 @@ public:
 	virtual void printInf() const;
 	
 	bool checkSize(double L, double W) const;
-	std::tuple<double, double, double, double> modelCalc(double L, double W, double Vdrain, double Vgate, double Vsource, double Vbulk) const;
+	std::tuple<double, double, double, double, double, double, double, double, double> modelCalc(double L, double W, double Vdrain, double Vgate, double Vsource, double Vbulk) const;
 	
 	virtual void addParam(const string& param, double val);
 	

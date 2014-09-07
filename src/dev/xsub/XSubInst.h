@@ -60,6 +60,8 @@ public:
 	virtual void loadDC();
 	virtual void loadTRAN(double time, double timeStep, bool flagInitial);
 	
+	virtual void setSmallParam();
+	
 	virtual void printFileTitle(ofstream& outF, const string& title) const;
 	virtual void printFileValue(ofstream& outF) const;
 	

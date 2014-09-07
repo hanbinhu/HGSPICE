@@ -273,6 +273,10 @@ void Ckt::SetTForNAB(const vector< double >& vTable) {
 	for(BranchPtr elem : branchList) elem->setTRAN(vTable[i++]);
 }
 
+void Ckt::SmallSignalSet() {
+	for(InstPtr elem : instList) elem->setSmallParam();
+}
+
 std::shared_ptr< InstBase > Ckt::findInst(const string& instName) {
 	const std::unordered_map< string, InstPtr >::const_iterator reVal = instHashMap.find(instName);
 	if(reVal == instHashMap.end()) return nullptr;

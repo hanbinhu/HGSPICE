@@ -78,7 +78,8 @@ void DCAnalysis::analyze(const std::shared_ptr< Ckt >& mCkt, std::shared_ptr< Ma
 		} while(!flagConv);
 		//cout << v << '\t' << iterCnt << endl;
 		mCkt->SetTForNAB(vVec);
-
+		mCkt->SmallSignalSet();
+		
 		bool initial = (v == vStart);
 		if(initial) {
 			outFile << mSrcName;
