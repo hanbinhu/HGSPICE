@@ -21,10 +21,7 @@ void OPAnalysis::PrintInf() {
 	cout << "No Special Information" << endl;
 }
 
-void OPAnalysis::analyze(const std::shared_ptr< Ckt >& mCkt, std::shared_ptr< Matrix< double > > mMat) {
-	std::ofstream outFile(outputFile, std::fstream::out);
-	outFile.setf(std::ios::scientific);
-	
+void OPAnalysis::opAna(const std::shared_ptr< Ckt >& mCkt, std::shared_ptr< Matrix< double > > mMat) {
 	mCkt->randInitial();
 	
 	vector<double> vVec;
@@ -47,9 +44,14 @@ void OPAnalysis::analyze(const std::shared_ptr< Ckt >& mCkt, std::shared_ptr< Ma
 	
 	mCkt->SetTForNAB(vVec);
 	mCkt->SmallSignalSet();
+}
+
+void OPAnalysis::analyze(const std::shared_ptr< Ckt >& mCkt, std::shared_ptr< Matrix< double > > mMat) {
+	std::ofstream outFile(outputFile, std::fstream::out);
+	outFile.setf(std::ios::scientific);
+	
+	opAna(mCkt, mMat);
 	
 	outFile << "NS";
 	mCkt->printFile(0, true, outFile);
-	
-	mMat->reset();
 }

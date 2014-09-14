@@ -2,6 +2,7 @@
 #define CKT_H
 
 #include <fstream>
+#include <complex>
 
 #include <string>
 #include <vector>
@@ -57,8 +58,11 @@ public:
 	
 	InstPtr findInst(const string& instName);
 	
+	void stampACInst(const std::shared_ptr< Matrix< std::complex<double> > >& mMat);
+	
 	void LoadOP() const;
 	void LoadDC() const;
+	void LoadAC(double freq) const;
 	void LoadTRAN(double time, double timeStep, bool flagInitial) const;
 	
 	void SetTForNAB(const vector<double>& vTable);
@@ -67,6 +71,7 @@ public:
 	
 	void randInitial();
 
+	void printACTitle(std::ofstream& outF) const;
 	void printFile(double sweep, bool initial, std::ofstream& outF) const;
 	
 	void printAllNodes() const;
@@ -74,6 +79,9 @@ public:
 	void printAllInsts() const;
 	void printAllModels() const;
 	void printAllSubDef() const;
+	
+	inline unsigned int nodeNum() const {return nodeList.size();}
+	inline unsigned int branchNum() const {return branchList.size();}
 
 private:
 	enum State {INIT, PARSING, LINKCKT, COMPLETECKT};

@@ -50,6 +50,18 @@ void CCVSInst::stamp(const std::shared_ptr< Matrix< double > >& mMat) {
 	pMatbcb = mMat->getMatPtr(branch, branchC);
 }
 
+void CCVSInst::stampAC(const std::shared_ptr< Matrix< std::complex< double > > >& mMat) {
+	unsigned int nodeP = nodeTable[0].lock()->getId();
+	unsigned int nodeN = nodeTable[1].lock()->getId();
+	unsigned int branch = brVSPtr.lock()->getId();
+	unsigned int branchC = mVPtr.lock()->getBrId();
+	pMatACpb = mMat->getMatPtr(nodeP, branch);
+	pMatACnb = mMat->getMatPtr(nodeN, branch);
+	pMatACbp = mMat->getMatPtr(branch, nodeP);
+	pMatACbn = mMat->getMatPtr(branch, nodeN);
+	pMatACbcb = mMat->getMatPtr(branch, branchC);
+}
+
 void CCVSInst::load() {
 	*pMatpb += 1;
 	*pMatnb -= 1;
@@ -64,6 +76,14 @@ void CCVSInst::loadOP() {
 
 void CCVSInst::loadDC() {
 	load();
+}
+
+void CCVSInst::loadAC(double freq) {
+	*pMatACpb += 1;
+	*pMatACnb -= 1;
+	*pMatACbp += 1;
+	*pMatACbn -= 1;
+	*pMatACbcb -= h;
 }
 
 void CCVSInst::loadTRAN(double time, double timeStep, bool flagInitial) {

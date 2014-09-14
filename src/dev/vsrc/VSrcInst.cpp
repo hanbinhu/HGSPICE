@@ -91,6 +91,17 @@ void VSrcInst::stamp(const std::shared_ptr< Matrix< double > >& mMat){
 	pRhsb = mMat->getRhsPtr(branch);
 }
 
+void VSrcInst::stampAC(const std::shared_ptr< Matrix< std::complex< double > > >& mMat) {
+	unsigned int nodeP = nodeTable[0].lock()->getId();
+	unsigned int nodeN = nodeTable[1].lock()->getId();
+	unsigned int branch = brPtr.lock()->getId();
+	pMatACpb = mMat->getMatPtr(nodeP, branch);
+	pMatACnb = mMat->getMatPtr(nodeN, branch);
+	pMatACbp = mMat->getMatPtr(branch, nodeP);
+	pMatACbn = mMat->getMatPtr(branch, nodeN);
+	pRhsACb = mMat->getRhsPtr(branch);
+}
+
 void VSrcInst::load() {
 	*pMatpb += 1;
 	*pMatnb -= 1;
@@ -108,6 +119,14 @@ void VSrcInst::loadDC() {
 	if(compDCLoad) compDCLoad = false;
 	else loadV = dcVoltage;
 	load();
+}
+
+void VSrcInst::loadAC(double freq) {
+	*pMatACpb += 1;
+	*pMatACnb -= 1;
+	*pMatACbp += 1;
+	*pMatACbn -= 1;
+	*pRhsACb += std::polar(acVoltage, acVoltagePhase);
 }
 
 void VSrcInst::loadTRAN(double time, double timeStep, bool flagInitial) {

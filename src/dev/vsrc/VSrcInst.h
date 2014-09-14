@@ -44,8 +44,10 @@ public:
 	inline double getBrI() const {return *(brPtr.lock()->getTPtr());}
 	
 	virtual void stamp(const std::shared_ptr< Matrix<double> >& mMat);
+	virtual void stampAC(const std::shared_ptr< Matrix< std::complex< double > > >& mMat);
 	virtual void loadOP();
 	virtual void loadDC();
+	virtual void loadAC(double freq);
 	virtual void loadTRAN(double time, double timeStep, bool flagInitial);
 	
 	inline void setLoad(double V) {loadV = V; compDCLoad = true;}
@@ -61,6 +63,12 @@ private:
 	double* pMatbp;
 	double* pMatbn;
 	double* pRhsb;
+	
+	std::complex< double >* pMatACpb;
+	std::complex< double >* pMatACnb;
+	std::complex< double >* pMatACbp;
+	std::complex< double >* pMatACbn;
+	std::complex< double >* pRhsACb;
 	
 	void load();
 };

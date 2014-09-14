@@ -2,6 +2,8 @@
 using std::cout;
 using std::endl;
 
+#include <cmath>
+
 #include "IndInst.h"
 
 #include "Matrix.h"
@@ -54,6 +56,17 @@ void IndInst::stamp(const std::shared_ptr< Matrix< double > >& mMat) {
 	IT = brPtr.lock()->getTPtr();
 }
 
+void IndInst::stampAC(const std::shared_ptr< Matrix< std::complex< double > > >& mMat) {
+	unsigned int nodeP = nodeTable[0].lock()->getId();
+	unsigned int nodeN = nodeTable[1].lock()->getId();
+	unsigned int branch = brPtr.lock()->getId();
+	pMatACpb = mMat->getMatPtr(nodeP, branch);
+	pMatACnb = mMat->getMatPtr(nodeN, branch);
+	pMatACbp = mMat->getMatPtr(branch, nodeP);
+	pMatACbn = mMat->getMatPtr(branch, nodeN);
+	pMatACbb = mMat->getMatPtr(branch, branch);
+}
+
 void IndInst::loadOP() {
 	*pMatpb += 1;
 	*pMatnb -= 1;
@@ -66,6 +79,15 @@ void IndInst::loadDC() {
 	*pMatnb -= 1;
 	*pMatbp += 1;
 	*pMatbn -= 1;
+}
+
+void IndInst::loadAC(double freq) {
+	double w = 2 * M_PI * freq;
+	*pMatACpb += 1;
+	*pMatACnb -= 1;
+	*pMatACbp += 1;
+	*pMatACbn -= 1;
+	*pMatACbb -= std::complex<double> (0, w * inductance);
 }
 
 void IndInst::loadTRAN(double time, double timeStep, bool flagInitial) {

@@ -229,12 +229,20 @@ void Ckt::stampInst(const std::shared_ptr< Matrix< double > >& mMat) {
 	for(InstPtr elem : instList) elem->stamp(mMat);
 }
 
+void Ckt::stampACInst(const std::shared_ptr< Matrix< std::complex< double > > >& mMat) {
+	for(InstPtr elem : instList) elem->stampAC(mMat);
+}
+
 void Ckt::LoadOP() const {
 	for(InstPtr elem : instList) elem->loadOP();
 }
 
 void Ckt::LoadDC() const {
 	for(InstPtr elem : instList) elem->loadDC();
+}
+
+void Ckt::LoadAC(double freq) const {
+	for(InstPtr elem : instList) elem->loadAC(freq);
 }
 
 void Ckt::LoadTRAN(double time, double timeStep, bool flagInitial) const {
@@ -281,6 +289,12 @@ std::shared_ptr< InstBase > Ckt::findInst(const string& instName) {
 	const std::unordered_map< string, InstPtr >::const_iterator reVal = instHashMap.find(instName);
 	if(reVal == instHashMap.end()) return nullptr;
 	else return reVal->second;
+}
+
+void Ckt::printACTitle(ofstream& outF) const {
+	for(NodePtr elem: nodeList)
+		outF << ",Mag(" << elem->getName() << "),Phase(" << elem->getName() << ")";
+	outF << endl;
 }
 
 void Ckt::printFile(double sweep, bool initial, std::ofstream& outF) const {

@@ -38,8 +38,10 @@ public:
 	virtual inline void setModel(const ModelPtr& mModel) {myModel = std::dynamic_pointer_cast<ISrcModel>(mModel);}
 	
 	virtual void stamp(const std::shared_ptr< Matrix<double> >& mMat);
+	virtual void stampAC(const std::shared_ptr< Matrix< std::complex< double > > >& mMat);
 	virtual void loadOP();
 	virtual void loadDC();
+	virtual void loadAC(double freq);
 	virtual void loadTRAN(double time, double timeStep, bool flagInitial);
 	
 	inline void setLoad(double I) {loadI = I; compDCLoad = true;}
@@ -52,6 +54,9 @@ public:
 private:
 	double* pRhsp;
 	double* pRhsn;
+	
+	std::complex< double >* pRhsACp;
+	std::complex< double >* pRhsACn;
 	
 	void load();
 };

@@ -44,7 +44,8 @@ void Analyzer::linkSrc(std::shared_ptr< Ckt > mCkt) {
 }
 
 void Analyzer::initialMat(unsigned int dim) {
-	cktMatrix = std::make_shared<EigenMatrix>(dim);
+	std::shared_ptr< Matrix<double> > tmp( new EigenMatrix<double>(dim) );
+	cktMatrix = tmp;
 	processState = COMPLETEANA;
 }
 
@@ -73,7 +74,7 @@ void Analyzer::ParseTranAnalysis(double vi, double ve, double vs) {
 	taskList.push_back(AnalysisPtr(new TranAnalysis(nTRAN++, prefixname + "_tr", vi, ve,vs)));
 }
 
-void Analyzer::ParseACAnalysis(ACAnalysis::SweepType mType, int n, double fe, double fs){
+void Analyzer::ParseACAnalysis(ACAnalysis::SweepType mType, int n, double fs, double fe){
 	if(processState != INIT)
 		throw std::runtime_error("Can't parse more analysis task now.");
 	taskList.push_back(AnalysisPtr(new ACAnalysis(nAC++, prefixname + "_ac", mType, n, fs, fe)));

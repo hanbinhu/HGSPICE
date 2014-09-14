@@ -46,6 +46,15 @@ void ResInst::stamp(const std::shared_ptr< Matrix< double > >& mMat) {
 	pMatnn = mMat->getMatPtr(nodeN, nodeN);
 }
 
+void ResInst::stampAC(const std::shared_ptr< Matrix< std::complex< double > > >& mMat) {
+	unsigned int nodeP = nodeTable[0].lock()->getId();
+	unsigned int nodeN = nodeTable[1].lock()->getId();
+	pMatACpp = mMat->getMatPtr(nodeP, nodeP);
+	pMatACpn = mMat->getMatPtr(nodeP, nodeN);
+	pMatACnp = mMat->getMatPtr(nodeN, nodeP);
+	pMatACnn = mMat->getMatPtr(nodeN, nodeN);
+}
+
 void ResInst::load() {
 	*pMatpp += 1/resistance;
 	*pMatpn -= 1/resistance;
@@ -59,6 +68,13 @@ void ResInst::loadOP() {
 
 void ResInst::loadDC() {
 	load();
+}
+
+void ResInst::loadAC(double freq) {
+	*pMatACpp += 1/resistance;
+	*pMatACpn -= 1/resistance;
+	*pMatACnp -= 1/resistance;
+	*pMatACnn += 1/resistance;
 }
 
 void ResInst::loadTRAN(double time, double timeStep, bool flagInitial) {

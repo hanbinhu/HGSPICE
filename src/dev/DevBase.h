@@ -1,6 +1,8 @@
 #ifndef  DEVBASE_H
 #define  DEVBASE_H
 
+#include <complex>
+
 #include <fstream>
 using std::ofstream;
 
@@ -72,8 +74,10 @@ public:
 	inline string getModelName() const {return modelName;}
 
 	virtual void stamp(const std::shared_ptr< Matrix<double> >& mMat) = 0;
+	virtual void stampAC(const std::shared_ptr< Matrix<std::complex< double > > >& mMat) = 0;
 	virtual void loadOP() = 0;
 	virtual void loadDC() = 0;
+	virtual void loadAC(double freq) = 0;
 	virtual void loadTRAN(double time, double timeStep, bool flagInitial) = 0;
 	
 	virtual void setSmallParam() {}

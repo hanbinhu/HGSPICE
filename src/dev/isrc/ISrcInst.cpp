@@ -87,6 +87,13 @@ void ISrcInst::stamp(const std::shared_ptr< Matrix< double > >& mMat) {
 	pRhsn = mMat->getRhsPtr(nodeN);
 }
 
+void ISrcInst::stampAC(const std::shared_ptr< Matrix< std::complex< double > > >& mMat) {
+	unsigned int nodeP = nodeTable[0].lock()->getId();
+	unsigned int nodeN = nodeTable[1].lock()->getId();
+	pRhsACp = mMat->getRhsPtr(nodeP);
+	pRhsACn = mMat->getRhsPtr(nodeN);
+}
+
 void ISrcInst::load() {
 	*pRhsp -= loadI;
 	*pRhsn += loadI;
@@ -101,6 +108,11 @@ void ISrcInst::loadDC() {
 	if(compDCLoad) compDCLoad = false;
 	else loadI = dcCurrent;
 	load();
+}
+
+void ISrcInst::loadAC(double freq) {
+	*pRhsACp -= std::polar(acCurrent, acCurrentPhase);
+	*pRhsACn += std::polar(acCurrent, acCurrentPhase);
 }
 
 void ISrcInst::loadTRAN(double time, double timeStep, bool flagInitial) {

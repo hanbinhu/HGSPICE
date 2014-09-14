@@ -7,52 +7,72 @@ using std::endl;
 
 #include "Eigen/Core"
 
-EigenMatrix::EigenMatrix(unsigned int dim):
+template<typename T>
+EigenMatrix<T>::EigenMatrix(unsigned int dim):
 	A(dim - 1, dim - 1),
 	b(dim - 1),
+	cb(dim - 1),
 	//solver(A),
 	dimension(dim),
-	stampMat(new double*[dim]),
-	stampRhs(new double[dim])
+	stampMat(new T*[dim]),
+	stampRhs(new T[dim])
 {
 	for(unsigned int i = 0; i < dimension; i++)
-		stampMat[i] = new double[dim];
+		stampMat[i] = new T[dim];
 	reset();
 }
 
-EigenMatrix::~EigenMatrix() {
+template<typename T>
+EigenMatrix<T>::~EigenMatrix() {
 	for(int i = 0; i < dimension; i++)
 		delete [] stampMat[i];
 	delete [] stampMat;
 	delete [] stampRhs;
 }
 
-double* EigenMatrix::getMatPtr(unsigned int i, unsigned int j) const {
+template<typename T>
+T* EigenMatrix<T>::getMatPtr(unsigned int i, unsigned int j) const {
 	return &stampMat[i][j];
 }
 
-double* EigenMatrix::getRhsPtr(unsigned int i) const {
+template<typename T>
+T* EigenMatrix<T>::getRhsPtr(unsigned int i) const {
 	return &stampRhs[i];
 }
 
-void EigenMatrix::SetAb() {
+template<>
+void EigenMatrix<double>::SetAb() {
 	A.setZero();
 	for(unsigned int i = 1; i < dimension; i++)
 		for(unsigned int j = 1; j < dimension; j++)
-			if(stampMat[i][j])
+			if(stampMat[i][j] != 0.0)
 				A.insert(i - 1, j - 1) = stampMat[i][j];
 	A.makeCompressed();
 	for(unsigned int i = 1; i < dimension; i++)
 		b(i - 1) = stampRhs[i];
 }
 
-void EigenMatrix::reset() {
+template<>
+void EigenMatrix<std::complex<double>>::SetAb() {
+	A.setZero();
+	for(unsigned int i = 1; i < dimension; i++)
+		for(unsigned int j = 1; j < dimension; j++)
+			if(stampMat[i][j] != 0.0)
+				A.insert(i - 1, j - 1) = stampMat[i][j];
+	A.makeCompressed();
+	for(unsigned int i = 1; i < dimension; i++)
+		cb(i - 1) = stampRhs[i];
+}
+
+template<typename T>
+void EigenMatrix<T>::reset() {
 	for(unsigned int i = 0; i < dimension; i++)
 		memset(stampMat[i], 0, sizeof(stampMat[i][0]) * dimension);
 	memset(stampRhs, 0, sizeof(stampRhs[0]) * dimension);
 }
 
-bool EigenMatrix::solveVI() {
+template<>
+bool EigenMatrix<double>::solveVI() {
 	SetAb();
 	solver.compute(A);
 	if(solver.info() != Eigen::Success) return false;
@@ -61,12 +81,29 @@ bool EigenMatrix::solveVI() {
 	return true;
 }
 
-double EigenMatrix::getResVal(unsigned int i) {
+template<>
+bool EigenMatrix< std::complex<double> >::solveVI() {
+	SetAb();
+	solver.compute(A);
+	if(solver.info() != Eigen::Success) return false;
+	cx = solver.solve(cb);
+	if(solver.info() != Eigen::Success) return false;
+	return true;
+}
+
+template<>
+double EigenMatrix<double>::getResVal(unsigned int i) {
 	return (i == 0) ? 0 : x(i - 1);
 }
 
-void EigenMatrix::printMat() const {
-	PrintMatTitle(dimension);
+template<>
+std::complex<double> EigenMatrix< std::complex<double> >::getResVal(unsigned int i) {
+	return (i == 0) ? 0 : cx(i - 1);
+}
+
+template<typename T>
+void EigenMatrix<T>::printMat() const {
+	Matrix<T>::PrintMatTitle(dimension);
 	cout.flags(std::ios::left);
 	cout.setf(std::ios::scientific);
 	cout.setf(std::ios::showpos);
@@ -79,8 +116,9 @@ void EigenMatrix::printMat() const {
 	cout.unsetf(std::ios::showpos);
 }
 
-void EigenMatrix::printRhs() const {
-	PrintRhsTitle(dimension);
+template<typename T>
+void EigenMatrix<T>::printRhs() const {
+	Matrix<T>::PrintRhsTitle(dimension);
 	cout.flags(std::ios::left);
 	cout.setf(std::ios::scientific);
 	cout.setf(std::ios::showpos);
@@ -91,8 +129,9 @@ void EigenMatrix::printRhs() const {
 	cout.unsetf(std::ios::showpos);
 }
 
-void EigenMatrix::printRes() const {
-	PrintResTitle(dimension);
+template<typename T>
+void EigenMatrix<T>::printRes() const {
+	Matrix<T>::PrintResTitle(dimension);
 	cout.flags(std::ios::left);
 	cout.setf(std::ios::scientific);
 	cout.setf(std::ios::showpos);
@@ -102,4 +141,9 @@ void EigenMatrix::printRes() const {
 	cout << endl;
 	cout.unsetf(std::ios::scientific);
 	cout.unsetf(std::ios::showpos);
+}
+
+void TemporaryFunction() {
+	EigenMatrix<double> tempObj1(1);
+	EigenMatrix< std::complex< double > > tempObj2(1);
 }

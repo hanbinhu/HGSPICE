@@ -9,6 +9,8 @@ public:
 	virtual ~OPAnalysis() {}
 	virtual void PrintInf();
 	
+	static void opAna(const std::shared_ptr< Ckt >& mCkt, std::shared_ptr< Matrix< double > > mMat);
+	
 	virtual void analyze(const std::shared_ptr< Ckt >& mCkt, std::shared_ptr< Matrix< double > > mMat);
 	
 };

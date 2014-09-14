@@ -46,6 +46,14 @@ void CCCSInst::stamp(const std::shared_ptr< Matrix< double > >& mMat) {
 	pMatncb = mMat->getMatPtr(nodeN, branchC);
 }
 
+void CCCSInst::stampAC(const std::shared_ptr< Matrix< std::complex< double > > >& mMat) {
+	unsigned int nodeP = nodeTable[0].lock()->getId();
+	unsigned int nodeN = nodeTable[1].lock()->getId();
+	unsigned int branchC = mVPtr.lock()->getBrId();
+	pMatACpcb = mMat->getMatPtr(nodeP, branchC);
+	pMatACncb = mMat->getMatPtr(nodeN, branchC);
+}
+
 void CCCSInst::load() {
 	*pMatpcb += f;
 	*pMatncb -= f;
@@ -57,6 +65,11 @@ void CCCSInst::loadOP() {
 
 void CCCSInst::loadDC() {
 	load();
+}
+
+void CCCSInst::loadAC(double freq) {
+	*pMatACpcb += f;
+	*pMatACncb -= f;
 }
 
 void CCCSInst::loadTRAN(double time, double timeStep, bool flagInitial) {

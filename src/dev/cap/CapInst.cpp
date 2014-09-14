@@ -2,6 +2,8 @@
 using std::cout;
 using std::endl;
 
+#include <cmath>
+
 #include "CapInst.h"
 
 #include "Matrix.h"
@@ -55,12 +57,32 @@ void CapInst::stamp(const std::shared_ptr< Matrix< double > >& mMat) {
 	VTn = nodeTable[1].lock()->getTPtr();
 }
 
+void CapInst::stampAC(const std::shared_ptr< Matrix< std::complex< double > > >& mMat) {
+	unsigned int nodeP = nodeTable[0].lock()->getId();
+	unsigned int nodeN = nodeTable[1].lock()->getId();
+	unsigned int branch = brPtr.lock()->getId();
+	pMatACpb = mMat->getMatPtr(nodeP, branch);
+	pMatACnb = mMat->getMatPtr(nodeN, branch);
+	pMatACbp = mMat->getMatPtr(branch, nodeP);
+	pMatACbn = mMat->getMatPtr(branch, nodeN);
+	pMatACbb = mMat->getMatPtr(branch, branch);
+}
+
 void CapInst::loadOP() {
 	*pMatbb += 1;
 }
 
 void CapInst::loadDC() {
 	*pMatbb += 1;
+}
+
+void CapInst::loadAC(double freq) {
+	double w = 2 * M_PI * freq;
+	*pMatACpb += 1;
+	*pMatACnb -= 1;
+	*pMatACbp += w * capcitance;
+	*pMatACbn -= w * capcitance;
+	*pMatACbb -= 1;
 }
 
 void CapInst::loadTRAN(double time, double timeStep, bool flagInitial) {

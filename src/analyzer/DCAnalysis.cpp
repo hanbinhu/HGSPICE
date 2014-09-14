@@ -65,9 +65,6 @@ void DCAnalysis::analyze(const std::shared_ptr< Ckt >& mCkt, std::shared_ptr< Ma
 			else mISrcInst.lock()->setLoad(v);
 			mCkt->LoadDC();
 			
-			//mMat->printMat();
-			//mMat->printRhs();
-			
 			bool SolveSuccess = mMat->solveVI();
 			if(!SolveSuccess) cout << v << " doesn't converge" << endl;
 			vVec.clear();

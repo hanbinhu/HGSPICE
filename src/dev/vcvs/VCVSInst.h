@@ -24,8 +24,10 @@ public:
 	virtual inline void setModel(const ModelPtr& mModel) {myModel = std::dynamic_pointer_cast<VCVSModel>(mModel);}
 	
 	virtual void stamp(const std::shared_ptr< Matrix<double> >& mMat);
+	virtual void stampAC(const std::shared_ptr< Matrix< std::complex< double > > >& mMat);
 	virtual void loadOP();
 	virtual void loadDC();
+	virtual void loadAC(double freq);
 	virtual void loadTRAN(double time, double timeStep, bool flagInitial);
 	
 	virtual void printFileTitle(ofstream& outF, const string& title) const;
@@ -40,6 +42,13 @@ private:
 	double* pMatbn;
 	double* pMatbcp;
 	double* pMatbcn;
+	
+	std::complex< double >* pMatACpb;
+	std::complex< double >* pMatACnb;
+	std::complex< double >* pMatACbp;
+	std::complex< double >* pMatACbn;
+	std::complex< double >* pMatACbcp;
+	std::complex< double >* pMatACbcn;
 	
 	void load();
 };

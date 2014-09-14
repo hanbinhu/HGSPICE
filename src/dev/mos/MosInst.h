@@ -34,8 +34,10 @@ public:
 	virtual void setModel(const ModelPtr& mModel);
 	
 	virtual void stamp(const std::shared_ptr< Matrix<double> >& mMat);
+	virtual void stampAC(const std::shared_ptr< Matrix< std::complex< double > > >& mMat);
 	virtual void loadOP();
 	virtual void loadDC();
+	virtual void loadAC(double freq);
 	virtual void loadTRAN(double time, double timeStep, bool flagInitial);
 	
 	virtual void setSmallParam();
@@ -46,16 +48,33 @@ public:
 	virtual void printInf() const;
 	
 private:
-	double *pMatdd;
-	double *pMatdg;
-	double *pMatds;
-	double *pMatdb;
-	double *pMatsd;
-	double *pMatsg;
-	double *pMatss;
-	double *pMatsb;
-	double *pRhsd;
-	double *pRhss;
+	double* pMatdd;
+	double* pMatdg;
+	double* pMatds;
+	double* pMatdb;
+	double* pMatsd;
+	double* pMatsg;
+	double* pMatss;
+	double* pMatsb;
+	double* pRhsd;
+	double* pRhss;
+	
+	std::complex< double >* pMatACdd;
+	std::complex< double >* pMatACdg;
+	std::complex< double >* pMatACds;
+	std::complex< double >* pMatACdb;
+	std::complex< double >* pMatACsd;
+	std::complex< double >* pMatACsg;
+	std::complex< double >* pMatACss;
+	std::complex< double >* pMatACsb;
+	std::complex< double >* pMatACgg;
+	std::complex< double >* pMatACgs;
+	std::complex< double >* pMatACgd;
+	std::complex< double >* pMatACgb;
+	std::complex< double >* pMatACbb;
+	std::complex< double >* pMatACbg;
+	std::complex< double >* pMatACbs;
+	std::complex< double >* pMatACbd;
 	
 	double *VDd;
 	double *VDg;

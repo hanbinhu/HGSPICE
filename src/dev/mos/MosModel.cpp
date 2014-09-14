@@ -39,7 +39,7 @@ MosModel::MosModel(const string& str, MosType type):
 		Phi = 0.904;
 		Cox = 8.80e-3;
 		gamma = 0.61;
-		Vth0 = 0.4;
+		Vth0 = 0.45;
 		kvalue = 82e-6;
 		lambda = 0.54;
 		xj = 50e-9;
@@ -181,6 +181,12 @@ std::tuple< double, double, double, double, double, double, double, double, doub
 	double cgb = c_ox * (nq - 1) / nq * (1 - cgs / c_ox - cgd / c_ox);
 	double csb = (nq - 1) * cgs;
 	double cdb = (nq - 1) * cgd;
+	
+	cgs = (cgs > 0) ? cgs : 0;
+	cgd = (cgd > 0) ? cgd : 0;
+	cgb = (cgb > 0) ? cgb : 0;
+	csb = (csb > 0) ? csb : 0;
+	cdb = (cdb > 0) ? cdb : 0;
 	
 	std::tuple<double, double, double, double, double, double, double, double, double> reVal(Ids, gm, gds, gmb, cgs, cgd, cgb, csb, cdb);
 	

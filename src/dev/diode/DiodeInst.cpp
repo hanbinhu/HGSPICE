@@ -34,11 +34,19 @@ void DiodeInst::stamp(const std::shared_ptr< Matrix< double > >& mMat) {
 
 }
 
+void DiodeInst::stampAC(const std::shared_ptr< Matrix< std::complex< double > > >& mMat) {
+
+}
+
 void DiodeInst::loadOP() {
 
 }
 
 void DiodeInst::loadDC() {
+
+}
+
+void DiodeInst::loadAC(double freq) {
 
 }
 

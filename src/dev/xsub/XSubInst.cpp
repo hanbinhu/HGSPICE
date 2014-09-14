@@ -178,12 +178,20 @@ void XSubInst::stamp(const std::shared_ptr< Matrix< double > >& mMat) {
 	for(InstPtr elem: instList) elem->stamp(mMat);
 }
 
+void XSubInst::stampAC(const std::shared_ptr< Matrix< std::complex< double > > >& mMat) {
+	for(InstPtr elem: instList) elem->stampAC(mMat);
+}
+
 void XSubInst::loadOP() {
 	for(InstPtr elem: instList) elem->loadOP();
 }
 
 void XSubInst::loadDC() {
 	for(InstPtr elem: instList) elem->loadDC();
+}
+
+void XSubInst::loadAC(double freq) {
+	for(InstPtr elem: instList) elem->loadAC(freq);
 }
 
 void XSubInst::loadTRAN(double time, double timeStep, bool flagInitial) {
