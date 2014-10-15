@@ -46,7 +46,7 @@ protected:
 	string modelName;
 
 	void printSeperator(ofstream& outF) const;
-	void printFileTitleGen(const string& currentName, ofstream& outF, const string& title) const;
+	void printFileTitleGen(const string& currentName, ofstream& outF, const string& title, unsigned int unitType = 0) const;
 	
 	void printNode() const;
 	void printGenInf() const;

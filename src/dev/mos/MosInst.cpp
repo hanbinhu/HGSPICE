@@ -28,14 +28,14 @@ void MosInst::setModel(const ModelPtr& mModel) {
 
 void MosInst::printFileTitle(ofstream& outF, const string& title) const {
 	printFileTitleGen(getInstName(), outF, title);
-	printFileTitleGen(getInstName() + ":gm", outF, title);
-	printFileTitleGen(getInstName() + ":gds", outF, title);
-	printFileTitleGen(getInstName() + ":gmb", outF, title);
-	printFileTitleGen(getInstName() + ":cgs", outF, title);
-	printFileTitleGen(getInstName() + ":cgd", outF, title);
-	printFileTitleGen(getInstName() + ":cgb", outF, title);
-	printFileTitleGen(getInstName() + ":csb", outF, title);
-	printFileTitleGen(getInstName() + ":cdb", outF, title);
+	printFileTitleGen(getInstName() + ":gm", outF, title, 2);
+	printFileTitleGen(getInstName() + ":gds", outF, title, 2);
+	printFileTitleGen(getInstName() + ":gmb", outF, title, 2);
+	printFileTitleGen(getInstName() + ":cgs", outF, title, 4);
+	printFileTitleGen(getInstName() + ":cgd", outF, title, 4);
+	printFileTitleGen(getInstName() + ":cgb", outF, title, 4);
+	printFileTitleGen(getInstName() + ":csb", outF, title, 4);
+	printFileTitleGen(getInstName() + ":cdb", outF, title, 4);
 }
 
 void MosInst::printFileValue(ofstream& outF) const {

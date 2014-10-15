@@ -24,9 +24,17 @@ void InstBase::printSeperator(ofstream& outF) const {
 	outF << ",";
 }
 
-void InstBase::printFileTitleGen(const string& currentName, ofstream& outF, const string& title) const {
+void InstBase::printFileTitleGen(const string& Name, ofstream& outF, const string& title, unsigned int unitType) const {
 	printSeperator(outF);
-	outF << title + currentName + "(A)";
+	string unit = "";
+	switch(unitType) {
+		case 0: unit = "(A)"; break;
+		case 1: unit = "(V)"; break;
+		case 2: unit = "(S)"; break;
+		case 3: unit = "(O)"; break;
+		case 4: unit = "(F)"; break;
+	}
+	outF << title + Name + unit;
 }
 
 void InstBase::printNode() const {
