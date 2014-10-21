@@ -80,8 +80,8 @@ void CapInst::loadAC(double freq) {
 	double w = 2 * M_PI * freq;
 	*pMatACpb += 1;
 	*pMatACnb -= 1;
-	*pMatACbp += w * capcitance;
-	*pMatACbn -= w * capcitance;
+	*pMatACbp += std::complex<double>(0, w * capcitance);
+	*pMatACbn -= std::complex<double>(0, w * capcitance);
 	*pMatACbb -= 1;
 }
 

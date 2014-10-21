@@ -131,7 +131,7 @@ foreach my $unit (keys %UnitHash) {
         $legend = $UnitName{$unit} . "(" . $legend .")";
         my $script = "data u 1:$count ";
         $script .= "t \"$legend\" ";
-        $script .= "w lp lw 2 pt 1,\\";
+        $script .= "w l lw 2,\\";
         push @scriptPlot, $script;
         $count++;
     }

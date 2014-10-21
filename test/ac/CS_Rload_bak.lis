@@ -1,0 +1,342 @@
+ ****** HSPICE -- A-2008.03 64-BIT (Feb 26 2008) linux ******                   
+  Copyright (C) 2008 Synopsys, Inc. All Rights Reserved.                        
+  Unpublished-rights reserved under US copyright laws.
+  This program is protected by law and is subject to the 
+  terms and conditions of the license agreement found in:
+    /license.warn
+  Use of this program is your acceptance to be bound by this 
+  license agreement. HSPICE is the trademark of Synopsys, Inc.
+  Input File: 1Stage/CS_Rload/CS_Rload.sp                                       
+ lic: No 'setenv LM_LICENSE_FILE' in current environment' 
+ lic:  
+ lic: FLEXlm: v8.5b 
+ lic: USER:   linyibo              HOSTNAME: eda-server.localdomain 
+ lic: HOSTID: 002219a9250f         PID:      20853 
+ lic: Using FLEXlm license file: 
+ lic: /usr/local/flexlm/licenses/license.dat 
+ lic: Checkout 1 hspice 
+ lic: License/Maintenance for hspice will expire on 31-dec-2020/2007.9 
+ lic: NODE LOCKED license on hostid 002219a9250f 
+ lic:   
+  **warning** (log018.l:1360)  associated with encrypted blocks were suppressed due to encrypted content
+
+ vdd vdd 0 dc 1.8 ac 0
+ vcm vcm 0 dc 0.9
+ vin in vcm ac 1
+
+ **amplifier
+ **common source
+ m1 out in 0 0 nch l=0.5u w=11u
+
+ **load
+ rl vdd out 2k
+ cl out 0 2p
+
+ .options list 
+
+ .op
+ .ac dec 10 1 1g
+ .print ac vm(out) vp(out)
+
+ .end
+ scientific notation:
+ a=10**-18  f=10**-15  p=10**-12  n=10**-9  u=10**-6
+ m=10**-3   k=10**3    x=10**6    g=10**9 
+
+
+ circuit parameter definitions
+  parameter          =  value 
+
+
+
+
+
+ constants  - tnom         kt           vt           gapsi        ni
+            298.1500     4.116e-21     25.6918m      1.1156     1.256e+16  
+ 
+
+1****** HSPICE -- A-2008.03 64-BIT (Feb 26 2008) linux ******                   
+ ******  
+ *common source res as load amplifier                                           
+  ******  circuit element summary          tnom=  25.000 temp=  25.000          
+ ******  
+
+
+ **** resistors
+
+  
+ 
+                             
+ element name        0:rl    
+ node1               0:vdd   
+ node2               0:out   
+ model                       
+ res eff             2.0000k 
+ tc1                 0.      
+ tc2                 0.      
+ scale               1.0000  
+ m                   1.0000  
+ ac                  2.0000k 
+ temp               25.0000  
+ l                   0.      
+ w                   0.      
+ cap                 0.      
+ noise               1.0000  
+
+
+ **** capacitors
+  
+ 
+                             
+ element name        0:cl    
+ node1               0:out   
+ node2               0:0     
+ model                       
+ cap eff             2.0000p 
+ tc1                 0.      
+ tc2                 0.      
+ scale               1.0000  
+ ic                  0.      
+ m                   1.0000  
+ w                   0.      
+ l                   0.      
+ temp               25.0000  
+
+
+ **** independent sources
+
+     name         node1        node2      dc volt    ac mag    ac phase    type
+        0:vdd       0:vdd                    0:0                   1.8000     0.         0.      dc   
+        0:vcm       0:vcm                    0:0                 900.0000m    0.         0.      dc   
+        0:vin       0:in                     0:vcm                 0.         1.0000     0.      dc   
+
+
+ **** mosfets
+
+
+ **** BSIM3v3 Model (Level49 or Level53)
+  
+ 
+                             
+ element name        0:m1    
+ drain               0:out   
+ gate                0:in    
+ source              0:0     
+ bulk                0:0     
+ model               0:nch.3 
+ w eff              10.9940u 
+ l eff             460.0000n 
+ rd eff            123.6364m 
+ rs eff            123.6364m 
+ cdsat              34.6000a 
+ cssat              34.6000a 
+ capbd              10.4836f 
+ capbs              10.4836f 
+ temp               25.0000  
+ aic                         
+ nf                  1.0000  
+ sa                  0.      
+ sb                  0.      
+ sd                  0.      
+ saeff               0.      
+ sbeff               0.      
+ mulu0               1.0000  
+ mulua               1.0000  
+ mulub               1.0000  
+  
+ 
+      
+1****** HSPICE -- A-2008.03 64-BIT (Feb 26 2008) linux ******                   
+ ******  
+ *common source res as load amplifier                                           
+  ******  operating point information      tnom=  25.000 temp=  25.000          
+ ******  
+ ***** operating point status is all       simulation time is     0.     
+    node    =voltage      node    =voltage      node    =voltage
+
+ +0:in      = 900.0000m 0:out     = 536.8031m 0:vcm     = 900.0000m
+ +0:vdd     =   1.8000 
+
+
+ ****  voltage sources
+
+ subckt                                   
+ element  0:vdd      0:vcm      0:vin     
+  volts      1.8000   900.0000m    0.     
+  current -631.5985u    0.         0.     
+  power      1.1369m    0.         0.     
+
+     total voltage source power dissipation=    1.1369m       watts
+
+
+
+ **** resistors
+
+ subckt             
+ element  0:rl      
+  r value    2.0000k
+  v drop     1.2632 
+  current  631.5985u
+  power    797.8332u
+
+
+
+ **** mosfets
+
+
+ subckt             
+ element  0:m1      
+ model    0:nch.3   
+ region     Saturati
+  id       631.5984u
+  ibs     -1.050e-19
+  ibd      -34.7070a
+  vgs      900.0000m
+  vds      536.8031m
+  vbs        0.     
+  vth      487.7563m
+  vdsat    330.3850m
+  vod      412.2437m
+  beta       9.1737m
+  gam eff  499.9785m
+  gm         2.4035m
+  gds       94.2828u
+  gmb      668.5075u
+  cdtot     12.9061f
+  cgtot     41.7290f
+  cstot     50.5939f
+  cbtot     28.5630f
+  cgs       35.9814f
+  cgd        4.1505f
+
+
+
+ ******  
+ *common source res as load amplifier                                           
+  ******  ac analysis                      tnom=  25.000 temp=  25.000          
+ ******  
+x
+
+        freq    voltage m    volt phase 
+                    out          out    
+    1.00000       4.0431     180.0000   
+    1.25893       4.0431     180.0000   
+    1.58489       4.0431     180.0000   
+    1.99526       4.0431     180.0000   
+    2.51189       4.0431     180.0000   
+    3.16228       4.0431     180.0000   
+    3.98107       4.0431     180.0000   
+    5.01187       4.0431     180.0000   
+    6.30957       4.0431     180.0000   
+    7.94328       4.0431     180.0000   
+   10.00000       4.0431     180.0000   
+   12.58925       4.0431     180.0000   
+   15.84893       4.0431     180.0000   
+   19.95262       4.0431     180.0000   
+   25.11886       4.0431     180.0000   
+   31.62278       4.0431     180.0000   
+   39.81072       4.0431     180.0000   
+   50.11872       4.0431     179.9999   
+   63.09573       4.0431     179.9999   
+   79.43282       4.0431     179.9999   
+  100.00000       4.0431     179.9999   
+  125.89254       4.0431     179.9998   
+  158.48932       4.0431     179.9998   
+  199.52623       4.0431     179.9998   
+  251.18864       4.0431     179.9997   
+  316.22777       4.0431     179.9996   
+  398.10717       4.0431     179.9995   
+  501.18723       4.0431     179.9994   
+  630.95734       4.0431     179.9992   
+  794.32823       4.0431     179.9990   
+    1.00000k      4.0431     179.9988   
+    1.25893k      4.0431     179.9985   
+    1.58489k      4.0431     179.9981   
+    1.99526k      4.0431     179.9976   
+    2.51189k      4.0431     179.9969   
+    3.16228k      4.0431     179.9961   
+    3.98107k      4.0431     179.9951   
+    5.01187k      4.0431     179.9939   
+    6.30957k      4.0431     179.9923   
+    7.94328k      4.0431     179.9903   
+   10.00000k      4.0431     179.9878   
+   12.58925k      4.0431     179.9846   
+   15.84893k      4.0431     179.9807   
+   19.95262k      4.0431     179.9757   
+   25.11886k      4.0431     179.9694   
+   31.62278k      4.0431     179.9614   
+   39.81072k      4.0431     179.9514   
+   50.11872k      4.0431     179.9389   
+   63.09573k      4.0431     179.9230   
+   79.43282k      4.0431     179.9031   
+  100.00000k      4.0431     179.8780   
+  125.89254k      4.0431     179.8464   
+  158.48932k      4.0430     179.8066   
+  199.52623k      4.0430     179.7566   
+  251.18864k      4.0430     179.6935   
+  316.22777k      4.0430     179.6142   
+  398.10717k      4.0429     179.5143   
+  501.18723k      4.0428     179.3885   
+  630.95734k      4.0427     179.2302   
+  794.32823k      4.0425     179.0309   
+    1.00000x      4.0422     178.7801   
+    1.25893x      4.0416     178.4644   
+    1.58489x      4.0408     178.0670   
+    1.99526x      4.0394     177.5671   
+    2.51189x      4.0373     176.9382   
+    3.16228x      4.0339     176.1475   
+    3.98107x      4.0286     175.1543   
+    5.01187x      4.0203     173.9081   
+    6.30957x      4.0071     172.3475   
+    7.94328x      3.9865     170.3992   
+   10.00000x      3.9545     167.9783   
+   12.58925x      3.9053     164.9923   
+   15.84893x      3.8310     161.3495   
+   19.95262x      3.7214     156.9782   
+   25.11886x      3.5655     151.8542   
+   31.62278x      3.3541     146.0374   
+   39.81072x      3.0847     139.6994   
+   50.11872x      2.7652     133.1191   
+   63.09573x      2.4148     126.6327   
+   79.43282x      2.0584     120.5529   
+  100.00000x      1.7193     115.1014   
+  125.89254x      1.4137     110.3843   
+  158.48932x      1.1492     106.4094   
+  199.52623x    926.7339m    103.1207   
+  251.18864x    743.3741m    100.4309   
+  316.22777x    594.2026m     98.2449   
+  398.10717x    473.8862m     96.4712   
+  501.18723x    377.3813m     95.0287   
+  630.95734x    300.2505m     93.8471   
+  794.32823x    238.7441m     92.8669   
+    1.00000g    189.7679m     92.0376   
+y
+
+          ***** job concluded
+1****** HSPICE -- A-2008.03 64-BIT (Feb 26 2008) linux ******                   
+ ******  
+ *common source res as load amplifier                                           
+  ******  job statistics summary           tnom=  25.000 temp=  25.000          
+ ******  
+
+           total memory used             183 kbytes
+
+  # nodes =       7 # elements=       6
+  # diodes=       0 # bjts    =       0 # jfets   =       0 # mosfets =       1
+  # va device =       0
+
+    analysis           time    # points   tot. iter  conv.iter
+
+    op point           0.00           1           6
+    ac analysis        0.00          91          91
+    readin             0.08
+    errchk             0.01
+    setup              0.00
+    output             0.00
+           total cpu time          0.09 seconds
+           total elapsed time         1 seconds
+               job started at  18:36:08 10/20/2014
+               job ended   at  18:36:08 10/20/2014
+
+
+ lic: Release hspice token(s) 

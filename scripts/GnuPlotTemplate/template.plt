@@ -4,7 +4,7 @@
 set terminal postscript enhanced eps color solid "Times-Roman,21"
 set datafile separator ","
 set grid
-set key box left bottom
+set key box right top
 set key Right
 set key spacing 1.5
 

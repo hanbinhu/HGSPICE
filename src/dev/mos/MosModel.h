@@ -25,7 +25,7 @@ private:
 	static constexpr double VT = 1.3807e-23 * 300.15 / 1.602e-19;
 	
 	MosType mType;
-	static const size_t arraySize = 12;
+	static const size_t arraySize = 16;
 };
 
 #endif  /*MOSMODEL_H*/

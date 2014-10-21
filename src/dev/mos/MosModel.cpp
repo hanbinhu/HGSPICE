@@ -17,8 +17,12 @@ using std::endl;
 #define lambda modelParamTable[9]
 #define xj modelParamTable[10]
 #define Esat modelParamTable[11]
+#define Cj modelParamTable[12]
+#define Cjsw modelParamTable[13]
+#define Ls modelParamTable[14]
+#define Cov modelParamTable[15]
 
-MosModel::MosModel(const string& str, MosType type): 
+MosModel::MosModel(const string& str, MosType type):
 	ModelBase(str, arraySize),
 	mType(type)
 {
@@ -35,6 +39,10 @@ MosModel::MosModel(const string& str, MosType type):
 		lambda = 0.5;
 		xj = 30e-9;
 		Esat = 5e6;
+		Cj = 0.001000266;
+		Cjsw = 2.0405474e-10;
+		Ls = 9e-8;
+		Cov = 3.665e-10;
 	} else {
 		Phi = 0.904;
 		Cox = 8.80e-3;
@@ -44,6 +52,10 @@ MosModel::MosModel(const string& str, MosType type):
 		lambda = 0.54;
 		xj = 50e-9;
 		Esat = 5.5e6;
+		Cj = 0.001121;
+		Cjsw = 2.481e-10;
+		Ls = 9e-8;
+		Cov = 3.28e-10;
 	}
 }
 
@@ -66,7 +78,11 @@ void MosModel::addParam(const string& param, double val) {
 	else if(std::regex_match(param, std::regex("lambda", std::regex::icase))) lambda = val;
 	else if(std::regex_match(param, std::regex("xj", std::regex::icase))) xj = val;
 	else if(std::regex_match(param, std::regex("esat", std::regex::icase))) Esat = val;
-	else throw std::runtime_error(string("No parameter ") + param + " for diodes.");
+	else if(std::regex_match(param, std::regex("cjsw", std::regex::icase))) Cjsw = val;
+	else if(std::regex_match(param, std::regex("cj", std::regex::icase))) Cj = val;
+	else if(std::regex_match(param, std::regex("ls", std::regex::icase))) Ls = val;
+	else if(std::regex_match(param, std::regex("cov", std::regex::icase))) Cov = val;
+	else throw std::runtime_error(string("No parameter ") + param + " for MOSFETs.");
 }
 
 std::tuple< double, double, double, double, double, double, double, double, double > MosModel::modelCalc(double L, double W, double Vdrain, double Vgate, double Vsource, double Vbulk) const {
@@ -170,26 +186,54 @@ std::tuple< double, double, double, double, double, double, double, double, doub
     double gm = gmg;
     double gds = gmd;
     double gmb = (gms - gmg - gmd) ;
-	
+
 	double nq = 1 + gamma / 2 / sqrt(Vp + Phi + 1e-6);
 	double c_ox = Cox * W * L;
-	double xf = sqrt(icf + 0.25);
-	double xr = sqrt(icr + 0.25);
-	
-	double cgs = c_ox * 2 / 3 * (1 - (xr * xr + xr + xf / 2) / (xf + xr) / (xf + xr));
-	double cgd = c_ox * 2 / 3 * (1 - (xf * xf + xf + xr / 2) / (xf + xr) / (xf + xr));
-	double cgb = c_ox * (nq - 1) / nq * (1 - cgs / c_ox - cgd / c_ox);
-	double csb = (nq - 1) * cgs;
-	double cdb = (nq - 1) * cgd;
-	
-	cgs = (cgs > 0) ? cgs : 0;
-	cgd = (cgd > 0) ? cgd : 0;
-	cgb = (cgb > 0) ? cgb : 0;
-	csb = (csb > 0) ? csb : 0;
-	cdb = (cdb > 0) ? cdb : 0;
-	
+	double cov = Cov * W;
+	double cjb0 = Cj * Ls * W + Cjsw * (2 * Ls + W);
+
+    double xf = sqrt(icf + 0.25);
+    double xr = sqrt(icr + 0.25);
+
+    double cgs = c_ox * 2 / 3 * (1 - (xr * xr + xr + xf / 2) / (xf + xr) / (xf + xr));
+    double cgd = c_ox * 2 / 3 * (1 - (xf * xf + xf + xr / 2) / (xf + xr) / (xf + xr));
+    double cgb = (nq - 1) / nq * (c_ox - cgs - cgd);
+    double csb = (nq - 1) * cgs;
+    double cdb = (nq - 1) * cgd;
+
+    cgs += cov;
+    cgd += cov;
+    csb += cjb0;
+    cdb += cjb0;
+
+    cgs = (cgs > 0) ? cgs : 0;
+    cgd = (cgd > 0) ? cgd : 0;
+    cgb = (cgb > 0) ? cgb : 0;
+    csb = (csb > 0) ? csb : 0;
+    cdb = (cdb > 0) ? cdb : 0;
+
+	//parasitic capacitance
+    //double sqrticf = sqrt(icf);
+    //double sqrticr = sqrt(icr);
+    //double sqrtic = sqrticf + sqrticr;
+    //double gif = 1.0 / sqrt(icf + 0.5 * sqrticf + 1);
+    //double gir = 1.0 / sqrt(icr + 0.5 * sqrticr + 1);
+
+    //double cgss = 2.0 * (1 - icr / (sqrtic * sqrtic)) / 3.0;
+    //double cgsw = icf * gif;
+    //double cgds = 2.0 * (1 - icf / (sqrtic * sqrtic)) / 3.0;
+    //double cgdw = icr * gir;
+    //double cgbs = 2.0 * (1 + sqrt(icf * icr) / (sqrtic * sqrtic)) / 3.0;
+    //double cgbw = icf * gif + icr * gir;
+
+    //double cgs = c_ox / (1.0 / cgss + 1.0 / cgsw) + cov;
+    //double cgd = c_ox / (1.0 / cgds + 1.0 / cgdw) + cov;
+    //double cgb = c_ox * (1 - 1 / nq) * (1 - cgbs * cgbw / (cgbs + cgbw));
+    //double cdb = cjb0 + (nq - 1) * cgd;
+    //double csb = cjb0 + (nq - 1) * cgs;
+
 	std::tuple<double, double, double, double, double, double, double, double, double> reVal(Ids, gm, gds, gmb, cgs, cgd, cgb, csb, cdb);
-	
+
 	return reVal;
 }
 
@@ -232,6 +276,10 @@ void MosModel::printInf() const {
 	cout << "Transconductance: " << kvalue << "A/V^2" << endl;
 	cout << "Junction depth: " << xj << "m" << endl;
 	cout << "Longitudinal critical field: " << Esat << "V/m" << endl;
+	cout << "Junction capacitance: " << Cj << "F/m^2" << endl;
+	cout << "Side wall capacitance: " << Cjsw << "F/m" << endl;
+	cout << "Length of diffusion region: " << Ls << "m" << endl;
+	cout << "OverLap capcitance:" << Cov << "F/m" << endl;
 }
 
 #undef Lmin
@@ -246,3 +294,7 @@ void MosModel::printInf() const {
 #undef lambda
 #undef xj
 #undef Esat
+#undef Cj
+#undef Cjsw
+#undef Ls
+#undef Cov
