@@ -31,6 +31,17 @@ MosModel::MosModel(const string& str, MosType type):
 	Wmin = 2.2e-7;
 	Wmax = 900e-6;
 	if(type == NMOS) {
+// 		Manual
+// 		Phi = 0.9;
+// 		Cox = 8.58e-3;
+// 		gamma = 0.3;
+// 		Vth0 = 0.41;
+// 		kvalue = 390e-6;
+// 		lambda = 0.5;
+// 		xj = 30e-9;
+// 		Esat = 5e6;
+		
+// 		Original
 		Phi = 0.9;
 		Cox = 8.58e-3;
 		gamma = 0.3;
@@ -39,11 +50,32 @@ MosModel::MosModel(const string& str, MosType type):
 		lambda = 0.5;
 		xj = 30e-9;
 		Esat = 5e6;
+		
+// 		TSMC 0.18um
+// 		Phi = 0.89;
+// 		Cox = 8.46e-3;
+// 		gamma = 0.43;
+// 		Vth0 = 0.458;
+// 		kvalue = 364e-6;
+// 		lambda = 0.5;
+// 		xj = 160e-9;
+// 		Esat = 2.1e6;
 		Cj = 0.001000266;
 		Cjsw = 2.0405474e-10;
 		Ls = 9e-8;
 		Cov = 3.665e-10;
 	} else {
+// 		Manual
+// 		Phi = 0.904;
+// 		Cox = 8.80e-3;
+// 		gamma = 0.51;
+// 		Vth0 = 0.44;
+// 		kvalue = 82e-6;
+// 		lambda = 0.54;
+// 		xj = 50e-9;
+// 		Esat = 5.5e6;
+		
+// 		Original
 		Phi = 0.904;
 		Cox = 8.80e-3;
 		gamma = 0.61;
@@ -52,6 +84,16 @@ MosModel::MosModel(const string& str, MosType type):
 		lambda = 0.54;
 		xj = 50e-9;
 		Esat = 5.5e6;
+		
+// 		TSMC 0.18um
+// 		Phi = 0.89;
+// 		Cox = 8.46e-3;
+// 		gamma = 0.43;
+// 		Vth0 = 0.437;
+// 		kvalue = 93e-6;
+// 		lambda = 0.54;
+// 		xj = 170e-9;
+// 		Esat = 13.6e6;
 		Cj = 0.001121;
 		Cjsw = 2.481e-10;
 		Ls = 9e-8;

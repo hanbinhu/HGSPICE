@@ -31,6 +31,7 @@ Cl out 0 2p
 .model pch PMOS
 .model nch NMOS
 
+.op
 .ac dec 10 1 1G
 
 .end
