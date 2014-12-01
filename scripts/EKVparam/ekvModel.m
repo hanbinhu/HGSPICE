@@ -2,7 +2,7 @@ function [Ids,G,C]=ekvModel(Type,L,W,V,Param)
 % Output Definition
 % Ids the current flowing through MOSFET
 % G = [gm, gds, gmb]
-% C = [Cgs, Cgs, Cgb, Csb, Cdb]
+% C = [Cgs, Cgd, Cgb, Csb, Cdb]
 
 % Sample Size
 N = length(Type);
